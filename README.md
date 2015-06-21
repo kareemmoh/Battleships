@@ -1,4 +1,4 @@
-# Kickstart
+# Battleships
 
 Battleships is a small game written in java.
 It will be equipped with the following features:

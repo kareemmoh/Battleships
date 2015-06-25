@@ -24,6 +24,7 @@
 package de.mash1t.battleships.gui.boards;
 
 import de.mash1t.battleships.config.ConfigHelper;
+import static de.mash1t.battleships.config.ConfigHelper.devLine;
 import de.mash1t.battleships.gui.Field;
 import static de.mash1t.battleships.gui.Main.fieldCountSquare;
 import de.mash1t.battleships.ships.Ship;
@@ -62,7 +63,7 @@ public class OwnBoard extends Board {
             if (isHoverValid) {
                 if (SwingUtilities.isRightMouseButton(e)) {
                     if (setShip) {
-                        System.out.println(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Own - turn");
+                        devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Own - turn");
                         ship.turn();
                         resetHover();
                         reloadHover(sourceField);

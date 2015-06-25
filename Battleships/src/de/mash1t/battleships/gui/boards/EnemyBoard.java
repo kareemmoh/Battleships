@@ -23,6 +23,7 @@
  */
 package de.mash1t.battleships.gui.boards;
 
+import static de.mash1t.battleships.config.ConfigHelper.devLine;
 import de.mash1t.battleships.gui.Field;
 import de.mash1t.battleships.gui.Field.Status;
 import java.awt.Color;
@@ -54,7 +55,7 @@ public class EnemyBoard extends Board {
             if (sourceField.getFieldStatus() == Status.Default) {
                  if (SwingUtilities.isLeftMouseButton(e)) {
                     sourceField.hit();
-                    System.out.println(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Enemy - hit");
+                    devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Enemy - hit");
                 }
             }
         }

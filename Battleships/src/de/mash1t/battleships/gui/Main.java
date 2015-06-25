@@ -23,6 +23,7 @@
  */
 package de.mash1t.battleships.gui;
 
+import de.mash1t.battleships.config.ConfigHelper;
 import de.mash1t.battleships.gui.boards.*;
 
 /**
@@ -31,8 +32,8 @@ import de.mash1t.battleships.gui.boards.*;
  */
 public class Main extends javax.swing.JFrame {
 
-    public static final int fieldSize = 35; 
-    private static final int fieldCountSquare = 13;
+    public static final int fieldSize = 35;
+    public static final int fieldCountSquare = 13;
     private static EnemyBoard enemyBoard;
     private static OwnBoard ownBoard;
 
@@ -41,7 +42,8 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
-        enemyBoard =  new EnemyBoard(fieldCountSquare, this.pEnemy);
+        ConfigHelper.init();
+        enemyBoard = new EnemyBoard(fieldCountSquare, this.pEnemy);
         ownBoard = new OwnBoard(fieldCountSquare, this.pOwn);
     }
 

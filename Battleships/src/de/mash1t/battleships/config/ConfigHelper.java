@@ -24,43 +24,44 @@
 package de.mash1t.battleships.config;
 
 /**
- * Class for configuration parameters for server
  *
  * @author Manuel Schmid
  */
-public enum ConfigParam {
+public class ConfigHelper {
 
-    DevMode("DevMode", "false"),
-    InvalidShipHoverBehaviour("InvalidShipHoverBehaviour", "true");
+    // Config controller
+    private static final ConfigController conf = new ConfigController("Config.ini");
 
-    private final String configString;
-    private final String defaultValue;
+    // Config Params
+    private static boolean devMode;
+    private static boolean invalidShipHoverBehaviour;
 
-    /**
-     * Constructor
-     *
-     * @param name
-     */
-    ConfigParam(String configString, String defaultValue) {
-        this.configString = configString;
-        this.defaultValue = defaultValue;
+    public static void init() {
+
+        if (!conf.readConfigFile() || !conf.validateConfig()) {
+            System.out.println("Server configuration file not found/readable/valid");
+            conf.makeDefaultFile();
+            System.out.println("Restored default configuration");
+            conf.readConfigFile();
+        }
+
+        devMode = conf.getConfigValueBoolean(ConfigParam.DevMode);
+        invalidShipHoverBehaviour = conf.getConfigValueBoolean(ConfigParam.InvalidShipHoverBehaviour);
+
     }
 
-    /**
-     * Getter for configString
-     *
-     * @return
-     */
-    public String getConfigString() {
-        return configString;
+    public static boolean isDevMode() {
+        return devMode;
     }
 
-    /**
-     * Getter for defaultValue
-     *
-     * @return
-     */
-    public String getDefaultValue() {
-        return defaultValue;
+    public static boolean getInvalidShipHoverBehaviour() {
+        return invalidShipHoverBehaviour;
     }
+
+    public static void devLine(String line) {
+        if (devMode) {
+            System.out.println(line);
+        }
+    }
+
 }

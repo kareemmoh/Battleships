@@ -23,6 +23,7 @@
  */
 package de.mash1t.battleships.gui.boards;
 
+import de.mash1t.battleships.config.ConfigHelper;
 import de.mash1t.battleships.gui.Field;
 import static de.mash1t.battleships.gui.Main.fieldCountSquare;
 import de.mash1t.battleships.ships.Ship;
@@ -42,7 +43,6 @@ public class OwnBoard extends Board {
     private boolean isHoverValid = true;
     private Ship ship;
     private Field[] hoveredFields = null;
-    private boolean hoverBehaviour = false;
 
     public OwnBoard(int dimensions, JPanel panel) {
         super(dimensions, dimensions, panel);
@@ -130,15 +130,17 @@ public class OwnBoard extends Board {
                 isHoverValid = false;
             }
         }
-            for (Field field : hoveredFields) {
-                if (getHoverExpression(field)) {
-                    field.setBackground(Color.red);
-                } else {
-                    field.setBackground(Color.ORANGE);
-                }
-                field.setText(Integer.toString(fieldCounter));
-                fieldCounter++;
+        for (Field field : hoveredFields) {
+            if (getHoverExpression(field)) {
+                field.setBackground(Color.red);
+            } else {
+                field.setBackground(Color.ORANGE);
             }
+            if (ConfigHelper.isDevMode()) {
+                field.setText(Integer.toString(fieldCounter));
+            }
+            fieldCounter++;
+        }
     }
 
     protected void resetHover() {
@@ -151,16 +153,17 @@ public class OwnBoard extends Board {
             isHoverValid = true;
         }
     }
-    
-    protected boolean getHoverExpression(Field field){
-        if(hoverBehaviour){
-           return !isHoverValid;
+
+    protected boolean getHoverExpression(Field field) {
+        if (ConfigHelper.getInvalidShipHoverBehaviour()) {
+            return !isHoverValid;
         } else {
             return field.isShipAssigned();
         }
     }
 
     protected void assignShipToFields() {
+        devLine("Assigning fields to ship");
         for (Field field : hoveredFields) {
             fields[field.getPosX()][field.getPosY()].assignShip(ship, field.getText());
         }

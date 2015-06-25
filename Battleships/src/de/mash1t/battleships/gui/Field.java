@@ -23,6 +23,7 @@
  */
 package de.mash1t.battleships.gui;
 
+import de.mash1t.battleships.config.ConfigHelper;
 import de.mash1t.battleships.ships.Ship;
 import java.awt.Color;
 import javax.swing.JButton;
@@ -78,13 +79,17 @@ public class Field extends JButton {
 
     public void resetSoft() {
         changeColor();
-        this.setText(fieldNumber);
+        if (ConfigHelper.isDevMode()) {
+            this.setText(fieldNumber);
+        }
     }
 
     public void resetHard() {
         fieldStatus = Status.Default;
         changeColor();
-        this.setText("");
+        if (ConfigHelper.isDevMode()) {
+            this.setText("");
+        }
     }
 
     private void changeColor() {

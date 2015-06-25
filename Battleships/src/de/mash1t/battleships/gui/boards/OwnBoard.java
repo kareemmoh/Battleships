@@ -71,18 +71,16 @@ public class OwnBoard extends Board {
         @Override
         public void mouseClicked(MouseEvent e) {
             Field sourceField = (Field) e.getSource();
-            if (isHoverValid) {
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    if (setShip) {
-                        devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Own - turn");
-                        ship.turn();
-                        resetHover();
-                        reloadHover(sourceField);
-                    }
-                } else if (SwingUtilities.isLeftMouseButton(e)) {
-                    if (setShip) {
-                        assignShipToFields();
-                    }
+            if (SwingUtilities.isRightMouseButton(e)) {
+                if (setShip) {
+                    devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Own - turn");
+                    ship.turn();
+                    resetHover();
+                    reloadHover(sourceField);
+                }
+            } else if (SwingUtilities.isLeftMouseButton(e)) {
+                if (setShip && isHoverValid) {
+                    assignShipToFields();
                 }
             }
         }

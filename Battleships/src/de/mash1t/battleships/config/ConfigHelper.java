@@ -50,14 +50,32 @@ public class ConfigHelper {
 
     }
 
+    /**
+     * Getter for devmode
+     *
+     * @return is dev mode enabled
+     */
     public static boolean isDevMode() {
         return devMode;
     }
 
+    /**
+     * Getter for Ship Hover Behaviour
+     *
+     * true: whole hover turns red;
+     * false: only invalid field turns red
+     *
+     * @return
+     */
     public static boolean getInvalidShipHoverBehaviour() {
         return invalidShipHoverBehaviour;
     }
 
+    /**
+     * Outputs a line on the console if dev mode is enabled
+     * 
+     * @param line String to output on the console
+     */
     public static void devLine(String line) {
         if (devMode) {
             System.out.println(line);

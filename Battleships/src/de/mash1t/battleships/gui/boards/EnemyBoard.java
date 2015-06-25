@@ -33,11 +33,19 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
+ * Class for the enemy board. 
+ * Here you can target fields and shoot at them, maybe even hit ships :P
  *
  * @author Manuel Schmid
  */
 public class EnemyBoard extends Board {
 
+    /**
+     * Constructor
+     *
+     * @param dimensions size of the board on the x and y axis
+     * @param panel
+     */
     public EnemyBoard(int dimensions, JPanel panel) {
         super(dimensions, dimensions, panel);
     }
@@ -47,13 +55,16 @@ public class EnemyBoard extends Board {
         return new ButtonClickListener();
     }
 
+    /**
+     * Listener for mouse events
+     */
     protected class ButtonClickListener extends ButtonMouseListener {
 
         @Override
         public void mouseClicked(MouseEvent e) {
             Field sourceField = (Field) e.getSource();
             if (sourceField.getFieldStatus() == Status.Default) {
-                 if (SwingUtilities.isLeftMouseButton(e)) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
                     sourceField.hit();
                     devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Enemy - hit");
                 }

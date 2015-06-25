@@ -35,8 +35,6 @@ import java.util.Properties;
 /**
  * Class for reading/writing config data from/to file system
  *
- * TODO Add property-support for client
- *
  * @author Manuel Schmid
  */
 public final class ConfigController {

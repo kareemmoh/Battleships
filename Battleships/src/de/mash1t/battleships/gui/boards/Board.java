@@ -42,15 +42,25 @@ public abstract class Board {
     protected final int fieldCountY;
     protected final JPanel panel;
 
+    /**
+     * Constructor
+     *
+     * @param fieldCountX size of the board on the x axis
+     * @param fieldCountY size of the board on the y axis
+     * @param panel Panel to set fields to
+     */
     public Board(int fieldCountX, int fieldCountY, JPanel panel) {
         this.fieldCountX = fieldCountX;
         this.fieldCountY = fieldCountY;
         this.panel = panel;
+        fields = new Field[fieldCountX][fieldCountY];
         drawButtons();
     }
 
+    /**
+     * Draws the buttons
+     */
     protected final void drawButtons() {
-        this.initFieldArray();
         Field tempField;
         for (int x = 0; x < fieldCountX; x++) {
             for (int y = 0; y < fieldCountY; y++) {
@@ -64,14 +74,18 @@ public abstract class Board {
         }
     }
 
-    private void initFieldArray() {
-        fields = new Field[fieldCountX][fieldCountY];
-    }
-
+    /**
+     * Getter for the MouseListener, can be overwritten to apply own listener
+     *
+     * @return applied mouse listener
+     */
     protected MouseListener getNewMouseListener() {
         return new ButtonMouseListener();
     }
 
+    /**
+     * Class for the ButtonListener with all possible events
+     */
     protected class ButtonMouseListener implements MouseListener {
 
         @Override

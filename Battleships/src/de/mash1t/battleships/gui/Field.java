@@ -47,14 +47,31 @@ public class Field extends JButton {
         fieldStatus = Status.Default;
     }
 
+    /**
+     * Getter for position x of the field
+     *
+     * @return position x of the field
+     */
     public int getPosX() {
         return posx;
     }
 
+    /**
+     * Getter for position y of the field
+     *
+     * @return position y of the field
+     */
     public int getPosY() {
         return posy;
     }
 
+    /**
+     * Assigns a ship to this field
+     *
+     * @param ship ship to assign
+     * @param fieldNumber number of the hover field counter, only outputted in
+     * dev mode
+     */
     public void assignShip(Ship ship, String fieldNumber) {
         this.ship = ship;
         this.fieldNumber = fieldNumber;
@@ -62,21 +79,35 @@ public class Field extends JButton {
         changeColor();
     }
 
+    /**
+     * Getter for ship assignment
+     *
+     * @return is ship assigned
+     */
     public boolean isShipAssigned() {
         return (ship != null);
 
     }
 
+    /**
+     * Set new field status and change color
+     */
     public void miss() {
         fieldStatus = Status.Miss;
         changeColor();
     }
 
+    /**
+     * Set new field status and change color
+     */
     public void hit() {
         fieldStatus = Status.Hit;
         changeColor();
     }
 
+    /**
+     * Resets the field to values set in this class
+     */
     public void resetSoft() {
         changeColor();
         if (ConfigHelper.isDevMode()) {
@@ -84,6 +115,9 @@ public class Field extends JButton {
         }
     }
 
+    /**
+     * Resets the field (clear color and text)
+     */
     public void resetHard() {
         fieldStatus = Status.Default;
         changeColor();
@@ -92,14 +126,25 @@ public class Field extends JButton {
         }
     }
 
+    /**
+     * Changes the color of the field to the one mapped to the state
+     */
     private void changeColor() {
         this.setBackground(fieldStatus.getColor());
     }
 
+    /**
+     * Getter for the current field state
+     *
+     * @return
+     */
     public Status getFieldStatus() {
         return this.fieldStatus;
     }
 
+    /**
+     * Enum for the field state, mapping state to colors
+     */
     public enum Status {
 
         Miss(Color.blue),

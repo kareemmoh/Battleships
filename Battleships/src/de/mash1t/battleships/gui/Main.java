@@ -32,8 +32,18 @@ import de.mash1t.battleships.gui.boards.*;
  */
 public class Main extends javax.swing.JFrame {
 
+    /**
+     * Dimensions of the field
+     */
     public static final int fieldSize = 35;
+
+    /**
+     * Counter of how many fields should be displayed in square.
+     * TODO move to config and create panels with dynamic size
+     */
     public static final int fieldCountSquare = 13;
+
+    // Boards
     private static EnemyBoard enemyBoard;
     private static OwnBoard ownBoard;
 

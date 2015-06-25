@@ -24,6 +24,7 @@
 package de.mash1t.battleships.ships;
 
 /**
+ * Class for a ship
  *
  * @author Manuel Schmid
  */
@@ -35,28 +36,52 @@ public class Ship {
     protected int posy;
     protected boolean isShipTurned = false;
 
+    /**
+     * Constructor
+     *
+     * @param shipSize size of the ship set in enum
+     */
     public Ship(ShipSize shipSize) {
         this.shipSize = shipSize;
     }
 
+    /**
+     * Getter for the ship size
+     *
+     * @return size of the ship (element of enum, not integer)
+     */
     public ShipSize getShipSize() {
         return shipSize;
     }
 
+    /**
+     * Turns the ship 90 degrees
+     */
     public void turn() {
         isShipTurned = !isShipTurned;
     }
 
+    /**
+     * Getter for turning state
+     *
+     * @return is ship turned
+     */
     public boolean isTurned() {
         return isShipTurned;
     }
 
+    /**
+     * Enum for status of the ship
+     */
     public enum Status {
 
         Destroyed,
         Healthy;
     }
 
+    /**
+     * Enum for the size of teh ship
+     */
     public enum ShipSize {
 
         Two(2),

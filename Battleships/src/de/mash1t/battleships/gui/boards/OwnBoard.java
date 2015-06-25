@@ -35,6 +35,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
+ * Class for the own board here you can place ships and see, which were already
+ * destroyed by your enemy
  *
  * @author Manuel Schmid
  */
@@ -45,6 +47,12 @@ public class OwnBoard extends Board {
     private Ship ship;
     private Field[] hoveredFields = null;
 
+    /**
+     * Constructor
+     *
+     * @param dimensions size of the board on the x and y axis
+     * @param panel
+     */
     public OwnBoard(int dimensions, JPanel panel) {
         super(dimensions, dimensions, panel);
         setShip(new Ship(Ship.ShipSize.Four));
@@ -55,6 +63,9 @@ public class OwnBoard extends Board {
         return new ButtonClickListener();
     }
 
+    /**
+     * Listener for mouse events
+     */
     protected class ButtonClickListener extends ButtonMouseListener {
 
         @Override
@@ -92,6 +103,13 @@ public class OwnBoard extends Board {
         }
     }
 
+    /**
+     * Creates an array of fields according to the ship size. Automatically
+     * relocates fields if the edge of the board was reached
+     *
+     * @param sourceField
+     * @return
+     */
     private Field[] setHoveredFields(Field sourceField) {
 
         int hoveredX = sourceField.getPosX();
@@ -104,8 +122,10 @@ public class OwnBoard extends Board {
         if (!ship.isTurned()) {
             for (int i = hoveredX; i < hoveredX + shipSize; i++) {
                 if (i < fieldCountSquare) {
+                    // Normal field addition to the right
                     returnArray[fieldCounter] = fields[i][hoveredY];
                 } else {
+                    // Edge of board is reached, add to the left of the source field
                     returnArray[fieldCounter] = fields[fieldCountSquare - fieldCounter - 1][hoveredY];
                 }
                 fieldCounter++;
@@ -113,8 +133,10 @@ public class OwnBoard extends Board {
         } else {
             for (int i = hoveredY; i < hoveredY + shipSize; i++) {
                 if (i < fieldCountSquare) {
+                    // Normal field addition to the bottom
                     returnArray[fieldCounter] = fields[hoveredX][i];
                 } else {
+                    // Edge of board is reached, add to the top of the source field
                     returnArray[fieldCounter] = fields[hoveredX][fieldCountSquare - fieldCounter - 1];
                 }
                 fieldCounter++;
@@ -123,6 +145,12 @@ public class OwnBoard extends Board {
         return returnArray;
     }
 
+    /**
+     * Reloads the hover in case of a mouse event or when hovering over a ship
+     * which has already been placed
+     *
+     * @param sourceField
+     */
     protected void reloadHover(Field sourceField) {
         hoveredFields = setHoveredFields(sourceField);
         int fieldCounter = 0;
@@ -132,11 +160,13 @@ public class OwnBoard extends Board {
             }
         }
         for (Field field : hoveredFields) {
+            // Switch hover mode depending on config settings
             if (getHoverExpression(field)) {
                 field.setBackground(Color.red);
             } else {
                 field.setBackground(Color.ORANGE);
             }
+            // Write number on field to better debug placement
             if (ConfigHelper.isDevMode()) {
                 field.setText(Integer.toString(fieldCounter));
             }
@@ -144,25 +174,41 @@ public class OwnBoard extends Board {
         }
     }
 
+    /**
+     * Resets the hover
+     */
     protected void resetHover() {
         for (Field field : hoveredFields) {
             if (!field.isShipAssigned()) {
+                // Reset field to default state
                 field.resetHard();
             } else {
+                // Keep field data
                 field.resetSoft();
             }
             isHoverValid = true;
         }
     }
 
+    /**
+     * Gets the hover mode on invalid ship hover
+     *
+     * @param field field to show color on
+     * @return result if invalid placement or not
+     */
     protected boolean getHoverExpression(Field field) {
         if (ConfigHelper.getInvalidShipHoverBehaviour()) {
+            // In case of invalid field: Turn whole hover red
             return !isHoverValid;
         } else {
+            // In case of invalid field: Turn invalid fields red
             return field.isShipAssigned();
         }
     }
 
+    /**
+     * Assigns a ship to a field
+     */
     protected void assignShipToFields() {
         devLine("Assigning fields to ship");
         for (Field field : hoveredFields) {
@@ -170,6 +216,11 @@ public class OwnBoard extends Board {
         }
     }
 
+    /**
+     * Sets ship placement mode to true
+     *
+     * @param ship ship to place
+     */
     private void setShip(Ship ship) {
         setShip = true;
         this.ship = ship;

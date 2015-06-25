@@ -27,17 +27,28 @@ package de.mash1t.battleships.ships;
  *
  * @author Manuel Schmid
  */
-public abstract class Ship {
+public class Ship {
 
     protected Status status = Status.Healthy;
-    private final int shipSize;
-    private final int posx;
-    private final int posy;
+    protected final ShipSize shipSize;
+    protected int posx;
+    protected int posy;
+    protected boolean isShipTurned = false;
 
-    public Ship(int shipSize, int x, int y) {
+    public Ship(ShipSize shipSize) {
         this.shipSize = shipSize;
-        posx = x;
-        posy = y;
+    }
+
+    public ShipSize getShipSize() {
+        return shipSize;
+    }
+
+    public void turn() {
+        isShipTurned = !isShipTurned;
+    }
+
+    public boolean isTurned() {
+        return isShipTurned;
     }
 
     public enum Status {
@@ -46,15 +57,21 @@ public abstract class Ship {
         Healthy;
     }
 
-    public int getShipSize() {
-        return shipSize;
-    }
+    public enum ShipSize {
 
-    public int getPosX() {
-        return posx;
-    }
+        Two(2),
+        Three(3),
+        Four(4),
+        Five(5);
 
-    public int getPosY() {
-        return posy;
+        private final int size;
+
+        ShipSize(int size) {
+            this.size = size;
+        }
+
+        public int size() {
+            return size;
+        }
     }
 }

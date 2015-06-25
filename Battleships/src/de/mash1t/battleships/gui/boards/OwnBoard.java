@@ -24,7 +24,9 @@
 package de.mash1t.battleships.gui.boards;
 
 import de.mash1t.battleships.gui.Field;
-import de.mash1t.battleships.gui.Field.Status;
+import static de.mash1t.battleships.gui.Main.fieldCountSquare;
+import de.mash1t.battleships.ships.Ship;
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JPanel;
@@ -36,8 +38,15 @@ import javax.swing.SwingUtilities;
  */
 public class OwnBoard extends Board {
 
+    private boolean setShip = false;
+    private boolean isHoverValid = true;
+    private Ship ship;
+    private Field[] hoveredFields = null;
+    private boolean hoverBehaviour = false;
+
     public OwnBoard(int dimensions, JPanel panel) {
         super(dimensions, dimensions, panel);
+        setShip(new Ship(Ship.ShipSize.Four));
     }
 
     @Override
@@ -47,18 +56,119 @@ public class OwnBoard extends Board {
 
     protected class ButtonClickListener extends ButtonMouseListener {
 
-                @Override
+        @Override
         public void mouseClicked(MouseEvent e) {
             Field sourceField = (Field) e.getSource();
-            if (sourceField.getFieldStatus() == Status.Default) {
+            if (isHoverValid) {
                 if (SwingUtilities.isRightMouseButton(e)) {
-                    System.out.println(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Own - turn");
+                    if (setShip) {
+                        System.out.println(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Own - turn");
+                        ship.turn();
+                        resetHover();
+                        reloadHover(sourceField);
+                    }
                 } else if (SwingUtilities.isLeftMouseButton(e)) {
-                    sourceField.miss();
-                    System.out.println(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Own - miss");
+                    if (setShip) {
+                        assignShipToFields();
+                    }
                 }
             }
         }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            if (setShip) {
+                Field sourceField = (Field) e.getSource();
+                reloadHover(sourceField);
+            }
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            if (setShip) {
+                resetHover();
+            }
+        }
+    }
+
+    private Field[] setHoveredFields(Field sourceField) {
+
+        int hoveredX = sourceField.getPosX();
+        int hoveredY = sourceField.getPosY();
+        int shipSize = ship.getShipSize().size();
+        Field[] returnArray = new Field[shipSize];
+        int fieldCounter = 0;
+
+        // If not turned, calculate fields on x axis
+        if (!ship.isTurned()) {
+            for (int i = hoveredX; i < hoveredX + shipSize; i++) {
+                if (i < fieldCountSquare) {
+                    returnArray[fieldCounter] = fields[i][hoveredY];
+                } else {
+                    returnArray[fieldCounter] = fields[fieldCountSquare - fieldCounter - 1][hoveredY];
+                }
+                fieldCounter++;
+            }
+        } else {
+            for (int i = hoveredY; i < hoveredY + shipSize; i++) {
+                if (i < fieldCountSquare) {
+                    returnArray[fieldCounter] = fields[hoveredX][i];
+                } else {
+                    returnArray[fieldCounter] = fields[hoveredX][fieldCountSquare - fieldCounter - 1];
+                }
+                fieldCounter++;
+            }
+        }
+        return returnArray;
+    }
+
+    protected void reloadHover(Field sourceField) {
+        hoveredFields = setHoveredFields(sourceField);
+        int fieldCounter = 0;
+        for (Field field : hoveredFields) {
+            if (field.isShipAssigned()) {
+                isHoverValid = false;
+            }
+        }
+            for (Field field : hoveredFields) {
+                if (getHoverExpression(field)) {
+                    field.setBackground(Color.red);
+                } else {
+                    field.setBackground(Color.ORANGE);
+                }
+                field.setText(Integer.toString(fieldCounter));
+                fieldCounter++;
+            }
+    }
+
+    protected void resetHover() {
+        for (Field field : hoveredFields) {
+            if (!field.isShipAssigned()) {
+                field.resetHard();
+            } else {
+                field.resetSoft();
+            }
+            isHoverValid = true;
+        }
+    }
+    
+    protected boolean getHoverExpression(Field field){
+        if(hoverBehaviour){
+           return !isHoverValid;
+        } else {
+            return field.isShipAssigned();
+        }
+    }
+
+    protected void assignShipToFields() {
+        for (Field field : hoveredFields) {
+            fields[field.getPosX()][field.getPosY()].assignShip(ship, field.getText());
+        }
+    }
+
+    private void setShip(Ship ship) {
+        setShip = true;
+        this.ship = ship;
     }
 
 }

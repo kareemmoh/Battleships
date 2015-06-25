@@ -25,6 +25,7 @@ package de.mash1t.battleships.gui.boards;
 
 import de.mash1t.battleships.gui.Field;
 import static de.mash1t.battleships.gui.Main.fieldSize;
+import de.mash1t.battleships.ships.Ship;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JPanel;
@@ -36,6 +37,7 @@ import javax.swing.JPanel;
 public abstract class Board {
 
     protected Field fields[][];
+    protected Ship ships[];
     protected final int fieldCountX;
     protected final int fieldCountY;
     protected final JPanel panel;

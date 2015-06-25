@@ -23,6 +23,7 @@
  */
 package de.mash1t.battleships.gui;
 
+import de.mash1t.battleships.ships.Ship;
 import java.awt.Color;
 import javax.swing.JButton;
 
@@ -35,6 +36,8 @@ public class Field extends JButton {
     private final int posx;
     private final int posy;
     private Status fieldStatus;
+    private Ship ship;
+    private String fieldNumber;
 
     public Field(int size, int x, int y) {
         posx = x;
@@ -51,6 +54,18 @@ public class Field extends JButton {
         return posy;
     }
 
+    public void assignShip(Ship ship, String fieldNumber) {
+        this.ship = ship;
+        this.fieldNumber = fieldNumber;
+        fieldStatus = Status.ShipIsSet;
+        changeColor();
+    }
+
+    public boolean isShipAssigned() {
+        return (ship != null);
+
+    }
+
     public void miss() {
         fieldStatus = Status.Miss;
         changeColor();
@@ -59,12 +74,17 @@ public class Field extends JButton {
     public void hit() {
         fieldStatus = Status.Hit;
         changeColor();
-        this.setText("1");
     }
 
-    public void reset() {
+    public void resetSoft() {
+        changeColor();
+        this.setText(fieldNumber);
+    }
+
+    public void resetHard() {
         fieldStatus = Status.Default;
         changeColor();
+        this.setText("");
     }
 
     private void changeColor() {
@@ -79,6 +99,7 @@ public class Field extends JButton {
 
         Miss(Color.blue),
         Hit(Color.red),
+        ShipIsSet(Color.darkGray),
         Default(null);
 
         private final Color color;

@@ -29,7 +29,8 @@ import java.awt.Color;
 import javax.swing.JButton;
 
 /**
- *
+ * Field for a board
+ * 
  * @author Manuel Schmid
  */
 public class Field extends JButton {
@@ -40,6 +41,13 @@ public class Field extends JButton {
     private Ship ship;
     private String fieldNumber;
 
+    /**
+     * Constructor
+     * 
+     * @param size size of the field
+     * @param x position on the board
+     * @param y position on the board
+     */
     public Field(int size, int x, int y) {
         posx = x;
         posy = y;

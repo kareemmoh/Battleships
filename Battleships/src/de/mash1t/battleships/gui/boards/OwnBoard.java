@@ -220,7 +220,6 @@ public class OwnBoard extends Board {
                 devLine(field.getPosX() + " - " + field.getPosY());
             }
             isHoverValid = false;
-            }
         } else {
             devLine("Assignation failed: size of ship differs from amount of fields to set");
         }

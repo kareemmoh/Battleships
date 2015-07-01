@@ -23,8 +23,8 @@
  */
 package de.mash1t.battleships.gui.boards;
 
-import de.mash1t.battleships.gui.ButtonField;
-import de.mash1t.battleships.gui.Field;
+import de.mash1t.battleships.gui.field.ButtonField;
+import de.mash1t.battleships.gui.field.Field;
 import static de.mash1t.battleships.gui.Main.fieldSize;
 import de.mash1t.battleships.ships.Ship;
 import java.awt.event.MouseEvent;
@@ -52,6 +52,7 @@ public abstract class Board {
      * @param panel Panel to set fields to
      */
     public Board(int fieldCountX, int fieldCountY, JPanel panel) {
+        panel.removeAll();
         this.fieldCountX = fieldCountX;
         this.fieldCountY = fieldCountY;
         this.panel = panel;

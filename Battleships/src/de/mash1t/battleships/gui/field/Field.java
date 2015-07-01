@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.mash1t.battleships.gui;
+package de.mash1t.battleships.gui.field;
 
 import de.mash1t.battleships.ships.Ship;
 

@@ -25,8 +25,9 @@ package de.mash1t.battleships.gui.boards;
 
 import de.mash1t.battleships.config.ConfigHelper;
 import static de.mash1t.battleships.config.ConfigHelper.devLine;
-import de.mash1t.battleships.gui.Field;
+import de.mash1t.battleships.gui.field.Field;
 import static de.mash1t.battleships.gui.Main.fieldCountSquare;
+import de.mash1t.battleships.gui.field.ButtonField;
 import de.mash1t.battleships.ships.Ship;
 import de.mash1t.battleships.ships.ShipSize;
 import java.awt.event.MouseEvent;
@@ -58,7 +59,17 @@ public class OwnBoard extends Board {
      */
     public OwnBoard(int dimensions, JPanel panel) {
         super(dimensions, dimensions, panel);
-        setShip(new Ship(ShipSize.Four));
+        //setShip(new Ship(ShipSize.Four));
+    }
+    
+    /**
+     * Sets ship placement mode to true
+     *
+     * @param ship ship to place
+     */
+    private void setShip(Ship ship) {
+        setShip = true;
+        this.ship = ship;
     }
 
     @Override
@@ -73,7 +84,7 @@ public class OwnBoard extends Board {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            Field sourceField = (Field) e.getSource();
+            ButtonField sourceField = (ButtonField) e.getSource();
             if (SwingUtilities.isRightMouseButton(e)) {
                 if (setShip) {
                     devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Own - turn");
@@ -86,6 +97,7 @@ public class OwnBoard extends Board {
                     assignShipToFields();
                 }
             }
+            sourceField.setFocusPainted(false);
         }
 
         @Override
@@ -224,15 +236,4 @@ public class OwnBoard extends Board {
             devLine("Assignation failed: size of ship differs from amount of fields to set");
         }
     }
-
-    /**
-     * Sets ship placement mode to true
-     *
-     * @param ship ship to place
-     */
-    private void setShip(Ship ship) {
-        setShip = true;
-        this.ship = ship;
-    }
-
 }

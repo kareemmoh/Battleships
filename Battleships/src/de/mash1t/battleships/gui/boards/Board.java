@@ -32,7 +32,8 @@ import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 
 /**
- *
+ * Class for a board
+ * 
  * @author Manuel Schmid
  */
 public abstract class Board {

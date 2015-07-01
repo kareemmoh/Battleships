@@ -29,7 +29,6 @@ import de.mash1t.battleships.gui.Field;
 import static de.mash1t.battleships.gui.Main.fieldCountSquare;
 import de.mash1t.battleships.ships.Ship;
 import de.mash1t.battleships.ships.ShipSize;
-import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
@@ -212,14 +211,15 @@ public class OwnBoard extends Board {
      * Assigns a ship to a field
      */
     protected void assignShipToFields() {
-        devLine("Assigning fields to ship");
+        devLine("Assigning fields to ship:");
         // Assign fields to ship
         if (ship.assignFieldsToShip(hoveredFields)) {
             for (Field field : hoveredFields) {
                 fieldShipMap.put(field, ship);
                 fields[field.getPosX()][field.getPosY()].assignShip(ship);
-                devLine("Assigned field " + field.getPosX() + " - " + field.getPosY());
-                isHoverValid = false;
+                devLine(field.getPosX() + " - " + field.getPosY());
+            }
+            isHoverValid = false;
             }
         } else {
             devLine("Assignation failed: size of ship differs from amount of fields to set");

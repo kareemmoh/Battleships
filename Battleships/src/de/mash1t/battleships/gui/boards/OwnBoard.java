@@ -219,6 +219,7 @@ public class OwnBoard extends Board {
                 fieldShipMap.put(field, ship);
                 fields[field.getPosX()][field.getPosY()].assignShip(ship);
                 devLine("Assigned field " + field.getPosX() + " - " + field.getPosY());
+                isHoverValid = false;
             }
         } else {
             devLine("Assignation failed: size of ship differs from amount of fields to set");

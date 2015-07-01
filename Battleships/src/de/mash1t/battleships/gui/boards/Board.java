@@ -23,6 +23,7 @@
  */
 package de.mash1t.battleships.gui.boards;
 
+import de.mash1t.battleships.gui.ButtonField;
 import de.mash1t.battleships.gui.Field;
 import static de.mash1t.battleships.gui.Main.fieldSize;
 import de.mash1t.battleships.ships.Ship;
@@ -61,15 +62,14 @@ public abstract class Board {
      * Draws the buttons
      */
     protected final void drawButtons() {
-        Field tempField;
+        ButtonField tempField;
         for (int x = 0; x < fieldCountX; x++) {
             for (int y = 0; y < fieldCountY; y++) {
-                tempField = new Field(fieldSize, x, y);
+                tempField = new ButtonField(fieldSize, x, y);
                 tempField.addMouseListener(getNewMouseListener());
                 panel.add(tempField);
                 tempField.setLocation(x * fieldSize, y * fieldSize);
                 fields[x][y] = tempField;
-
             }
         }
     }

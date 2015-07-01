@@ -28,9 +28,12 @@ import static de.mash1t.battleships.config.ConfigHelper.devLine;
 import de.mash1t.battleships.gui.Field;
 import static de.mash1t.battleships.gui.Main.fieldCountSquare;
 import de.mash1t.battleships.ships.Ship;
+import de.mash1t.battleships.ships.ShipSize;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -42,6 +45,7 @@ import javax.swing.SwingUtilities;
  */
 public class OwnBoard extends Board {
 
+    private final Map<Field, Ship> fieldShipMap = new HashMap<>();
     private boolean setShip = false;
     private boolean isHoverValid = true;
     private Ship ship;
@@ -55,7 +59,7 @@ public class OwnBoard extends Board {
      */
     public OwnBoard(int dimensions, JPanel panel) {
         super(dimensions, dimensions, panel);
-        setShip(new Ship(Ship.ShipSize.Four));
+        setShip(new Ship(ShipSize.Four));
     }
 
     @Override
@@ -160,13 +164,13 @@ public class OwnBoard extends Board {
         for (Field field : hoveredFields) {
             // Switch hover mode depending on config settings
             if (getHoverExpression(field)) {
-                field.setBackground(Color.red);
+                field.hoverInvalid();
             } else {
-                field.setBackground(Color.ORANGE);
+                field.hover();
             }
             // Write number on field to better debug placement
-            if (ConfigHelper.isDevMode()) {
-                field.setText(Integer.toString(fieldCounter));
+            if (ConfigHelper.isDevModeHover()) {
+                field.devModeText(Integer.toString(fieldCounter));
             }
             fieldCounter++;
         }
@@ -209,8 +213,15 @@ public class OwnBoard extends Board {
      */
     protected void assignShipToFields() {
         devLine("Assigning fields to ship");
-        for (Field field : hoveredFields) {
-            fields[field.getPosX()][field.getPosY()].assignShip(ship, field.getText());
+        // Assign fields to ship
+        if (ship.assignFieldsToShip(hoveredFields)) {
+            for (Field field : hoveredFields) {
+                fieldShipMap.put(field, ship);
+                fields[field.getPosX()][field.getPosY()].assignShip(ship);
+                devLine("Assigned field " + field.getPosX() + " - " + field.getPosY());
+            }
+        } else {
+            devLine("Assignation failed: size of ship differs from amount of fields to set");
         }
     }
 

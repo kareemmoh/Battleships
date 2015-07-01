@@ -23,6 +23,11 @@
  */
 package de.mash1t.battleships.ships;
 
+import de.mash1t.battleships.gui.Field;
+import de.mash1t.battleships.gui.FieldState;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class for a ship
  *
@@ -30,11 +35,10 @@ package de.mash1t.battleships.ships;
  */
 public class Ship {
 
-    protected Status status = Status.Healthy;
+    protected ShipState shipState = ShipState.ToBeSet;
     protected final ShipSize shipSize;
-    protected int posx;
-    protected int posy;
     protected boolean isShipTurned = false;
+    protected final List<Field> fieldList = new ArrayList<>();
 
     /**
      * Constructor
@@ -71,32 +75,41 @@ public class Ship {
     }
 
     /**
-     * Enum for status of the ship
+     * Checks if all fields are destroyed and sets ship state
+     *
+     * @return is ship destroyed
      */
-    public enum Status {
-
-        Destroyed,
-        Healthy;
+    public boolean isDestroyed() {
+        boolean isDestroyed = true;
+        for (Field field : fieldList) {
+            if (field.getFieldState() != FieldState.Hit) {
+                isDestroyed = false;
+                break;
+            }
+        }
+        
+        if(isDestroyed){
+            shipState = ShipState.Destroyed;
+            return true;
+        }
+        return false;
     }
 
     /**
-     * Enum for the size of teh ship
+     * Assigning fields to ship
+     *
+     * @param fields
+     * @return is ship turned
      */
-    public enum ShipSize {
-
-        Two(2),
-        Three(3),
-        Four(4),
-        Five(5);
-
-        private final int size;
-
-        ShipSize(int size) {
-            this.size = size;
+    public boolean assignFieldsToShip(Field[] fields) {
+        if (fields.length == this.shipSize.size()) {
+            // Add fields to ship
+            for (Field field : fields) {
+                fieldList.add(field);
+            }
+            this.shipState = ShipState.Healthy;
+            return true;
         }
-
-        public int size() {
-            return size;
-        }
+        return false;
     }
 }

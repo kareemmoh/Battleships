@@ -23,151 +23,83 @@
  */
 package de.mash1t.battleships.gui;
 
-import de.mash1t.battleships.config.ConfigHelper;
 import de.mash1t.battleships.ships.Ship;
-import java.awt.Color;
-import javax.swing.JButton;
 
 /**
- * Field for a board
- * 
+ *
  * @author Manuel Schmid
  */
-public class Field extends JButton {
-
-    private final int posx;
-    private final int posy;
-    private Status fieldStatus;
-    private Ship ship;
-    private String fieldNumber;
-
-    /**
-     * Constructor
-     * 
-     * @param size size of the field
-     * @param x position on the board
-     * @param y position on the board
-     */
-    public Field(int size, int x, int y) {
-        posx = x;
-        posy = y;
-        setSize(size, size);
-        fieldStatus = Status.Default;
-    }
+public interface Field {
 
     /**
      * Getter for position x of the field
      *
      * @return position x of the field
      */
-    public int getPosX() {
-        return posx;
-    }
+    public int getPosX();
 
     /**
      * Getter for position y of the field
      *
      * @return position y of the field
      */
-    public int getPosY() {
-        return posy;
-    }
+    public int getPosY();
 
     /**
      * Assigns a ship to this field
      *
      * @param ship ship to assign
-     * @param fieldNumber number of the hover field counter, only outputted in
-     * dev mode
      */
-    public void assignShip(Ship ship, String fieldNumber) {
-        this.ship = ship;
-        this.fieldNumber = fieldNumber;
-        fieldStatus = Status.ShipIsSet;
-        changeColor();
-    }
+    public void assignShip(Ship ship);
 
     /**
      * Getter for ship assignment
      *
      * @return is ship assigned
      */
-    public boolean isShipAssigned() {
-        return (ship != null);
-
-    }
+    public boolean isShipAssigned();
 
     /**
      * Set new field status and change color
      */
-    public void miss() {
-        fieldStatus = Status.Miss;
-        changeColor();
-    }
+    public void hover();
 
     /**
      * Set new field status and change color
      */
-    public void hit() {
-        fieldStatus = Status.Hit;
-        changeColor();
-    }
+    public void hoverInvalid();
+
+    /**
+     * Set new field status and change color
+     */
+    public void miss();
+
+    /**
+     * Set new field status and change color
+     */
+    public void hit();
 
     /**
      * Resets the field to values set in this class
      */
-    public void resetSoft() {
-        changeColor();
-        if (ConfigHelper.isDevMode()) {
-            this.setText(fieldNumber);
-        }
-    }
+    public void resetSoft();
 
     /**
      * Resets the field (clear color and text)
      */
-    public void resetHard() {
-        fieldStatus = Status.Default;
-        changeColor();
-        if (ConfigHelper.isDevMode()) {
-            this.setText("");
-        }
-    }
-
-    /**
-     * Changes the color of the field to the one mapped to the state
-     */
-    private void changeColor() {
-        this.setBackground(fieldStatus.getColor());
-    }
+    public void resetHard();
 
     /**
      * Getter for the current field state
      *
      * @return
      */
-    public Status getFieldStatus() {
-        return this.fieldStatus;
-    }
+    public FieldState getFieldState();
 
     /**
-     * Enum for the field state, mapping state to colors
+     * Sets the text of the field to the given String
+     *
+     * @param text
      */
-    public enum Status {
-
-        Miss(Color.blue),
-        Hit(Color.red),
-        ShipIsSet(Color.darkGray),
-        Default(null);
-
-        private final Color color;
-
-        Status(Color color) {
-            this.color = color;
-        }
-
-        public Color getColor() {
-            return color;
-        }
-    }
+    public void devModeText(String text);
 }

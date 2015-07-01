@@ -33,6 +33,8 @@ import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -47,7 +49,7 @@ public class OwnBoard extends Board {
     private final Map<Field, Ship> fieldShipMap = new HashMap<>();
     private boolean setShip = false;
     private boolean isHoverValid = true;
-    private Ship ship;
+    private static Ship ship;
     private Field[] hoveredFields = null;
 
     /**
@@ -59,20 +61,38 @@ public class OwnBoard extends Board {
      */
     public OwnBoard(int dimensions, JPanel panel, List<Ship> shipList) {
         super(dimensions, dimensions, panel);
-        for(Ship shipToSet: shipList){
-            setShip(shipToSet);
-        }
-        System.out.println("Finished setting up ships");
     }
-    
+
     /**
-     * Sets ship placement mode to true
+     * Sets up ships
      *
-     * @param ship ship to place
+     * @param shipList List of ships to set
      */
-    private void setShip(Ship ship) {
-        setShip = true;
-        this.ship = ship;
+    public void setShips(final List<Ship> shipList) {
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                // Sets ship placement mode to true
+                for (Ship shipToSet : shipList) {
+                    OwnBoard.ship = shipToSet;
+                    setShip = true;
+                    while (setShip) {
+                        try {
+                            Thread.sleep(10);
+                            System.out.println("waiting... " + ship.getShipSize().toString());
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(OwnBoard.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                for (Field field : hoveredFields) {
+                    field.resetSoft();
+                }
+                System.out.println("Finished setting up ships");
+            }
+        };
+        thread.start();
     }
 
     @Override
@@ -235,6 +255,7 @@ public class OwnBoard extends Board {
                 devLine(field.getPosX() + " - " + field.getPosY());
             }
             isHoverValid = false;
+            setShip = false;
         } else {
             devLine("Assignation failed: size of ship differs from amount of fields to set");
         }

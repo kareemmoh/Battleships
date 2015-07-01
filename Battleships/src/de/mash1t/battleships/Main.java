@@ -38,10 +38,9 @@ import java.util.List;
  */
 public final class Main extends javax.swing.JFrame {
 
-    
     // Ship List
     private static final List<Ship> shipList = new ArrayList<>();
-    
+
     // Boards
     private static EnemyBoard enemyBoard;
     private static OwnBoard ownBoard;
@@ -56,8 +55,6 @@ public final class Main extends javax.swing.JFrame {
         startNewGame();
     }
 
-    
-
     public static void createShipList() {
         shipList.add(new Ship(ShipSize.Five));
         shipList.add(new Ship(ShipSize.Four));
@@ -70,10 +67,13 @@ public final class Main extends javax.swing.JFrame {
 //        shipList.add(new Ship(ShipSize.Two));
 //        shipList.add(new Ship(ShipSize.Two));
     }
+
     public void startNewGame() {
         enemyBoard = new EnemyBoard(fieldCountSquare, this.pEnemy);
         ownBoard = new OwnBoard(fieldCountSquare, this.pOwn, shipList);
+        ownBoard.setShips(shipList);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

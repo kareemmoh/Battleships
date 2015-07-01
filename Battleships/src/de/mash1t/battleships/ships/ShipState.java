@@ -24,12 +24,11 @@
 package de.mash1t.battleships.ships;
 
 /**
- *
- * @author Manuel Schmid
+ * Enum for status of the ship
  */
-public class ShipThree extends Ship {
+public enum ShipState {
 
-    public ShipThree(int x, int y) {
-        super(3, x, y);
-    }
+    ToBeSet,
+    Destroyed,
+    Healthy;
 }

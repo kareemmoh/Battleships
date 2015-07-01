@@ -24,12 +24,22 @@
 package de.mash1t.battleships.ships;
 
 /**
- *
- * @author Manuel Schmid
+ * Enum for the size of teh ship
  */
-public class ShipTwo extends Ship {
+public enum ShipSize {
 
-    public ShipTwo(int x, int y) {
-        super(2, x, y);
+    Two(2),
+    Three(3),
+    Four(4),
+    Five(5);
+
+    private final int size;
+
+    ShipSize(int size) {
+        this.size = size;
+    }
+
+    public int size() {
+        return size;
     }
 }

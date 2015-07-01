@@ -23,8 +23,9 @@
  */
 package de.mash1t.battleships.gui.boards;
 
+import static de.mash1t.battleships.config.ConfigHelper.devLine;
 import de.mash1t.battleships.gui.Field;
-import de.mash1t.battleships.gui.Field.Status;
+import de.mash1t.battleships.gui.FieldState;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -32,11 +33,19 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
+ * Class for the enemy board. 
+ * Here you can target fields and shoot at them, maybe even hit ships :P
  *
  * @author Manuel Schmid
  */
 public class EnemyBoard extends Board {
 
+    /**
+     * Constructor
+     *
+     * @param dimensions size of the board on the x and y axis
+     * @param panel
+     */
     public EnemyBoard(int dimensions, JPanel panel) {
         super(dimensions, dimensions, panel);
     }
@@ -46,15 +55,18 @@ public class EnemyBoard extends Board {
         return new ButtonClickListener();
     }
 
+    /**
+     * Listener for mouse events
+     */
     protected class ButtonClickListener extends ButtonMouseListener {
 
         @Override
         public void mouseClicked(MouseEvent e) {
             Field sourceField = (Field) e.getSource();
-            if (sourceField.getFieldStatus() == Status.Default) {
-                 if (SwingUtilities.isLeftMouseButton(e)) {
+            if (sourceField.getFieldState() == FieldState.Default) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
                     sourceField.hit();
-                    System.out.println(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Enemy - hit");
+                    devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Enemy - hit");
                 }
             }
         }
@@ -62,16 +74,16 @@ public class EnemyBoard extends Board {
         @Override
         public void mouseEntered(MouseEvent e) {
             Field sourceField = (Field) e.getSource();
-            if (sourceField.getFieldStatus() == Status.Default) {
-                sourceField.setBackground(Color.ORANGE);
+            if (sourceField.getFieldState() == FieldState.Default) {
+                sourceField.hover();
             }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
             Field sourceField = (Field) e.getSource();
-            if (sourceField.getFieldStatus() == Status.Default) {
-                sourceField.setBackground(null);
+            if (sourceField.getFieldState() == FieldState.Default) {
+                sourceField.resetSoft();
             }
         }
     }

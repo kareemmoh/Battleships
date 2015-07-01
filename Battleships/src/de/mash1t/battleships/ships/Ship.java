@@ -23,38 +23,93 @@
  */
 package de.mash1t.battleships.ships;
 
+import de.mash1t.battleships.gui.Field;
+import de.mash1t.battleships.gui.FieldState;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
+ * Class for a ship
  *
  * @author Manuel Schmid
  */
-public abstract class Ship {
+public class Ship {
 
-    protected Status status = Status.Healthy;
-    private final int shipSize;
-    private final int posx;
-    private final int posy;
+    protected ShipState shipState = ShipState.ToBeSet;
+    protected final ShipSize shipSize;
+    protected boolean isShipTurned = false;
+    protected final List<Field> fieldList = new ArrayList<>();
 
-    public Ship(int shipSize, int x, int y) {
+    /**
+     * Constructor
+     *
+     * @param shipSize size of the ship set in enum
+     */
+    public Ship(ShipSize shipSize) {
         this.shipSize = shipSize;
-        posx = x;
-        posy = y;
     }
 
-    public enum Status {
-
-        Destroyed,
-        Healthy;
-    }
-
-    public int getShipSize() {
+    /**
+     * Getter for the ship size
+     *
+     * @return size of the ship (element of enum, not integer)
+     */
+    public ShipSize getShipSize() {
         return shipSize;
     }
 
-    public int getPosX() {
-        return posx;
+    /**
+     * Turns the ship 90 degrees
+     */
+    public void turn() {
+        isShipTurned = !isShipTurned;
     }
 
-    public int getPosY() {
-        return posy;
+    /**
+     * Getter for turning state
+     *
+     * @return is ship turned
+     */
+    public boolean isTurned() {
+        return isShipTurned;
+    }
+
+    /**
+     * Checks if all fields are destroyed and sets ship state
+     *
+     * @return is ship destroyed
+     */
+    public boolean isDestroyed() {
+        boolean isDestroyed = true;
+        for (Field field : fieldList) {
+            if (field.getFieldState() != FieldState.Hit) {
+                isDestroyed = false;
+                break;
+            }
+        }
+        
+        if(isDestroyed){
+            shipState = ShipState.Destroyed;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Assigning fields to ship
+     *
+     * @param fields
+     * @return is ship turned
+     */
+    public boolean assignFieldsToShip(Field[] fields) {
+        if (fields.length == this.shipSize.size()) {
+            // Add fields to ship
+            for (Field field : fields) {
+                fieldList.add(field);
+            }
+            this.shipState = ShipState.Healthy;
+            return true;
+        }
+        return false;
     }
 }

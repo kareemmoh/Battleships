@@ -21,15 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.mash1t.battleships.ships;
+package de.mash1t.battleships.gui;
+
+import java.awt.Color;
 
 /**
- *
+ * Enum for the field state, mapping state to colors
+ * 
  * @author Manuel Schmid
  */
-public class ShipFive extends Ship {
+public enum HoverState {
 
-    public ShipFive(int x, int y) {
-        super(5, x, y);
+    Hovered(Color.orange),
+    HoverInvalid(Color.red),
+    NotHovered(null);
+
+    // color to display on field
+    private final Color color;
+
+    HoverState(Color color) {
+        this.color = color;
+    }
+
+    public Color getColor() {
+        return color;
     }
 }

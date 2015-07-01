@@ -23,72 +23,83 @@
  */
 package de.mash1t.battleships.gui;
 
-import java.awt.Color;
-import javax.swing.JButton;
+import de.mash1t.battleships.ships.Ship;
 
 /**
  *
  * @author Manuel Schmid
  */
-public class Field extends JButton {
+public interface Field {
 
-    private final int posx;
-    private final int posy;
-    private Status fieldStatus;
+    /**
+     * Getter for position x of the field
+     *
+     * @return position x of the field
+     */
+    public int getPosX();
 
-    public Field(int size, int x, int y) {
-        posx = x;
-        posy = y;
-        setSize(size, size);
-        fieldStatus = Status.Default;
-    }
+    /**
+     * Getter for position y of the field
+     *
+     * @return position y of the field
+     */
+    public int getPosY();
 
-    public int getPosX() {
-        return posx;
-    }
+    /**
+     * Assigns a ship to this field
+     *
+     * @param ship ship to assign
+     */
+    public void assignShip(Ship ship);
 
-    public int getPosY() {
-        return posy;
-    }
+    /**
+     * Getter for ship assignment
+     *
+     * @return is ship assigned
+     */
+    public boolean isShipAssigned();
 
-    public void miss() {
-        fieldStatus = Status.Miss;
-        changeColor();
-    }
+    /**
+     * Set new field status and change color
+     */
+    public void hover();
 
-    public void hit() {
-        fieldStatus = Status.Hit;
-        changeColor();
-        this.setText("1");
-    }
+    /**
+     * Set new field status and change color
+     */
+    public void hoverInvalid();
 
-    public void reset() {
-        fieldStatus = Status.Default;
-        changeColor();
-    }
+    /**
+     * Set new field status and change color
+     */
+    public void miss();
 
-    private void changeColor() {
-        this.setBackground(fieldStatus.getColor());
-    }
+    /**
+     * Set new field status and change color
+     */
+    public void hit();
 
-    public Status getFieldStatus() {
-        return this.fieldStatus;
-    }
+    /**
+     * Resets the field to values set in this class
+     */
+    public void resetSoft();
 
-    public enum Status {
+    /**
+     * Resets the field (clear color and text)
+     */
+    public void resetHard();
 
-        Miss(Color.blue),
-        Hit(Color.red),
-        Default(null);
+    /**
+     * Getter for the current field state
+     *
+     * @return
+     */
+    public FieldState getFieldState();
 
-        private final Color color;
-
-        Status(Color color) {
-            this.color = color;
-        }
-
-        public Color getColor() {
-            return color;
-        }
-    }
+    /**
+     * Sets the text of the field to the given String
+     *
+     * @param text
+     */
+    public void devModeText(String text);
 }

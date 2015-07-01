@@ -21,15 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.mash1t.battleships.ships;
+package de.mash1t.battleships.config;
 
 /**
+ * Class for configuration parameters for server
  *
  * @author Manuel Schmid
  */
-public class ShipFour extends Ship {
+public enum ConfigParam {
 
-    public ShipFour(int x, int y) {
-        super(4, x, y);
+    DevMode("DevMode", "false"),
+    DevModeHover("DevModeHover", "true"),
+    InvalidShipHoverBehaviour("InvalidShipHoverBehaviour", "true");
+
+    private final String configString;
+    private final String defaultValue;
+
+    /**
+     * Constructor
+     *
+     * @param name
+     */
+    ConfigParam(String configString, String defaultValue) {
+        this.configString = configString;
+        this.defaultValue = defaultValue;
+    }
+
+    /**
+     * Getter for configString
+     *
+     * @return
+     */
+    public String getConfigString() {
+        return configString;
+    }
+
+    /**
+     * Getter for defaultValue
+     *
+     * @return
+     */
+    public String getDefaultValue() {
+        return defaultValue;
     }
 }

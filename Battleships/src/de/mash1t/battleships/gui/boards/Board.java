@@ -23,53 +23,70 @@
  */
 package de.mash1t.battleships.gui.boards;
 
+import de.mash1t.battleships.gui.ButtonField;
 import de.mash1t.battleships.gui.Field;
 import static de.mash1t.battleships.gui.Main.fieldSize;
+import de.mash1t.battleships.ships.Ship;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 
 /**
- *
+ * Class for a board
+ * 
  * @author Manuel Schmid
  */
 public abstract class Board {
 
     protected Field fields[][];
+    protected Ship ships[];
     protected final int fieldCountX;
     protected final int fieldCountY;
     protected final JPanel panel;
 
+    /**
+     * Constructor
+     *
+     * @param fieldCountX size of the board on the x axis
+     * @param fieldCountY size of the board on the y axis
+     * @param panel Panel to set fields to
+     */
     public Board(int fieldCountX, int fieldCountY, JPanel panel) {
         this.fieldCountX = fieldCountX;
         this.fieldCountY = fieldCountY;
         this.panel = panel;
+        fields = new Field[fieldCountX][fieldCountY];
         drawButtons();
     }
 
+    /**
+     * Draws the buttons
+     */
     protected final void drawButtons() {
-        this.initFieldArray();
-        Field tempField;
+        ButtonField tempField;
         for (int x = 0; x < fieldCountX; x++) {
             for (int y = 0; y < fieldCountY; y++) {
-                tempField = new Field(fieldSize, x, y);
+                tempField = new ButtonField(fieldSize, x, y);
                 tempField.addMouseListener(getNewMouseListener());
                 panel.add(tempField);
                 tempField.setLocation(x * fieldSize, y * fieldSize);
                 fields[x][y] = tempField;
-
             }
         }
     }
 
-    private void initFieldArray() {
-        fields = new Field[fieldCountX][fieldCountY];
-    }
-
+    /**
+     * Getter for the MouseListener, can be overwritten to apply own listener
+     *
+     * @return applied mouse listener
+     */
     protected MouseListener getNewMouseListener() {
         return new ButtonMouseListener();
     }
 
+    /**
+     * Class for the ButtonListener with all possible events
+     */
     protected class ButtonMouseListener implements MouseListener {
 
         @Override

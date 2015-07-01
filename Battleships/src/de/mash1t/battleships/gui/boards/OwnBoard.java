@@ -26,13 +26,12 @@ package de.mash1t.battleships.gui.boards;
 import de.mash1t.battleships.config.ConfigHelper;
 import static de.mash1t.battleships.config.ConfigHelper.devLine;
 import de.mash1t.battleships.gui.field.Field;
-import static de.mash1t.battleships.gui.Main.fieldCountSquare;
 import de.mash1t.battleships.gui.field.ButtonField;
 import de.mash1t.battleships.ships.Ship;
-import de.mash1t.battleships.ships.ShipSize;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -55,11 +54,15 @@ public class OwnBoard extends Board {
      * Constructor
      *
      * @param dimensions size of the board on the x and y axis
-     * @param panel
+     * @param panel jPanel to show fields in
+     * @param shipList list of ships
      */
-    public OwnBoard(int dimensions, JPanel panel) {
+    public OwnBoard(int dimensions, JPanel panel, List<Ship> shipList) {
         super(dimensions, dimensions, panel);
-        //setShip(new Ship(ShipSize.Four));
+        for(Ship shipToSet: shipList){
+            setShip(shipToSet);
+        }
+        System.out.println("Finished setting up ships");
     }
     
     /**

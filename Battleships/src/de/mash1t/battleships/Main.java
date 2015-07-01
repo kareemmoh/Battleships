@@ -21,28 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.mash1t.battleships.gui;
+package de.mash1t.battleships;
 
 import de.mash1t.battleships.config.ConfigHelper;
 import de.mash1t.battleships.gui.boards.*;
+import static de.mash1t.battleships.gui.boards.Board.fieldCountSquare;
+import de.mash1t.battleships.ships.Ship;
+import de.mash1t.battleships.ships.ShipSize;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
+ * Main class to start battleships
  *
  * @author Manuel Schmid
  */
-public class Main extends javax.swing.JFrame {
+public final class Main extends javax.swing.JFrame {
 
-    /**
-     * Dimensions of the field
-     */
-    public static final int fieldSize = 35;
-
-    /**
-     * Counter of how many fields should be displayed in square.
-     * TODO move to config and create panels with dynamic size
-     */
-    public static final int fieldCountSquare = 13;
-
+    
+    // Ship List
+    private static final List<Ship> shipList = new ArrayList<>();
+    
     // Boards
     private static EnemyBoard enemyBoard;
     private static OwnBoard ownBoard;
@@ -53,10 +52,28 @@ public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
         ConfigHelper.init();
-        enemyBoard = new EnemyBoard(fieldCountSquare, this.pEnemy);
-        ownBoard = new OwnBoard(fieldCountSquare, this.pOwn);
+        createShipList();
+        startNewGame();
     }
 
+    
+
+    public static void createShipList() {
+        shipList.add(new Ship(ShipSize.Five));
+        shipList.add(new Ship(ShipSize.Four));
+        shipList.add(new Ship(ShipSize.Four));
+//        shipList.add(new Ship(ShipSize.Three));
+//        shipList.add(new Ship(ShipSize.Three));
+//        shipList.add(new Ship(ShipSize.Three));
+//        shipList.add(new Ship(ShipSize.Two));
+//        shipList.add(new Ship(ShipSize.Two));
+//        shipList.add(new Ship(ShipSize.Two));
+//        shipList.add(new Ship(ShipSize.Two));
+    }
+    public void startNewGame() {
+        enemyBoard = new EnemyBoard(fieldCountSquare, this.pEnemy);
+        ownBoard = new OwnBoard(fieldCountSquare, this.pOwn, shipList);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -75,22 +92,22 @@ public class Main extends javax.swing.JFrame {
         pEnemy.setLayout(pEnemyLayout);
         pEnemyLayout.setHorizontalGroup(
             pEnemyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 484, Short.MAX_VALUE)
+            .addGap(0, 468, Short.MAX_VALUE)
         );
         pEnemyLayout.setVerticalGroup(
             pEnemyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 504, Short.MAX_VALUE)
+            .addGap(0, 471, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout pOwnLayout = new javax.swing.GroupLayout(pOwn);
         pOwn.setLayout(pOwnLayout);
         pOwnLayout.setHorizontalGroup(
             pOwnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 532, Short.MAX_VALUE)
+            .addGap(0, 468, Short.MAX_VALUE)
         );
         pOwnLayout.setVerticalGroup(
             pOwnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 504, Short.MAX_VALUE)
+            .addGap(0, 511, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -99,18 +116,18 @@ public class Main extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pEnemy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pOwn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pEnemy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pOwn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pOwn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pEnemy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(pEnemy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(pOwn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 

@@ -35,7 +35,6 @@ public class ConfigHelper {
     // Config Params
     private static boolean devMode;
     private static boolean devModeHover;
-    private static boolean invalidShipHoverBehaviour;
 
     public static void init() {
 
@@ -48,7 +47,6 @@ public class ConfigHelper {
 
         devMode = conf.getConfigValueBoolean(ConfigParam.DevMode);
         devModeHover = conf.getConfigValueBoolean(ConfigParam.DevModeHover);
-        invalidShipHoverBehaviour = conf.getConfigValueBoolean(ConfigParam.InvalidShipHoverBehaviour);
 
     }
 
@@ -68,17 +66,6 @@ public class ConfigHelper {
      */
     public static boolean isDevModeHover() {
         return devModeHover;
-    }
-
-    /**
-     * Getter for Ship Hover Behaviour
-     *
-     * true: whole hover turns red; false: only invalid field turns red
-     *
-     * @return
-     */
-    public static boolean getInvalidShipHoverBehaviour() {
-        return invalidShipHoverBehaviour;
     }
 
     /**

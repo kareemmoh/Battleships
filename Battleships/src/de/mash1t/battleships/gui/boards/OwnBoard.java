@@ -298,22 +298,6 @@ public class OwnBoard extends Board {
     }
 
     /**
-     * Gets the hover mode on invalid ship hover
-     *
-     * @param field field to show color on
-     * @return result if invalid placement or not
-     */
-    protected boolean getHoverExpression(Field field) {
-        if (ConfigHelper.getInvalidShipHoverBehaviour()) {
-            // In case of invalid field: Turn whole hover red
-            return !isHoverValid;
-        } else {
-            // In case of invalid field: Turn invalid fields red
-            return field.isShipAssigned();
-        }
-    }
-
-    /**
      * Validates hover on fields
      *
      * @param fields
@@ -332,7 +316,7 @@ public class OwnBoard extends Board {
         // Setting hover
         for (Field field : fields) {
             // Switch hover mode depending on config settings
-            if (getHoverExpression(field)) {
+            if (field.isShipAssigned()) {
                 field.hoverInvalid();
             } else {
                 if (isWrapper) {

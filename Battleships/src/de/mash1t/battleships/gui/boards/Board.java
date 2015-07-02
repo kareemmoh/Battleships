@@ -23,9 +23,8 @@
  */
 package de.mash1t.battleships.gui.boards;
 
-import de.mash1t.battleships.gui.ButtonField;
-import de.mash1t.battleships.gui.Field;
-import static de.mash1t.battleships.gui.Main.fieldSize;
+import de.mash1t.battleships.gui.field.ButtonField;
+import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.ships.Ship;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -33,7 +32,7 @@ import javax.swing.JPanel;
 
 /**
  * Class for a board
- * 
+ *
  * @author Manuel Schmid
  */
 public abstract class Board {
@@ -45,6 +44,17 @@ public abstract class Board {
     protected final JPanel panel;
 
     /**
+     * Dimensions of the field
+     */
+    public static final int fieldSize = 45;
+
+    /**
+     * Counter of how many fields should be displayed in square. TODO move to
+     * config and create panels with dynamic size
+     */
+    public static final int fieldCountSquare = 10;
+
+    /**
      * Constructor
      *
      * @param fieldCountX size of the board on the x axis
@@ -52,6 +62,7 @@ public abstract class Board {
      * @param panel Panel to set fields to
      */
     public Board(int fieldCountX, int fieldCountY, JPanel panel) {
+        panel.removeAll();
         this.fieldCountX = fieldCountX;
         this.fieldCountY = fieldCountY;
         this.panel = panel;

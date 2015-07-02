@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.mash1t.battleships.gui;
+package de.mash1t.battleships.gui.field;
 
 import java.awt.Color;
 
 /**
  * Enum for the field state, mapping state to colors
- * 
+ *
  * @author Manuel Schmid
  */
 public enum HoverState {

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.mash1t.battleships.gui;
+package de.mash1t.battleships.gui.field;
 
 import de.mash1t.battleships.config.ConfigHelper;
 import de.mash1t.battleships.ships.Ship;
@@ -40,6 +40,8 @@ public class ButtonField extends JButton implements Field {
     private Ship ship;
     private String fieldNumber;
     private HoverState hoverState;
+
+    private HoverPosition hoverPosition;
 
     /**
      * Constructor
@@ -108,6 +110,7 @@ public class ButtonField extends JButton implements Field {
     @Override
     public void resetSoft() {
         hoverState = HoverState.NotHovered;
+        hoverPosition = HoverPosition.None;
         changeColor();
         if (ConfigHelper.isDevModeHover()) {
             this.setText(fieldNumber);
@@ -117,6 +120,7 @@ public class ButtonField extends JButton implements Field {
     @Override
     public void resetHard() {
         hoverState = HoverState.NotHovered;
+        hoverPosition = HoverPosition.None;
         fieldStatus = FieldState.Default;
         changeColor();
         if (ConfigHelper.isDevModeHover()) {
@@ -132,6 +136,21 @@ public class ButtonField extends JButton implements Field {
     @Override
     public void devModeText(String text) {
         this.setText(text);
+    }
+
+    @Override
+    public void setFirst() {
+        hoverPosition = HoverPosition.First;
+    }
+
+    @Override
+    public void setLast() {
+        hoverPosition = HoverPosition.Last;
+    }
+
+    @Override
+    public HoverPosition getHoverPosition() {
+        return this.hoverPosition;
     }
 
     /**

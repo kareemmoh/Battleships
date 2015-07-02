@@ -25,14 +25,19 @@ package de.mash1t.battleships.gui.boards;
 
 import de.mash1t.battleships.config.ConfigHelper;
 import static de.mash1t.battleships.config.ConfigHelper.devLine;
-import de.mash1t.battleships.gui.Field;
-import static de.mash1t.battleships.gui.Main.fieldCountSquare;
+import de.mash1t.battleships.gui.field.ButtonField;
+import de.mash1t.battleships.gui.field.Field;
+import de.mash1t.battleships.gui.field.HoverPosition;
 import de.mash1t.battleships.ships.Ship;
-import de.mash1t.battleships.ships.ShipSize;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -47,18 +52,54 @@ public class OwnBoard extends Board {
     private final Map<Field, Ship> fieldShipMap = new HashMap<>();
     private boolean setShip = false;
     private boolean isHoverValid = true;
-    private Ship ship;
-    private Field[] hoveredFields = null;
+    private static Ship ship;
+    private Field[] shipFields = null;
+    private Field[] hoveredShipFields = null;
 
     /**
      * Constructor
      *
      * @param dimensions size of the board on the x and y axis
-     * @param panel
+     * @param panel jPanel to show fields in
+     * @param shipList list of ships
      */
-    public OwnBoard(int dimensions, JPanel panel) {
+    public OwnBoard(int dimensions, JPanel panel, List<Ship> shipList) {
         super(dimensions, dimensions, panel);
-        setShip(new Ship(ShipSize.Four));
+    }
+
+    /**
+     * Sets up ships
+     *
+     * @param shipList List of ships to set
+     */
+    public void setShips(final List<Ship> shipList) {
+        
+        // Outsource ship placement setter to new thread
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                // Sets ship placement mode to true
+                for (Ship shipToSet : shipList) {
+                    OwnBoard.ship = shipToSet;
+                    setShip = true;
+                    while (setShip) {
+                        try {
+                            // TODO bad practice
+                            Thread.sleep(100);
+                            devLine("waiting... " + ship.getShipSize().toString());
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(OwnBoard.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                // Reset all hovered fields
+                for (Field field : hoveredShipFields) {
+                    field.resetSoft();
+                }
+                System.out.println("Finished setting up ships");
+            }
+        };
+        thread.start();
     }
 
     @Override
@@ -73,7 +114,7 @@ public class OwnBoard extends Board {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            Field sourceField = (Field) e.getSource();
+            ButtonField sourceField = (ButtonField) e.getSource();
             if (SwingUtilities.isRightMouseButton(e)) {
                 if (setShip) {
                     devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Own - turn");
@@ -86,6 +127,7 @@ public class OwnBoard extends Board {
                     assignShipToFields();
                 }
             }
+            sourceField.setFocusPainted(false);
         }
 
         @Override
@@ -111,13 +153,15 @@ public class OwnBoard extends Board {
      * @param sourceField
      * @return
      */
-    private Field[] setHoveredFields(Field sourceField) {
+    private Field[] setShipFields(Field sourceField) {
 
         int hoveredX = sourceField.getPosX();
         int hoveredY = sourceField.getPosY();
         int shipSize = ship.getShipSize().size();
         Field[] returnArray = new Field[shipSize];
         int fieldCounter = 0;
+        int lastCounter = 0;
+        int firstCounter = 0;
 
         // If not turned, calculate fields on x axis
         if (!ship.isTurned()) {
@@ -125,9 +169,11 @@ public class OwnBoard extends Board {
                 if (i < fieldCountSquare) {
                     // Normal field addition to the right
                     returnArray[fieldCounter] = fields[i][hoveredY];
+                    lastCounter = fieldCounter;
                 } else {
                     // Edge of board is reached, add to the left of the source field
                     returnArray[fieldCounter] = fields[fieldCountSquare - fieldCounter - 1][hoveredY];
+                    firstCounter = fieldCounter;
                 }
                 fieldCounter++;
             }
@@ -136,13 +182,20 @@ public class OwnBoard extends Board {
                 if (i < fieldCountSquare) {
                     // Normal field addition to the bottom
                     returnArray[fieldCounter] = fields[hoveredX][i];
+                    lastCounter = fieldCounter;
                 } else {
                     // Edge of board is reached, add to the top of the source field
                     returnArray[fieldCounter] = fields[hoveredX][fieldCountSquare - fieldCounter - 1];
+                    firstCounter = fieldCounter;
                 }
                 fieldCounter++;
             }
         }
+
+        // Setting up first/last field
+        returnArray[firstCounter].setFirst();
+        returnArray[lastCounter].setLast();
+
         return returnArray;
     }
 
@@ -153,14 +206,18 @@ public class OwnBoard extends Board {
      * @param sourceField
      */
     protected void reloadHover(Field sourceField) {
-        hoveredFields = setHoveredFields(sourceField);
+        shipFields = setShipFields(sourceField);
+        hoveredShipFields = getShipFieldHoverWrapper();
         int fieldCounter = 0;
-        for (Field field : hoveredFields) {
+        // Validate hover
+        for (Field field : hoveredShipFields) {
             if (field.isShipAssigned()) {
                 isHoverValid = false;
             }
         }
-        for (Field field : hoveredFields) {
+
+        // Setting hover
+        for (Field field : hoveredShipFields) {
             // Switch hover mode depending on config settings
             if (getHoverExpression(field)) {
                 field.hoverInvalid();
@@ -176,10 +233,73 @@ public class OwnBoard extends Board {
     }
 
     /**
+     * Calculates and validates all surrounding fields which are necessary
+     *
+     * @return Array hovered fields
+     */
+    protected Field[] getShipFieldHoverWrapper() {
+        ArrayList<Field> extenedHover = new ArrayList<>();
+        extenedHover.addAll(Arrays.asList(shipFields));
+        int x;
+        int y;
+        for (int i = 0; i < shipFields.length; i++) {
+            Field field = shipFields[i];
+            x = field.getPosX();
+            y = field.getPosY();
+            if (field.getHoverPosition() == HoverPosition.First) {
+                // Check for first element
+                if (ship.isTurned()) {
+                    // If not on top corner, add field for hover on top
+                    if (y != 0) {
+                        validateHoverOnField(extenedHover, x, y - 1);
+                    }
+                    validateHoverOnField(extenedHover, x + 1, y);
+                    validateHoverOnField(extenedHover, x - 1, y);
+                } else {
+                    // If not on left corner, add field for hover on left
+                    if (x != 0) {
+                        validateHoverOnField(extenedHover, x - 1, y);
+                    }
+                    validateHoverOnField(extenedHover, x, y + 1);
+                    validateHoverOnField(extenedHover, x, y - 1);
+                }
+            } else if (field.getHoverPosition() == HoverPosition.Last) {
+                // Check for last element
+                if (ship.isTurned()) {
+                    // If not on top corner, add field for hover on top
+                    if (y != fields.length - 1) {
+                        validateHoverOnField(extenedHover, x, y + 1);
+                    }
+                    validateHoverOnField(extenedHover, x + 1, y);
+                    validateHoverOnField(extenedHover, x - 1, y);
+                } else {
+                    // If not on left corner, add field for hover on left
+                    if (x != fields.length - 1) {
+                        validateHoverOnField(extenedHover, x + 1, y);
+                    }
+                    validateHoverOnField(extenedHover, x, y + 1);
+                    validateHoverOnField(extenedHover, x, y - 1);
+                }
+            } else {
+                if (ship.isTurned()) {
+                    // Add fields to left and right side of ship
+                    validateHoverOnField(extenedHover, x + 1, y);
+                    validateHoverOnField(extenedHover, x - 1, y);
+                } else {
+                    // Add fields to top and bottom side of ship
+                    validateHoverOnField(extenedHover, x, y + 1);
+                    validateHoverOnField(extenedHover, x, y - 1);
+                }
+            }
+        }
+        return extenedHover.toArray(new Field[extenedHover.size()]);
+    }
+
+    /**
      * Resets the hover
      */
     protected void resetHover() {
-        for (Field field : hoveredFields) {
+        for (Field field : hoveredShipFields) {
             if (!field.isShipAssigned()) {
                 // Reset field to default state
                 field.resetHard();
@@ -208,31 +328,35 @@ public class OwnBoard extends Board {
     }
 
     /**
+     * Validates position of fields to hover on and adds valid fields to hover
+     * list
+     *
+     * @param hover ArrayList to add fields to
+     * @param x int position x
+     * @param y int position y
+     */
+    protected void validateHoverOnField(ArrayList<Field> hover, int x, int y) {
+        if (x < fields.length && y < fields.length && x >= 0 && y >= 0) {
+            hover.add(fields[x][y]);
+        }
+    }
+
+    /**
      * Assigns a ship to a field
      */
     protected void assignShipToFields() {
         devLine("Assigning fields to ship:");
         // Assign fields to ship
-        if (ship.assignFieldsToShip(hoveredFields)) {
-            for (Field field : hoveredFields) {
+        if (ship.assignFieldsToShip(shipFields)) {
+            for (Field field : shipFields) {
                 fieldShipMap.put(field, ship);
                 fields[field.getPosX()][field.getPosY()].assignShip(ship);
                 devLine(field.getPosX() + " - " + field.getPosY());
             }
             isHoverValid = false;
+            setShip = false;
         } else {
             devLine("Assignation failed: size of ship differs from amount of fields to set");
         }
     }
-
-    /**
-     * Sets ship placement mode to true
-     *
-     * @param ship ship to place
-     */
-    private void setShip(Ship ship) {
-        setShip = true;
-        this.ship = ship;
-    }
-
 }

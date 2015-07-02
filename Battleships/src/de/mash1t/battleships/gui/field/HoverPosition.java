@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 Manuel Schmid.
+ * Copyright 2015 manuel.schmid.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,30 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.mash1t.battleships.gui;
 
-import java.awt.Color;
+package de.mash1t.battleships.gui.field;
 
 /**
- * Enum for the field state, mapping state to colors
+ * Position of the fields in the hover
+ * 
+ * @author manuel.schmid
  */
-public enum FieldState {
-
-    Miss(Color.blue),
-    Hit(Color.red),
-    HoverInvalid(Color.red),
-    Hovered(Color.orange),
-    ShipIsSet(Color.darkGray),
-    Default(null);
-
-    // color to display on field
-    private final Color color;
-
-    FieldState(Color color) {
-        this.color = color;
-    }
-
-    public Color getColor() {
-        return color;
-    }
+public enum HoverPosition {
+    First,
+    Last,
+    None;
 }

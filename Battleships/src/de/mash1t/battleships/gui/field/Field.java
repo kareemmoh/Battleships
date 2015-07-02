@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.mash1t.battleships.gui;
+package de.mash1t.battleships.gui.field;
 
 import de.mash1t.battleships.ships.Ship;
 
@@ -102,4 +102,20 @@ public interface Field {
      * @param text
      */
     public void devModeText(String text);
+
+    /**
+     * Sets the first field in the hover
+     */
+    public void setFirst();
+
+    /**
+     * Sets the last field in the hover
+     */
+    public void setLast();
+
+    /**
+     * Gatter for the current field hover position
+     * @return HoverPosition
+     */
+    public HoverPosition getHoverPosition();
 }

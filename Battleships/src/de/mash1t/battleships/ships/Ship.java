@@ -59,10 +59,12 @@ public class Ship {
     }
 
     /**
-     * Turns the ship 90 degrees
+     * Sets up the turn state
+     *
+     * @param turned boolean current turn state
      */
-    public void turn() {
-        isShipTurned = !isShipTurned;
+    public void setTurned(boolean turned) {
+        isShipTurned = turned;
     }
 
     /**
@@ -87,8 +89,8 @@ public class Ship {
                 break;
             }
         }
-        
-        if(isDestroyed){
+
+        if (isDestroyed) {
             shipState = ShipState.Destroyed;
             return true;
         }

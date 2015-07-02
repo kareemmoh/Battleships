@@ -55,6 +55,7 @@ public class OwnBoard extends Board {
     private static Ship ship;
     private Field[] shipFields = null;
     private Field[] hoveredShipFields = null;
+    private boolean isShipTurned;
 
     /**
      * Constructor
@@ -65,6 +66,7 @@ public class OwnBoard extends Board {
      */
     public OwnBoard(int dimensions, JPanel panel, List<Ship> shipList) {
         super(dimensions, dimensions, panel);
+        isShipTurned = false;
     }
 
     /**
@@ -116,7 +118,7 @@ public class OwnBoard extends Board {
             if (SwingUtilities.isRightMouseButton(e)) {
                 if (setShip) {
                     devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Own - turn");
-                    ship.turn();
+                    isShipTurned = !isShipTurned;
                     resetHover();
                     reloadHover(sourceField);
                 }
@@ -178,7 +180,7 @@ public class OwnBoard extends Board {
         int firstCounter = 0;
 
         // If not turned, calculate fields on x axis
-        if (!ship.isTurned()) {
+        if (!isShipTurned) {
             for (int i = hoveredX; i < hoveredX + shipSize; i++) {
                 if (i < fieldCountSquare) {
                     // Normal field addition to the right
@@ -229,7 +231,7 @@ public class OwnBoard extends Board {
             y = field.getPosY();
             if (field.getHoverPosition() == HoverPosition.First) {
                 // Check for first element
-                if (ship.isTurned()) {
+                if (isShipTurned) {
                     // If not on top corner, add field for hover on top
                     if (y != 0) {
                         validateHoverWrapperPosition(extenedHover, x, y - 1);
@@ -246,7 +248,7 @@ public class OwnBoard extends Board {
                 }
             } else if (field.getHoverPosition() == HoverPosition.Last) {
                 // Check for last element
-                if (ship.isTurned()) {
+                if (isShipTurned) {
                     // If not on top corner, add field for hover on top
                     if (y != fields.length - 1) {
                         validateHoverWrapperPosition(extenedHover, x, y + 1);
@@ -262,7 +264,7 @@ public class OwnBoard extends Board {
                     validateHoverWrapperPosition(extenedHover, x, y - 1);
                 }
             } else {
-                if (ship.isTurned()) {
+                if (isShipTurned) {
                     // Add fields to left and right side of ship
                     validateHoverWrapperPosition(extenedHover, x + 1, y);
                     validateHoverWrapperPosition(extenedHover, x - 1, y);
@@ -369,6 +371,7 @@ public class OwnBoard extends Board {
         // Assign fields to ship
         if (ship.assignFieldsToShip(shipFields)) {
             for (Field field : shipFields) {
+                ship.setTurned(isShipTurned);
                 fieldShipMap.put(field, ship);
                 fields[field.getPosX()][field.getPosY()].assignShip(ship);
                 devLine(field.getPosX() + " - " + field.getPosY());

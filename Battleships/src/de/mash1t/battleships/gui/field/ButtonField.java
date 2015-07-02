@@ -38,10 +38,12 @@ public class ButtonField extends JButton implements Field {
     private final int posy;
     private FieldState fieldStatus;
     private Ship ship;
-    private String fieldNumber;
     private HoverState hoverState;
 
     private HoverPosition hoverPosition;
+
+    // TODO remove after development
+    private String fieldNumber;
 
     /**
      * Constructor
@@ -70,6 +72,7 @@ public class ButtonField extends JButton implements Field {
     @Override
     public void assignShip(Ship ship) {
         this.ship = ship;
+        // TODO remove after development
         this.fieldNumber = this.getText();
         fieldStatus = FieldState.ShipIsSet;
         hoverState = HoverState.HoverInvalid;
@@ -98,6 +101,12 @@ public class ButtonField extends JButton implements Field {
     @Override
     public void hover() {
         hoverState = HoverState.Hovered;
+        changeColor();
+    }
+
+    @Override
+    public void hoverWrapper() {
+        hoverState = HoverState.HoveredWrapper;
         changeColor();
     }
 

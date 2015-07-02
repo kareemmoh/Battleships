@@ -63,6 +63,11 @@ public interface Field {
      * Set new field status and change color
      */
     public void hover();
+    
+    /**
+     * Set new field status and change color
+     */
+    public void hoverWrapper();
 
     /**
      * Set new field status and change color

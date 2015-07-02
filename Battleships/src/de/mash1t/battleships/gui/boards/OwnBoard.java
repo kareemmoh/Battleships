@@ -113,7 +113,7 @@ public class OwnBoard extends Board {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            ButtonField sourceField = (ButtonField) e.getSource();
+            Field sourceField = (Field) e.getSource();
             if (SwingUtilities.isRightMouseButton(e)) {
                 if (setShip) {
                     devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Own - turn");
@@ -126,7 +126,6 @@ public class OwnBoard extends Board {
                     assignShipToFields();
                 }
             }
-            sourceField.setFocusPainted(false);
         }
 
         @Override

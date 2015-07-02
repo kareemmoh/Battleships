@@ -57,6 +57,10 @@ public class ButtonField extends JButton implements Field {
         posy = y;
         setSize(size, size);
         fieldStatus = FieldState.Default;
+        
+        setFocusPainted(false);
+        setRolloverEnabled(false);
+        setFocusable(false);
     }
 
     @Override

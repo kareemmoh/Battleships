@@ -32,8 +32,6 @@ public enum FieldState {
 
     Miss(Color.blue),
     Hit(Color.red),
-    HoverInvalid(Color.red),
-    Hovered(Color.orange),
     ShipIsSet(Color.darkGray),
     Default(null);
 

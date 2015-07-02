@@ -102,4 +102,20 @@ public interface Field {
      * @param text
      */
     public void devModeText(String text);
+
+    /**
+     * Sets the first field in the hover
+     */
+    public void setFirst();
+
+    /**
+     * Sets the last field in the hover
+     */
+    public void setLast();
+
+    /**
+     * Gatter for the current field hover position
+     * @return HoverPosition
+     */
+    public HoverPosition getHoverPosition();
 }

@@ -87,8 +87,7 @@ public class OwnBoard extends Board {
                     while (setShip) {
                         try {
                             // TODO bad practice
-                            Thread.sleep(100);
-                            devLine("waiting... " + ship.getShipSize().toString());
+                            Thread.sleep(50);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(OwnBoard.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -96,7 +95,7 @@ public class OwnBoard extends Board {
                 }
                 // Reset all hovered fields
                 resetHover();
-                System.out.println("Finished setting up ships");
+                devLine("Finished setting up ships");
             }
         };
         thread.start();

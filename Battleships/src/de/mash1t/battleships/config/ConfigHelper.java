@@ -24,7 +24,8 @@
 package de.mash1t.battleships.config;
 
 /**
- *
+ * Helper for config params
+ * 
  * @author Manuel Schmid
  */
 public class ConfigHelper {
@@ -47,7 +48,6 @@ public class ConfigHelper {
 
         devMode = conf.getConfigValueBoolean(ConfigParam.DevMode);
         devModeHover = conf.getConfigValueBoolean(ConfigParam.DevModeHover);
-
     }
 
     /**
@@ -78,5 +78,4 @@ public class ConfigHelper {
             System.out.println(line);
         }
     }
-
 }

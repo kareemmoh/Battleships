@@ -31,7 +31,7 @@ package de.mash1t.battleships.config;
 public enum ConfigParam {
 
     DevMode("DevMode", "false"),
-    DevModeHover("DevModeHover", "true");
+    DevModeHover("DevModeHover", "false");
 
     private final String configString;
     private final String defaultValue;

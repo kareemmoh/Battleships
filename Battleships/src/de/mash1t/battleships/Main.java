@@ -59,13 +59,13 @@ public final class Main extends javax.swing.JFrame {
         shipList.add(new Ship(ShipSize.Five));
         shipList.add(new Ship(ShipSize.Four));
         shipList.add(new Ship(ShipSize.Four));
-//        shipList.add(new Ship(ShipSize.Three));
-//        shipList.add(new Ship(ShipSize.Three));
-//        shipList.add(new Ship(ShipSize.Three));
-//        shipList.add(new Ship(ShipSize.Two));
-//        shipList.add(new Ship(ShipSize.Two));
-//        shipList.add(new Ship(ShipSize.Two));
-//        shipList.add(new Ship(ShipSize.Two));
+        shipList.add(new Ship(ShipSize.Three));
+        shipList.add(new Ship(ShipSize.Three));
+        shipList.add(new Ship(ShipSize.Three));
+        shipList.add(new Ship(ShipSize.Two));
+        shipList.add(new Ship(ShipSize.Two));
+        shipList.add(new Ship(ShipSize.Two));
+        shipList.add(new Ship(ShipSize.Two));
     }
 
     public void startNewGame() {

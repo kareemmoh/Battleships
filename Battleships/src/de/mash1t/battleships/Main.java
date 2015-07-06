@@ -55,7 +55,10 @@ public final class Main extends javax.swing.JFrame {
         startNewGame();
     }
 
-    public static void createShipList() {
+    /**
+     * Adds all ships to the shipList
+     */
+    protected static void createShipList() {
         shipList.add(new Ship(ShipSize.Five));
         shipList.add(new Ship(ShipSize.Four));
         shipList.add(new Ship(ShipSize.Four));
@@ -68,6 +71,9 @@ public final class Main extends javax.swing.JFrame {
         shipList.add(new Ship(ShipSize.Two));
     }
 
+    /**
+     * Resets boards and initializes new game
+     */
     public void startNewGame() {
         enemyBoard = new EnemyBoard(fieldCountSquare, this.pEnemy);
         ownBoard = new OwnBoard(fieldCountSquare, this.pOwn, shipList);

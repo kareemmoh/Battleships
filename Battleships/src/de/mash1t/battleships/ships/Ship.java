@@ -26,6 +26,7 @@ package de.mash1t.battleships.ships;
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -106,9 +107,7 @@ public class Ship {
     public boolean assignFieldsToShip(Field[] fields) {
         if (fields.length == this.shipSize.size()) {
             // Add fields to ship
-            for (Field field : fields) {
-                fieldList.add(field);
-            }
+            fieldList.addAll(Arrays.asList(fields));
             this.shipState = ShipState.Healthy;
             return true;
         }

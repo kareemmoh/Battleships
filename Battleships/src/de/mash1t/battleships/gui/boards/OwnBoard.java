@@ -25,7 +25,6 @@ package de.mash1t.battleships.gui.boards;
 
 import de.mash1t.battleships.config.ConfigHelper;
 import static de.mash1t.battleships.config.ConfigHelper.devLine;
-import de.mash1t.battleships.gui.field.ButtonField;
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.HoverPosition;
 import de.mash1t.battleships.ships.Ship;
@@ -309,6 +308,12 @@ public class OwnBoard extends Board {
         }
     }
 
+    /**
+     * Sets field state as hovered depending on validation
+     *
+     * @param fields
+     * @param isWrapper
+     */
     protected void setHover(Field[] fields, boolean isWrapper) {
         int fieldCounter = 0;
         // Setting hover

@@ -78,7 +78,7 @@ public final class Main extends javax.swing.JFrame {
         enemyBoard = new EnemyBoard(fieldCountSquare, this.pEnemy);
         ownBoard = new OwnBoard(fieldCountSquare, this.pOwn, shipList);
         ownBoard.setShips(shipList);
-        ownBoard.disablePanel();
+        enemyBoard.disablePanel();
     }
 
     /**

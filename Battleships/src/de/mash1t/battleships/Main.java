@@ -55,23 +55,30 @@ public final class Main extends javax.swing.JFrame {
         startNewGame();
     }
 
-    public static void createShipList() {
+    /**
+     * Adds all ships to the shipList
+     */
+    protected static void createShipList() {
         shipList.add(new Ship(ShipSize.Five));
         shipList.add(new Ship(ShipSize.Four));
         shipList.add(new Ship(ShipSize.Four));
-//        shipList.add(new Ship(ShipSize.Three));
-//        shipList.add(new Ship(ShipSize.Three));
-//        shipList.add(new Ship(ShipSize.Three));
-//        shipList.add(new Ship(ShipSize.Two));
-//        shipList.add(new Ship(ShipSize.Two));
-//        shipList.add(new Ship(ShipSize.Two));
-//        shipList.add(new Ship(ShipSize.Two));
+        shipList.add(new Ship(ShipSize.Three));
+        shipList.add(new Ship(ShipSize.Three));
+        shipList.add(new Ship(ShipSize.Three));
+        shipList.add(new Ship(ShipSize.Two));
+        shipList.add(new Ship(ShipSize.Two));
+        shipList.add(new Ship(ShipSize.Two));
+        shipList.add(new Ship(ShipSize.Two));
     }
 
+    /**
+     * Resets boards and initializes new game
+     */
     public void startNewGame() {
         enemyBoard = new EnemyBoard(fieldCountSquare, this.pEnemy);
         ownBoard = new OwnBoard(fieldCountSquare, this.pOwn, shipList);
         ownBoard.setShips(shipList);
+        enemyBoard.disablePanel();
     }
 
     /**
@@ -83,10 +90,21 @@ public final class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pGame = new javax.swing.JPanel();
         pEnemy = new javax.swing.JPanel();
         pOwn = new javax.swing.JPanel();
+        connectionPanel = new javax.swing.JPanel();
+        bConnect = new javax.swing.JButton();
+        tbPort = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        tbServer = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        tbNickname = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(960, 545));
+        setMinimumSize(new java.awt.Dimension(960, 545));
 
         javax.swing.GroupLayout pEnemyLayout = new javax.swing.GroupLayout(pEnemy);
         pEnemy.setLayout(pEnemyLayout);
@@ -96,7 +114,7 @@ public final class Main extends javax.swing.JFrame {
         );
         pEnemyLayout.setVerticalGroup(
             pEnemyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 471, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout pOwnLayout = new javax.swing.GroupLayout(pOwn);
@@ -107,7 +125,94 @@ public final class Main extends javax.swing.JFrame {
         );
         pOwnLayout.setVerticalGroup(
             pOwnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 511, Short.MAX_VALUE)
+            .addGap(0, 471, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout pGameLayout = new javax.swing.GroupLayout(pGame);
+        pGame.setLayout(pGameLayout);
+        pGameLayout.setHorizontalGroup(
+            pGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pGameLayout.createSequentialGroup()
+                .addComponent(pEnemy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(pOwn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        pGameLayout.setVerticalGroup(
+            pGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pGameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pGameLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(pOwn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pEnemy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        bConnect.setText("Connect");
+        bConnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bConnectActionPerformed(evt);
+            }
+        });
+
+        tbPort.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tbPortKeyPressed(evt);
+            }
+        });
+
+        jLabel1.setText("Port");
+
+        jLabel2.setText("Server");
+
+        tbServer.setMinimumSize(new java.awt.Dimension(50, 20));
+        tbServer.setName(""); // NOI18N
+        tbServer.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tbServerKeyPressed(evt);
+            }
+        });
+
+        jLabel3.setText("Nickname");
+
+        tbNickname.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tbNicknameKeyPressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout connectionPanelLayout = new javax.swing.GroupLayout(connectionPanel);
+        connectionPanel.setLayout(connectionPanelLayout);
+        connectionPanelLayout.setHorizontalGroup(
+            connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, connectionPanelLayout.createSequentialGroup()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tbNickname, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tbServer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tbPort, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(bConnect, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        connectionPanelLayout.setVerticalGroup(
+            connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(connectionPanelLayout.createSequentialGroup()
+                .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tbServer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(tbNickname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel1)
+                    .addComponent(tbPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bConnect))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -117,22 +222,49 @@ public final class Main extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pEnemy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pOwn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(pGame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(connectionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pEnemy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(pOwn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(connectionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addComponent(pGame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void bConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bConnectActionPerformed
+//        if (this.bConnect.getText().equals(connectButtonText.Connect.toString())) {
+//            this.connect();
+//        } else {
+//            this.disconnect();
+//        }
+    }//GEN-LAST:event_bConnectActionPerformed
+
+    private void tbPortKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbPortKeyPressed
+//        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+//            this.connect();
+//        }
+    }//GEN-LAST:event_tbPortKeyPressed
+
+    private void tbServerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbServerKeyPressed
+//        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+//            this.connect();
+//        }
+    }//GEN-LAST:event_tbServerKeyPressed
+
+    private void tbNicknameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbNicknameKeyPressed
+//        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+//            this.connect();
+//        }
+    }//GEN-LAST:event_tbNicknameKeyPressed
 
     /**
      * @param args the command line arguments
@@ -171,7 +303,16 @@ public final class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bConnect;
+    private javax.swing.JPanel connectionPanel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel pEnemy;
+    private javax.swing.JPanel pGame;
     private javax.swing.JPanel pOwn;
+    private javax.swing.JTextField tbNickname;
+    private javax.swing.JTextField tbPort;
+    private javax.swing.JTextField tbServer;
     // End of variables declaration//GEN-END:variables
 }

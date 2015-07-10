@@ -33,6 +33,7 @@ import java.awt.Color;
 public enum HoverState {
 
     Hovered(Color.orange),
+    HoveredWrapper(null),
     HoverInvalid(Color.red),
     NotHovered(null);
 

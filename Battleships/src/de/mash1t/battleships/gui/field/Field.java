@@ -67,6 +67,11 @@ public interface Field {
     /**
      * Set new field status and change color
      */
+    public void hoverWrapper();
+
+    /**
+     * Set new field status and change color
+     */
     public void hoverInvalid();
 
     /**
@@ -114,8 +119,16 @@ public interface Field {
     public void setLast();
 
     /**
-     * Gatter for the current field hover position
+     * Getter for the current field hover position
+     *
      * @return HoverPosition
      */
     public HoverPosition getHoverPosition();
+
+    /**
+     * Enables the field
+     *
+     * @param state
+     */
+    public void setEnabled(boolean state);
 }

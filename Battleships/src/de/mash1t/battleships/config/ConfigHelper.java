@@ -24,7 +24,8 @@
 package de.mash1t.battleships.config;
 
 /**
- *
+ * Helper for config params
+ * 
  * @author Manuel Schmid
  */
 public class ConfigHelper {
@@ -35,7 +36,6 @@ public class ConfigHelper {
     // Config Params
     private static boolean devMode;
     private static boolean devModeHover;
-    private static boolean invalidShipHoverBehaviour;
 
     public static void init() {
 
@@ -48,8 +48,6 @@ public class ConfigHelper {
 
         devMode = conf.getConfigValueBoolean(ConfigParam.DevMode);
         devModeHover = conf.getConfigValueBoolean(ConfigParam.DevModeHover);
-        invalidShipHoverBehaviour = conf.getConfigValueBoolean(ConfigParam.InvalidShipHoverBehaviour);
-
     }
 
     /**
@@ -71,17 +69,6 @@ public class ConfigHelper {
     }
 
     /**
-     * Getter for Ship Hover Behaviour
-     *
-     * true: whole hover turns red; false: only invalid field turns red
-     *
-     * @return
-     */
-    public static boolean getInvalidShipHoverBehaviour() {
-        return invalidShipHoverBehaviour;
-    }
-
-    /**
      * Outputs a line on the console if dev mode is enabled
      *
      * @param line String to output on the console
@@ -91,5 +78,4 @@ public class ConfigHelper {
             System.out.println(line);
         }
     }
-
 }

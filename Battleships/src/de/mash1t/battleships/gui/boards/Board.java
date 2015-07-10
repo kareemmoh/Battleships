@@ -120,4 +120,26 @@ public abstract class Board {
         public void mouseExited(MouseEvent e) {
         }
     }
+
+    /**
+     * Enables all fields
+     */
+    public void enablePanel() {
+        for (int x = 0; x < fieldCountX; x++) {
+            for (int y = 0; y < fieldCountY; y++) {
+                fields[x][y].setEnabled(true);
+            }
+        }
+    }
+
+    /**
+     * Disables all fields
+     */
+    public void disablePanel() {
+        for (int x = 0; x < fieldCountX; x++) {
+            for (int y = 0; y < fieldCountY; y++) {
+                fields[x][y].setEnabled(false);
+            }
+        }
+    }
 }

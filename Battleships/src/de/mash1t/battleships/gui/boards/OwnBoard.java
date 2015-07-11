@@ -75,29 +75,22 @@ public class OwnBoard extends Board {
      */
     public void setShips(final List<Ship> shipList) {
 
-        // Outsource ship placement setter to new thread
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                // Sets ship placement mode to true
-                for (Ship shipToSet : shipList) {
-                    OwnBoard.ship = shipToSet;
-                    setShip = true;
-                    while (setShip) {
-                        try {
-                            // TODO bad practice
-                            Thread.sleep(50);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(OwnBoard.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
+        // Sets ship placement mode to true
+        for (Ship shipToSet : shipList) {
+            OwnBoard.ship = shipToSet;
+            setShip = true;
+            while (setShip) {
+                try {
+                    // TODO bad practice
+                    Thread.sleep(50);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(OwnBoard.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                // Reset all hovered fields
-                resetHover();
-                devLine("Finished setting up ships");
             }
-        };
-        thread.start();
+        }
+        // Reset all hovered fields
+        resetHover();
+        devLine("Finished setting up ships");
     }
 
     @Override

@@ -26,8 +26,11 @@ package de.mash1t.battleships;
 import de.mash1t.battleships.config.ConfigHelper;
 import de.mash1t.battleships.gui.boards.*;
 import static de.mash1t.battleships.gui.boards.Board.fieldCountSquare;
+import de.mash1t.battleships.gui.helper.DialogHelper;
 import de.mash1t.battleships.ships.Ship;
 import de.mash1t.battleships.ships.ShipSize;
+import java.awt.Component;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +48,9 @@ public final class Main extends javax.swing.JFrame {
     private static EnemyBoard enemyBoard;
     private static OwnBoard ownBoard;
 
+    // Helper
+    private final DialogHelper dialogHelper = new DialogHelper(this);
+
     /**
      * Creates new form Main
      */
@@ -52,6 +58,7 @@ public final class Main extends javax.swing.JFrame {
         initComponents();
         ConfigHelper.init();
         createShipList();
+        tbPort.setText(Integer.toString(ConfigHelper.getPort()));
         startNewGame();
     }
 
@@ -75,10 +82,48 @@ public final class Main extends javax.swing.JFrame {
      * Resets boards and initializes new game
      */
     public void startNewGame() {
+        switchConnectionPanelState(false);
         enemyBoard = new EnemyBoard(fieldCountSquare, this.pEnemy);
         ownBoard = new OwnBoard(fieldCountSquare, this.pOwn, shipList);
-        ownBoard.setShips(shipList);
+        // Outsource ship placement setter to new thread
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                ownBoard.setShips(shipList);
+                switchConnectionPanelState(true);
+            }
+        };
+        thread.start();
         enemyBoard.disablePanel();
+    }
+
+    /**
+     * Tries to connect to the given server
+     */
+    protected void connect() {
+        if (validateConnectionData()) {
+            // TODO implement network support
+        }
+    }
+
+    /**
+     * Validates the content set in the fields in the connection panel
+     *
+     * @return validity of field content
+     */
+    protected boolean validateConnectionData() {
+        return false;
+    }
+
+    /**
+     * Switches the enabled state of all components in the connection panel
+     *
+     * @param enabled
+     */
+    protected void switchConnectionPanelState(boolean enabled) {
+        for (Component comp : connectionPanel.getComponents()) {
+            comp.setEnabled(enabled);
+        }
     }
 
     /**
@@ -103,8 +148,11 @@ public final class Main extends javax.swing.JFrame {
         tbNickname = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(960, 545));
-        setMinimumSize(new java.awt.Dimension(960, 545));
+        setAlwaysOnTop(true);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setMaximumSize(new java.awt.Dimension(966, 554));
+        setMinimumSize(new java.awt.Dimension(966, 554));
+        setResizable(false);
 
         javax.swing.GroupLayout pEnemyLayout = new javax.swing.GroupLayout(pEnemy);
         pEnemy.setLayout(pEnemyLayout);
@@ -121,7 +169,7 @@ public final class Main extends javax.swing.JFrame {
         pOwn.setLayout(pOwnLayout);
         pOwnLayout.setHorizontalGroup(
             pOwnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 468, Short.MAX_VALUE)
+            .addGap(0, 454, Short.MAX_VALUE)
         );
         pOwnLayout.setVerticalGroup(
             pOwnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -135,7 +183,8 @@ public final class Main extends javax.swing.JFrame {
             .addGroup(pGameLayout.createSequentialGroup()
                 .addComponent(pEnemy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pOwn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(pOwn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pGameLayout.setVerticalGroup(
             pGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,7 +248,8 @@ public final class Main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tbPort, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(bConnect, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(bConnect, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24))
         );
         connectionPanelLayout.setVerticalGroup(
             connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -212,7 +262,7 @@ public final class Main extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(tbPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bConnect))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -222,17 +272,14 @@ public final class Main extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(pGame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(connectionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(connectionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pGame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(connectionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(connectionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15)
                 .addComponent(pGame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -241,29 +288,25 @@ public final class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bConnectActionPerformed
-//        if (this.bConnect.getText().equals(connectButtonText.Connect.toString())) {
-//            this.connect();
-//        } else {
-//            this.disconnect();
-//        }
+        connect();
     }//GEN-LAST:event_bConnectActionPerformed
 
     private void tbPortKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbPortKeyPressed
-//        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-//            this.connect();
-//        }
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            connect();
+        }
     }//GEN-LAST:event_tbPortKeyPressed
 
     private void tbServerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbServerKeyPressed
-//        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-//            this.connect();
-//        }
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            connect();
+        }
     }//GEN-LAST:event_tbServerKeyPressed
 
     private void tbNicknameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbNicknameKeyPressed
-//        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-//            this.connect();
-//        }
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            connect();
+        }
     }//GEN-LAST:event_tbNicknameKeyPressed
 
     /**

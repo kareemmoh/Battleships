@@ -25,7 +25,7 @@ package de.mash1t.battleships.config;
 
 /**
  * Helper for config params
- * 
+ *
  * @author Manuel Schmid
  */
 public class ConfigHelper {
@@ -36,6 +36,7 @@ public class ConfigHelper {
     // Config Params
     private static boolean devMode;
     private static boolean devModeHover;
+    private static int port;
 
     public static void init() {
 
@@ -48,6 +49,7 @@ public class ConfigHelper {
 
         devMode = conf.getConfigValueBoolean(ConfigParam.DevMode);
         devModeHover = conf.getConfigValueBoolean(ConfigParam.DevModeHover);
+        port = conf.getConfigValueInt(ConfigParam.Port);
     }
 
     /**
@@ -66,6 +68,15 @@ public class ConfigHelper {
      */
     public static boolean isDevModeHover() {
         return devModeHover;
+    }
+
+    /**
+     * Getter for port
+     *
+     * @return port set in config
+     */
+    public static int getPort() {
+        return port;
     }
 
     /**

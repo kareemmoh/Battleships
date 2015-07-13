@@ -82,7 +82,7 @@ public class OwnBoard extends Board {
             while (setShip) {
                 try {
                     // TODO bad practice
-                    Thread.sleep(50);
+                    Thread.sleep(10);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(OwnBoard.class.getName()).log(Level.SEVERE, null, ex);
                 }

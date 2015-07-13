@@ -29,6 +29,8 @@ import static de.mash1t.battleships.gui.boards.Board.fieldCountSquare;
 import de.mash1t.battleships.gui.helper.DialogHelper;
 import de.mash1t.battleships.ships.Ship;
 import de.mash1t.battleships.ships.ShipSize;
+import de.mash1t.networklib.methods.NetworkBasics;
+import de.mash1t.networklib.methods.NetworkProtocolType;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -48,12 +50,13 @@ public final class Main extends javax.swing.JFrame {
     private static OwnBoard ownBoard;
 
     // Helper
-    private final DialogHelper dialogHelper = new DialogHelper(this);
+    private final DialogHelper dialogHelper = DialogHelper.getDialogHelper(this);
 
     /**
      * Creates new form Main
      */
     public Main() {
+        NetworkBasics.setNetworkProtocolType(NetworkProtocolType.TCP);
         initComponents();
         setLocationRelativeTo(null);
         ConfigHelper.init();
@@ -86,18 +89,18 @@ public final class Main extends javax.swing.JFrame {
         ownBoard = new OwnBoard(fieldCountSquare, this.pOwn, shipList);
         final JFrame mainFrame = this;
         // Outsource ship placement setter to new thread
-        Thread thread = new Thread() {
+        new Thread() {
             @Override
             public void run() {
+                // Set up ships
                 ownBoard.setShips(shipList);
-//                switchConnectionPanelState(true);
+                
+                // Show frame (host or join)
                 ConnectionDialog connDialog = new ConnectionDialog(mainFrame);
                 connDialog.setLocationRelativeTo(mainFrame);
                 connDialog.setVisible(true);
-
             }
-        };
-        thread.start();
+        }.start();
         enemyBoard.disablePanel();
     }
     

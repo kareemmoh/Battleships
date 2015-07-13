@@ -8,7 +8,7 @@ It will be equipped with the following features:
 
 ### Version
 
-0.0.2
+0.0.3
 
 ### Installation
 Currently there is **no installer**. Simply pull the repository:
@@ -23,9 +23,9 @@ If you have any questions or feature requests, don't hesitate to contact me on [
 
 ### Current Todo's
 
- - [ ] LAN-Support
+ - [ ] Full LAN-Support
  - [ ] Implement ship setting thread correctly
- - [ ] Make hover wrapper invisible
+ - [x] Make hover wrapper invisible
  - [x] Add hover wrapper
  - [x] .ini-file support
 

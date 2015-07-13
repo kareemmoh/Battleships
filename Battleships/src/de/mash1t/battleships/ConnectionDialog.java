@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 manuelschmid.
+ * Copyright 2015 Manuel Schmid.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,24 +24,30 @@
 package de.mash1t.battleships;
 
 import de.mash1t.battleships.config.ConfigHelper;
+import de.mash1t.battleships.gui.helper.DialogHelper;
+import de.mash1t.battleships.network.*;
 import java.awt.Color;
 import java.awt.Component;
+import javax.swing.JFrame;
 
 /**
  * Class for a dialog, where the user can choose between hosting or joining a
  * server
  *
- * @author manuelschmid
+ * @author Manuel Schmid
  */
 public class ConnectionDialog extends javax.swing.JDialog {
+
+    protected final JFrame parentFrame;
 
     /**
      * Creates new form ConnectionDialog
      *
      * @param parent
      */
-    public ConnectionDialog(java.awt.Frame parent) {
+    public ConnectionDialog(JFrame parent) {
         super(parent, true);
+        this.parentFrame = parent;
         initComponents();
         presetFields();
         progressBar.setVisible(false);
@@ -55,12 +61,38 @@ public class ConnectionDialog extends javax.swing.JDialog {
     }
 
     /**
+     * Hosts a server
+     */
+    protected void host() {
+        // Change elements of dialog
+        hostElementChange(true);
+        // Start server
+        Server server = new Server();
+        if (server.waitForClientToConnect()) {
+            DialogHelper.getDialogHelper(parentFrame).showInfoDialog("Info", "Connected");
+            // Close form
+            dispose();
+        } else {
+            DialogHelper.getDialogHelper(parentFrame).showWarningDialog("Error", "Connection Failed");
+            // Reset elements of dialog
+            hostElementChange(false);
+        }
+    }
+
+    /**
      * Tries to connect to the given server
      */
     protected void connect() {
         if (validateConnectionData()) {
             // TODO actually connect
-            dispose();
+            Client client = new Client(tbServer.getText(), Integer.parseInt(tbPort.getText()), tbNickname.getText(), parentFrame);
+            if (client.connect()) {
+                DialogHelper.getDialogHelper(parentFrame).showInfoDialog("Info", "Connected");
+                // Close form
+                dispose();
+            } else {
+                DialogHelper.getDialogHelper(parentFrame).showWarningDialog("Error", "Connection Failed");
+            }
         }
     }
 
@@ -73,6 +105,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
 
         boolean isValid = true;
 
+        // Validate nickname
         if (tbNickname.getText().trim().equals("")) {
             tbNickname.setBackground(Color.red);
             isValid = false;
@@ -80,6 +113,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
             tbNickname.setBackground(null);
         }
 
+        // Validate server address
         if (tbServer.getText().length() == 0) {
             tbServer.setBackground(Color.red);
             isValid = false;
@@ -87,9 +121,9 @@ public class ConnectionDialog extends javax.swing.JDialog {
             tbServer.setBackground(null);
         }
 
+        // Validate port
         int port = Integer.parseInt(tbPort.getText());
-
-        if (port > 65535 || port < 2000) {
+        if (port > 65535 || port < 1024) {
             tbPort.setBackground(Color.red);
             isValid = false;
         } else {
@@ -99,7 +133,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
         return isValid;
     }
 
-        /**
+    /**
      * Switches the enabled state of all components in the connection panel
      *
      * @param enabled
@@ -109,7 +143,28 @@ public class ConnectionDialog extends javax.swing.JDialog {
             comp.setEnabled(enabled);
         }
     }
-    
+
+    /**
+     * Changes the elements of the dialog depending on host state
+     *
+     * @param state enabled/disabled
+     */
+    protected void hostElementChange(boolean state) {
+        if (state) {
+            // Enable hosting
+            bHostGame.setText("Waiting for client to connect ...");
+            bHostGame.setEnabled(!state);
+            progressBar.setVisible(state);
+            switchConnectionPanelState(!state);
+        } else {
+            // Reset hosting
+            bHostGame.setText("Host Game");
+            bHostGame.setEnabled(state);
+            progressBar.setVisible(!state);
+            switchConnectionPanelState(state);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -232,15 +287,33 @@ public class ConnectionDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Starts thread to connect to server
+     *
+     * @param evt
+     */
     private void bJoinGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bJoinGameActionPerformed
-        connect();
+        new Thread() {
+            @Override
+            public void run() {
+                connect();
+            }
+        }.start();
     }//GEN-LAST:event_bJoinGameActionPerformed
 
+    /**
+     * Starts thread to host server
+     *
+     * @param evt
+     */
     private void bHostGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHostGameActionPerformed
-        // TODO actually host a server
-        bHostGame.setText("Waiting for client to connect ...");
-        progressBar.setVisible(true);
-        switchConnectionPanelState(false);
+        new Thread() {
+            @Override
+            public void run() {
+                host();
+            }
+        }.start();
+
     }//GEN-LAST:event_bHostGameActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing

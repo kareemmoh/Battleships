@@ -28,22 +28,28 @@ import static de.mash1t.battleships.config.ConfigHelper.devLine;
 import de.mash1t.networklib.methods.NetworkBasics;
 import de.mash1t.networklib.methods.NetworkProtocol;
 import de.mash1t.networklib.packets.KickPacket;
-import java.io.IOException;
+import de.mash1t.networklib.packets.Packet;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 
 /**
  * Class for the server
  *
  * @author Manuel Schmid
  */
-public class Server {
+public class Server extends BattleshipNetworkObject implements NetworkProtocol {
 
-    protected Socket clientSocket;
-    protected NetworkProtocol conLib;
-
+    /**
+     * Constructor
+     * 
+     * @param jFrame frame to show dialogs on
+     */
+    public Server(JFrame jFrame) {
+        super(jFrame);
+    }
+    
     /**
      * Waits for the client to connect to the server
      *
@@ -64,7 +70,7 @@ public class Server {
             // Create client socket for incoming connection
             // Handle for new connection, put it into empty array-slot
             clientSocket = serverSocket.accept();
-            conLib = NetworkBasics.makeNetworkProtocolObject(clientSocket);
+            nwProtocol = NetworkBasics.makeNetworkProtocolObject(clientSocket);
             return true;
 
         } catch (Exception ex) {
@@ -81,7 +87,8 @@ public class Server {
             devLine("Shutting down Server");
 
             if (clientSocket != null && clientSocket.isConnected()) {
-                conLib.send(new KickPacket("*** SERVER IS GOING DOWN ***"));
+                nwProtocol.send(new KickPacket("*** SERVER IS GOING DOWN ***"));
+                nwProtocol.close();
             }
             devLine("Shut down successfully");
         }

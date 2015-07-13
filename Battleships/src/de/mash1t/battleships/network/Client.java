@@ -36,17 +36,12 @@ import javax.swing.JFrame;
  *
  * @author Manuel Schmid
  */
-public class Client {
+public class Client extends BattleshipNetworkObject implements NetworkProtocol{
 
     protected final String host;
     protected final int port;
     protected String clientName;
-    protected Socket clientSocket;
-    protected NetworkProtocol networkObj;
-
-    protected DialogHelper dialogHelper;
     
-
     /**
      * Constructor for Client
      * 
@@ -56,20 +51,13 @@ public class Client {
      * @param jFrame frame to show dialogs on
      */
     public Client(String host, int port, String nickname, JFrame jFrame) {
+        super(jFrame);
         this.host = host;
         this.port = port;
         this.clientName = nickname;
-        this.dialogHelper = DialogHelper.getDialogHelper(jFrame);
     }
-
-    /**
-     * Changes the dialog helper
-     *
-     * @param jFrame frame to show dialogs on
-     */
-    public void changeDialogHelper(JFrame jFrame) {
-        this.dialogHelper = DialogHelper.getDialogHelper(jFrame);
-    }
+    
+    
 
     public boolean connect() {
 
@@ -77,13 +65,13 @@ public class Client {
         try {
             // Set up socket and streams
             clientSocket = new Socket(host, port);
-            networkObj = NetworkBasics.makeNetworkProtocolObject(clientSocket);
+            nwProtocol = NetworkBasics.makeNetworkProtocolObject(clientSocket);
 
             // Create a thread to read from the server
             //new Thread(new ClientGuiThread(this)).start();
 
             // Send clientName
-            if (networkObj.send(new ConnectPacket(this.clientName))) {
+            if (nwProtocol.send(new ConnectPacket(this.clientName))) {
                 return true;
             }
 
@@ -96,4 +84,6 @@ public class Client {
         }
         return false;
     }
+    
+
 }

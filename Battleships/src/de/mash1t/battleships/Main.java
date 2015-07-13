@@ -27,6 +27,7 @@ import de.mash1t.battleships.config.ConfigHelper;
 import de.mash1t.battleships.gui.boards.*;
 import static de.mash1t.battleships.gui.boards.Board.fieldCountSquare;
 import de.mash1t.battleships.gui.helper.DialogHelper;
+import de.mash1t.battleships.network.BattleshipNetworkObject;
 import de.mash1t.battleships.ships.Ship;
 import de.mash1t.battleships.ships.ShipSize;
 import de.mash1t.networklib.methods.NetworkBasics;
@@ -48,6 +49,8 @@ public final class Main extends javax.swing.JFrame {
     // Boards
     private static EnemyBoard enemyBoard;
     private static OwnBoard ownBoard;
+    
+    public static BattleshipNetworkObject bsno;
 
     // Helper
     private final DialogHelper dialogHelper = DialogHelper.getDialogHelper(this);
@@ -83,7 +86,7 @@ public final class Main extends javax.swing.JFrame {
     /**
      * Resets boards and initializes new game
      */
-    public void startNewGame() {
+    protected void startNewGame() {
 //        switchConnectionPanelState(false);
         enemyBoard = new EnemyBoard(fieldCountSquare, this.pEnemy);
         ownBoard = new OwnBoard(fieldCountSquare, this.pOwn, shipList);

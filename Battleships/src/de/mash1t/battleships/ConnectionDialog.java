@@ -67,13 +67,14 @@ public class ConnectionDialog extends javax.swing.JDialog {
         // Change elements of dialog
         hostElementChange(true);
         // Start server
-        Server server = new Server();
+        Server server = new Server(parentFrame);
         if (server.waitForClientToConnect()) {
-            DialogHelper.getDialogHelper(parentFrame).showInfoDialog("Info", "Connected");
+            server.dialogHelper.showInfoDialog("Info", "Connected");
+            
             // Close form
             dispose();
         } else {
-            DialogHelper.getDialogHelper(parentFrame).showWarningDialog("Error", "Connection Failed");
+            server.dialogHelper.showWarningDialog("Error", "Connection Failed");
             // Reset elements of dialog
             hostElementChange(false);
         }
@@ -87,11 +88,11 @@ public class ConnectionDialog extends javax.swing.JDialog {
             // TODO actually connect
             Client client = new Client(tbServer.getText(), Integer.parseInt(tbPort.getText()), tbNickname.getText(), parentFrame);
             if (client.connect()) {
-                DialogHelper.getDialogHelper(parentFrame).showInfoDialog("Info", "Connected");
+                client.dialogHelper.showInfoDialog("Info", "Connected");
                 // Close form
                 dispose();
             } else {
-                DialogHelper.getDialogHelper(parentFrame).showWarningDialog("Error", "Connection Failed");
+                client.dialogHelper.showWarningDialog("Error", "Connection Failed");
             }
         }
     }

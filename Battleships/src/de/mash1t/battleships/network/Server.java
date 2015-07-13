@@ -67,7 +67,7 @@ public class Server {
             conLib = NetworkBasics.makeNetworkProtocolObject(clientSocket);
             return true;
 
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
@@ -80,7 +80,7 @@ public class Server {
 
             devLine("Shutting down Server");
 
-            if (clientSocket.isConnected()) {
+            if (clientSocket != null && clientSocket.isConnected()) {
                 conLib.send(new KickPacket("*** SERVER IS GOING DOWN ***"));
             }
             devLine("Shut down successfully");

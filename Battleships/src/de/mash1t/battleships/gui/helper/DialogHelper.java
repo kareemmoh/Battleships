@@ -47,6 +47,11 @@ public class DialogHelper {
      */
     public DialogHelper(JFrame frame) {
         this.frame = frame;
+        // Check if a helper already exists for the given frame
+        if (!existingHelpers.containsKey(frame)) {
+            // Add helper to map
+            existingHelpers.put(frame, this);
+        }
     }
 
     /**

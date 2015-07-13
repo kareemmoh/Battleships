@@ -44,12 +44,12 @@ import javax.swing.JFrame;
 public final class Main extends javax.swing.JFrame {
 
     // Ship List
-    private static final List<Ship> shipList = new ArrayList<>();
+    protected static final List<Ship> shipList = new ArrayList<>();
 
     // Boards
-    private static EnemyBoard enemyBoard;
-    private static OwnBoard ownBoard;
-    
+    protected static EnemyBoard enemyBoard;
+    protected static OwnBoard ownBoard;
+
     public static BattleshipNetworkObject bsno;
 
     // Helper
@@ -59,12 +59,17 @@ public final class Main extends javax.swing.JFrame {
      * Creates new form Main
      */
     public Main() {
+        setState(MainState.Initialized);
         NetworkBasics.setNetworkProtocolType(NetworkProtocolType.TCP);
         initComponents();
         setLocationRelativeTo(null);
         ConfigHelper.init();
         createShipList();
         startNewGame();
+    }
+
+    public static void setState(MainState state) {
+        System.out.println(state.toString());
     }
 
     /**
@@ -96,17 +101,20 @@ public final class Main extends javax.swing.JFrame {
             @Override
             public void run() {
                 // Set up ships
+                setState(MainState.SettingShips);
                 ownBoard.setShips(shipList);
-                
+
                 // Show frame (host or join)
+                setState(MainState.InitHostOrClient);
                 ConnectionDialog connDialog = new ConnectionDialog(mainFrame);
                 connDialog.setLocationRelativeTo(mainFrame);
                 connDialog.setVisible(true);
+                
             }
         }.start();
         enemyBoard.disablePanel();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -123,10 +131,8 @@ public final class Main extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMaximumSize(null);
         setMinimumSize(null);
         setResizable(false);
-        setSize(new java.awt.Dimension(950, 450));
 
         pGame.setPreferredSize(new java.awt.Dimension(940, 470));
 
@@ -138,7 +144,7 @@ public final class Main extends javax.swing.JFrame {
         );
         pEnemyLayout.setVerticalGroup(
             pEnemyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 452, Short.MAX_VALUE)
+            .addGap(0, 437, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout pOwnLayout = new javax.swing.GroupLayout(pOwn);
@@ -184,7 +190,7 @@ public final class Main extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pGame, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE))
+                .addComponent(pGame, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE))
         );
 
         pack();

@@ -23,7 +23,6 @@
  */
 package de.mash1t.battleships.network;
 
-import de.mash1t.battleships.gui.helper.DialogHelper;
 import de.mash1t.networklib.methods.NetworkBasics;
 import de.mash1t.networklib.methods.NetworkProtocol;
 import de.mash1t.networklib.packets.ConnectPacket;
@@ -36,15 +35,15 @@ import javax.swing.JFrame;
  *
  * @author Manuel Schmid
  */
-public class Client extends BattleshipNetworkObject implements NetworkProtocol{
+public class Client extends BattleshipNetworkObject implements NetworkProtocol {
 
     protected final String host;
     protected final int port;
     protected String clientName;
-    
+
     /**
      * Constructor for Client
-     * 
+     *
      * @param host host to connect to
      * @param port port to connect to
      * @param nickname nickname to set
@@ -56,8 +55,6 @@ public class Client extends BattleshipNetworkObject implements NetworkProtocol{
         this.port = port;
         this.clientName = nickname;
     }
-    
-    
 
     public boolean connect() {
 
@@ -69,7 +66,6 @@ public class Client extends BattleshipNetworkObject implements NetworkProtocol{
 
             // Create a thread to read from the server
             //new Thread(new ClientGuiThread(this)).start();
-
             // Send clientName
             if (nwProtocol.send(new ConnectPacket(this.clientName))) {
                 return true;
@@ -84,6 +80,4 @@ public class Client extends BattleshipNetworkObject implements NetworkProtocol{
         }
         return false;
     }
-    
-
 }

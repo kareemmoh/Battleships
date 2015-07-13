@@ -32,8 +32,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
- * Class for the enemy board. 
- * Here you can target fields and shoot at them, maybe even hit ships :P
+ * Class for the enemy board. Here you can target fields and shoot at them,
+ * maybe even hit ships :P
  *
  * @author Manuel Schmid
  */

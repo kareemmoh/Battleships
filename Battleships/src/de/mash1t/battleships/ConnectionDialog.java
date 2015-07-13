@@ -23,8 +23,8 @@
  */
 package de.mash1t.battleships;
 
+import static de.mash1t.battleships.Main.setState;
 import de.mash1t.battleships.config.ConfigHelper;
-import de.mash1t.battleships.gui.helper.DialogHelper;
 import de.mash1t.battleships.network.*;
 import java.awt.Color;
 import java.awt.Component;
@@ -39,6 +39,11 @@ import javax.swing.JFrame;
 public class ConnectionDialog extends javax.swing.JDialog {
 
     protected final JFrame parentFrame;
+
+    protected Server server;
+    protected boolean cancelButtonPressed = false;
+
+    private Thread searchingClient = null;
 
     /**
      * Creates new form ConnectionDialog
@@ -67,14 +72,14 @@ public class ConnectionDialog extends javax.swing.JDialog {
         // Change elements of dialog
         hostElementChange(true);
         // Start server
-        Server server = new Server(parentFrame);
+        server = new Server(parentFrame);
         if (server.waitForClientToConnect()) {
             server.dialogHelper.showInfoDialog("Info", "Connected");
-            
-            // Close form
-            dispose();
+            setAndClose(server);
         } else {
-            server.dialogHelper.showWarningDialog("Error", "Connection Failed");
+            if (!cancelButtonPressed) {
+                server.dialogHelper.showWarningDialog("Error", "Connection Failed");
+            }
             // Reset elements of dialog
             hostElementChange(false);
         }
@@ -89,12 +94,18 @@ public class ConnectionDialog extends javax.swing.JDialog {
             Client client = new Client(tbServer.getText(), Integer.parseInt(tbPort.getText()), tbNickname.getText(), parentFrame);
             if (client.connect()) {
                 client.dialogHelper.showInfoDialog("Info", "Connected");
-                // Close form
-                dispose();
+                setAndClose(client);
             } else {
                 client.dialogHelper.showWarningDialog("Error", "Connection Failed");
             }
         }
+    }
+
+    protected void setAndClose(BattleshipNetworkObject bsno) {
+        BattleshipNetworkObject.setNetworkObject(bsno);
+        Main.enemyBoard.enablePanel();
+        setState(MainState.MyTurn);
+        dispose();
     }
 
     /**
@@ -153,17 +164,13 @@ public class ConnectionDialog extends javax.swing.JDialog {
     protected void hostElementChange(boolean state) {
         if (state) {
             // Enable hosting
-            bHostGame.setText("Waiting for client to connect ...");
-            bHostGame.setEnabled(!state);
-            progressBar.setVisible(state);
-            switchConnectionPanelState(!state);
+            bHostGame.setText("<html>Waiting for client to connect ...<br>Press to cancel<html>");
         } else {
             // Reset hosting
-            bHostGame.setText("Host Game");
-            bHostGame.setEnabled(state);
-            progressBar.setVisible(!state);
-            switchConnectionPanelState(state);
+            bHostGame.setText("<html>Host Game<html>");
         }
+        progressBar.setVisible(state);
+        switchConnectionPanelState(!state);
     }
 
     /**
@@ -308,12 +315,23 @@ public class ConnectionDialog extends javax.swing.JDialog {
      * @param evt
      */
     private void bHostGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHostGameActionPerformed
-        new Thread() {
-            @Override
-            public void run() {
-                host();
-            }
-        }.start();
+        if (searchingClient != null && searchingClient.isAlive()) {
+            searchingClient.interrupt();
+            searchingClient = null;
+            cancelButtonPressed = true;
+            server.closeSocket();
+            hostElementChange(false);
+        } else {
+
+            searchingClient = new Thread() {
+                @Override
+                public void run() {
+                    cancelButtonPressed = false;
+                    host();
+                }
+            };
+            searchingClient.start();
+        }
 
     }//GEN-LAST:event_bHostGameActionPerformed
 

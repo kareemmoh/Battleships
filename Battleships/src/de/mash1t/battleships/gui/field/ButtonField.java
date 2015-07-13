@@ -24,6 +24,7 @@
 package de.mash1t.battleships.gui.field;
 
 import de.mash1t.battleships.config.ConfigHelper;
+import static de.mash1t.battleships.network.BattleshipNetworkObject.getNetworkObject;
 import de.mash1t.battleships.ships.Ship;
 import javax.swing.JButton;
 
@@ -100,6 +101,10 @@ public class ButtonField extends JButton implements Field {
         hoverState = HoverState.NotHovered;
         fieldStatus = FieldState.Hit;
         changeColor();
+    }
+
+    @Override
+    public void shoot() {
     }
 
     @Override

@@ -28,10 +28,8 @@ import static de.mash1t.battleships.config.ConfigHelper.devLine;
 import de.mash1t.networklib.methods.NetworkBasics;
 import de.mash1t.networklib.methods.NetworkProtocol;
 import de.mash1t.networklib.packets.KickPacket;
-import de.mash1t.networklib.packets.Packet;
+import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -41,15 +39,17 @@ import javax.swing.JFrame;
  */
 public class Server extends BattleshipNetworkObject implements NetworkProtocol {
 
+    protected ServerSocket serverSocket;
+
     /**
      * Constructor
-     * 
+     *
      * @param jFrame frame to show dialogs on
      */
     public Server(JFrame jFrame) {
         super(jFrame);
     }
-    
+
     /**
      * Waits for the client to connect to the server
      *
@@ -61,7 +61,7 @@ public class Server extends BattleshipNetworkObject implements NetworkProtocol {
             int portNumber = ConfigHelper.getPort();
 
             // Open a server socket on the portNumber
-            ServerSocket serverSocket = new ServerSocket(portNumber);
+            serverSocket = new ServerSocket(portNumber);
             devLine("Server started on port " + portNumber);
 
             // Adding shutdown handle
@@ -74,11 +74,22 @@ public class Server extends BattleshipNetworkObject implements NetworkProtocol {
             return true;
 
         } catch (Exception ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
     }
 
+    public boolean closeSocket() {
+        try {
+            serverSocket.close();
+            return true;
+        } catch (IOException ex) {
+            return false;
+        }
+    }
+
+    /**
+     * Handle for shut down
+     */
     class ShutdownHandle extends Thread {
 
         @Override

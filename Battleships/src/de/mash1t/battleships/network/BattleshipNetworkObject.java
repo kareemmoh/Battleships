@@ -40,23 +40,47 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol {
     protected NetworkProtocol nwProtocol;
     public final DialogHelper dialogHelper;
 
+    protected static BattleshipNetworkObject networkObject;
+
     /**
      * Constructor, adds DialogHelper
-     * 
-     * @param jFrame 
+     *
+     * @param jFrame
      */
     public BattleshipNetworkObject(JFrame jFrame) {
         this.dialogHelper = DialogHelper.getDialogHelper(jFrame);
     }
-    
-//    /**
-//     * Changes the dialog helper
-//     *
-//     * @param jFrame frame to show dialogs on
-//     */
-//    public void changeDialogHelper(JFrame jFrame) {
-//        this.dialogHelper = DialogHelper.getDialogHelper(jFrame);
-//    }
+
+    /**
+     * Getter for connection state
+     *
+     * @return is connected or not
+     */
+    public static boolean isConnected() {
+        if (networkObject != null && networkObject.nwProtocol != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Sets a networkObject to the static variable networkObject
+     *
+     * @param networkObject to set
+     */
+    public static void setNetworkObject(BattleshipNetworkObject networkObject) {
+        BattleshipNetworkObject.networkObject = networkObject;
+    }
+
+    /**
+     * Getter for the networkObject
+     *
+     * @return networkObject
+     */
+    public static BattleshipNetworkObject getNetworkObject() {
+        return networkObject;
+    }
 
     @Override
     public String getIP() {
@@ -76,5 +100,9 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol {
     @Override
     public boolean close() {
         return nwProtocol.close();
+    }
+
+    public void getEnemyShot() {
+
     }
 }

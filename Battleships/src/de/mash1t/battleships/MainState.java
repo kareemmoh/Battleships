@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 manuel.schmid.
+ * Copyright 2015 Manuel Schmid.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,16 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.mash1t.battleships.gui.field;
+package de.mash1t.battleships;
 
 /**
- * Position of the fields in the hover
  *
- * @author manuel.schmid
+ * @author Manuel Schmid
  */
-public enum HoverPosition {
-
-    First,
-    Last,
-    None;
+public enum MainState {
+    Initialized,
+    SettingShips,
+    InitHostOrClient,
+    EnemyTurn,
+    MyTurn;
 }

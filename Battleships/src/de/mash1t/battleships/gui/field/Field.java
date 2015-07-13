@@ -85,6 +85,11 @@ public interface Field {
     public void hit();
 
     /**
+     * Shoot at the field and send request to enemy
+     */
+    public void shoot();
+
+    /**
      * Resets the field to values set in this class
      */
     public void resetSoft();

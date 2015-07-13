@@ -66,15 +66,15 @@ public final class Main extends javax.swing.JFrame {
      */
     protected static void createShipList() {
         shipList.add(new Ship(ShipSize.Five));
-        shipList.add(new Ship(ShipSize.Four));
-        shipList.add(new Ship(ShipSize.Four));
-        shipList.add(new Ship(ShipSize.Three));
-        shipList.add(new Ship(ShipSize.Three));
-        shipList.add(new Ship(ShipSize.Three));
-        shipList.add(new Ship(ShipSize.Two));
-        shipList.add(new Ship(ShipSize.Two));
-        shipList.add(new Ship(ShipSize.Two));
-        shipList.add(new Ship(ShipSize.Two));
+//        shipList.add(new Ship(ShipSize.Four));
+//        shipList.add(new Ship(ShipSize.Four));
+//        shipList.add(new Ship(ShipSize.Three));
+//        shipList.add(new Ship(ShipSize.Three));
+//        shipList.add(new Ship(ShipSize.Three));
+//        shipList.add(new Ship(ShipSize.Two));
+//        shipList.add(new Ship(ShipSize.Two));
+//        shipList.add(new Ship(ShipSize.Two));
+//        shipList.add(new Ship(ShipSize.Two));
     }
 
     /**
@@ -100,17 +100,7 @@ public final class Main extends javax.swing.JFrame {
         thread.start();
         enemyBoard.disablePanel();
     }
-
-//    /**
-//     * Switches the enabled state of all components in the connection panel
-//     *
-//     * @param enabled
-//     */
-//    protected void switchConnectionPanelState(boolean enabled) {
-//        for (Component comp : connectionPanel.getComponents()) {
-//            comp.setEnabled(enabled);
-//        }
-//    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

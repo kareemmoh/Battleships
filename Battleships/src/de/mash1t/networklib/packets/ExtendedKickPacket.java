@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 manuel.schmid.
+ * Copyright 2015 Manuel Schmid.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,16 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.mash1t.battleships.gui.field;
+package de.mash1t.networklib.packets;
 
 /**
- * Position of the fields in the hover
+ * Used for kicking clients
  *
- * @author manuel.schmid
+ * @author Manuel Schmid
  */
-public enum HoverPosition {
+public class ExtendedKickPacket extends KickPacket {
 
-    First,
-    Last,
-    None;
+    protected boolean isGameFinished;
+
+    /**
+     * Set up packet type and kick message
+     *
+     * @param message
+     */
+    public ExtendedKickPacket(String message) {
+        super(message);
+    }
+
+    /**
+     * Set up packet type and kick message
+     *
+     * @param gameFinished
+     */
+    public ExtendedKickPacket(boolean gameFinished) {
+        super("");
+        this.isGameFinished = gameFinished;
+        this.packetType = PacketType.Kick;
+    }
+
+    /**
+     * Returns if the game is finished
+     *
+     * @return boolean isGameFinished
+     */
+    public boolean getIsGameFinished() {
+        return this.isGameFinished;
+    }
 }

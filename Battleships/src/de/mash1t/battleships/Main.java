@@ -23,15 +23,17 @@
  */
 package de.mash1t.battleships;
 
+import static de.mash1t.battleships.gui.boards.Board.fieldCountSquare;
+
 import de.mash1t.battleships.config.ConfigHelper;
 import de.mash1t.battleships.gui.boards.*;
-import static de.mash1t.battleships.gui.boards.Board.fieldCountSquare;
 import de.mash1t.battleships.gui.helper.DialogHelper;
 import de.mash1t.battleships.ships.Ship;
 import de.mash1t.battleships.ships.ShipSize;
+import de.mash1t.networklib.methods.NetworkBasics;
+import de.mash1t.networklib.methods.NetworkProtocolType;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JFrame;
 
 /**
  * Main class to start battleships
@@ -41,19 +43,21 @@ import javax.swing.JFrame;
 public final class Main extends javax.swing.JFrame {
 
     // Ship List
-    private static final List<Ship> shipList = new ArrayList<>();
+    protected static final List<Ship> shipList = new ArrayList<>();
 
     // Boards
-    private static EnemyBoard enemyBoard;
-    private static OwnBoard ownBoard;
+    public static EnemyBoard enemyBoard;
+    public static OwnBoard ownBoard;
 
     // Helper
-    private final DialogHelper dialogHelper = new DialogHelper(this);
+    protected final DialogHelper dialogHelper = DialogHelper.getDialogHelper(this);
 
     /**
      * Creates new form Main
      */
     public Main() {
+        setState(GameState.Initialized);
+        NetworkBasics.setNetworkProtocolType(NetworkProtocolType.TCP);
         initComponents();
         setLocationRelativeTo(null);
         ConfigHelper.init();
@@ -61,11 +65,15 @@ public final class Main extends javax.swing.JFrame {
         startNewGame();
     }
 
+    public static void setState(GameState state) {
+        System.out.println(state.toString());
+    }
+
     /**
      * Adds all ships to the shipList
      */
     protected static void createShipList() {
-        shipList.add(new Ship(ShipSize.Five));
+        shipList.add(new Ship(ShipSize.Two));
 //        shipList.add(new Ship(ShipSize.Four));
 //        shipList.add(new Ship(ShipSize.Four));
 //        shipList.add(new Ship(ShipSize.Three));
@@ -80,27 +88,29 @@ public final class Main extends javax.swing.JFrame {
     /**
      * Resets boards and initializes new game
      */
-    public void startNewGame() {
+    protected void startNewGame() {
 //        switchConnectionPanelState(false);
         enemyBoard = new EnemyBoard(fieldCountSquare, this.pEnemy);
         ownBoard = new OwnBoard(fieldCountSquare, this.pOwn, shipList);
-        final JFrame mainFrame = this;
+        final Main mainFrame = this;
         // Outsource ship placement setter to new thread
-        Thread thread = new Thread() {
+        new Thread() {
             @Override
             public void run() {
+                // Set up ships
+                setState(GameState.SettingShips);
                 ownBoard.setShips(shipList);
-//                switchConnectionPanelState(true);
+
+                // Show frame (host or join)
+                setState(GameState.InitHostOrClient);
                 ConnectionDialog connDialog = new ConnectionDialog(mainFrame);
                 connDialog.setLocationRelativeTo(mainFrame);
                 connDialog.setVisible(true);
-
             }
-        };
-        thread.start();
+        }.start();
         enemyBoard.disablePanel();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -131,7 +141,7 @@ public final class Main extends javax.swing.JFrame {
         );
         pEnemyLayout.setVerticalGroup(
             pEnemyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 452, Short.MAX_VALUE)
+            .addGap(0, 457, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout pOwnLayout = new javax.swing.GroupLayout(pOwn);
@@ -177,7 +187,7 @@ public final class Main extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pGame, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE))
+                .addComponent(pGame, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE))
         );
 
         pack();

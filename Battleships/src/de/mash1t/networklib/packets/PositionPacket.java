@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 manuel.schmid.
+ * Copyright 2015 Manuel Schmid.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,16 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.mash1t.battleships.gui.field;
+package de.mash1t.networklib.packets;
 
 /**
- * Position of the fields in the hover
+ * Used for positions
  *
- * @author manuel.schmid
+ * @author Manuel Schmid
  */
-public enum HoverPosition {
+public class PositionPacket extends Packet {
 
-    First,
-    Last,
-    None;
+    protected final int posX;
+    protected final int posY;
+
+    /**
+     * Set up packet type and position
+     *
+     * @param posX position on the x axis
+     * @param posY position on the y axis
+     */
+    public PositionPacket(int posX, int posY) {
+        this.posX = posX;
+        this.posY = posY;
+        this.packetType = PacketType.Position;
+    }
+
+    /**
+     * Getter for the position on the x axis
+     *
+     * @return int position on the x axis
+     */
+    public int getPosX() {
+        return posX;
+    }
+
+    /**
+     * Getter for the position on the y axis
+     *
+     * @return int position on the y axis
+     */
+    public int getPosY() {
+        return posY;
+    }
 }

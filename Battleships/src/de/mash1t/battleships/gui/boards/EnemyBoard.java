@@ -26,14 +26,15 @@ package de.mash1t.battleships.gui.boards;
 import static de.mash1t.battleships.config.ConfigHelper.devLine;
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
+import de.mash1t.battleships.network.BattleshipNetworkObject;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
- * Class for the enemy board. 
- * Here you can target fields and shoot at them, maybe even hit ships :P
+ * Class for the enemy board. Here you can target fields and shoot at them,
+ * maybe even hit ships :P
  *
  * @author Manuel Schmid
  */
@@ -64,8 +65,10 @@ public class EnemyBoard extends Board {
             Field sourceField = (Field) e.getSource();
             if (sourceField.getFieldState() == FieldState.Default) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                    sourceField.hit();
-                    devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Enemy - hit");
+                    if (!BattleshipNetworkObject.getWaitForEnemy()) {
+                        devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Enemy - shoot");
+                        sourceField.shoot();
+                    }
                 }
             }
         }

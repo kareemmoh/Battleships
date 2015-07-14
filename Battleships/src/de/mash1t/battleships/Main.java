@@ -115,12 +115,11 @@ public final class Main extends javax.swing.JFrame {
         pOwn = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Battleships");
         setAlwaysOnTop(true);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMaximumSize(null);
         setMinimumSize(null);
         setResizable(false);
-        setSize(new java.awt.Dimension(950, 450));
 
         pGame.setPreferredSize(new java.awt.Dimension(940, 470));
 

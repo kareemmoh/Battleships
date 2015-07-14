@@ -23,13 +23,15 @@
  */
 package de.mash1t.battleships.network;
 
+import de.mash1t.battleships.GameState;
 import de.mash1t.networklib.packets.ShootPacket;
 import de.mash1t.battleships.Main;
 import de.mash1t.battleships.gui.field.Field;
+import de.mash1t.battleships.gui.field.FieldState;
 import de.mash1t.battleships.gui.helper.DialogHelper;
 import de.mash1t.networklib.methods.NetworkProtocol;
+import de.mash1t.networklib.packets.InfoPacket;
 import de.mash1t.networklib.packets.Packet;
-import static de.mash1t.networklib.packets.PacketType.ShootPacket;
 import java.net.Socket;
 import javax.swing.JFrame;
 
@@ -40,14 +42,21 @@ import javax.swing.JFrame;
  */
 public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnable {
 
+    // Networking
     protected Socket clientSocket;
     protected NetworkProtocol nwProtocol;
-    public final DialogHelper dialogHelper;
-    protected static boolean waitForEnemy;
-    protected boolean notKicked = true;
+    protected static BattleshipNetworkObject networkObject;
+
+    // Fields of ownBoard
     protected final Field fields[][];
 
-    protected static BattleshipNetworkObject networkObject;
+    // GUI-Output
+    public final DialogHelper dialogHelper;
+    protected Field fieldToShootAt;
+
+    // Booleans
+    protected static boolean waitForEnemy;
+    protected boolean notKicked = true;
 
     /**
      * Constructor, adds DialogHelper
@@ -120,9 +129,7 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
 
         notKicked = true;
         while (notKicked) {
-            if (waitForEnemy) {
-                readResponse();
-            }
+            readResponse();
         }
     }
 
@@ -132,16 +139,37 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
     protected void readResponse() {
         Packet packet = read();
         switch (packet.getType()) {
-            case ShootPacket:
-                Field field = ((ShootPacket) packet).getField(fields);
-                if (field.isShipAssigned()) {
-                    field.hitAndCheckDestroyed();
-                    send(new ShootPacket(field.getPosX(), field.getPosY()));
-                    // TODO send hit message back to client
+            case Position:
+                // Setting up field
+                ShootPacket shootingPacket = (ShootPacket) packet;
+                Field field = shootingPacket.getField(fields);
+                // Setting up result from last shooting
+                FieldState result = shootingPacket.getResult();
+                // Check if packet has result 
+                if (result.equals(FieldState.Default)) {
+                    // If no result was found, check if ship is assigned
+                    if (field.isShipAssigned()) {
+                        field.hitAndCheckDestroyed();
+                        // Set result of shooting
+                        shootingPacket.setResult(FieldState.Hit);
+                    } else {
+                        field.miss();
+                        // Set result of shooting
+                        shootingPacket.setResult(FieldState.Miss);
+                    }
+                    // Send message with result back to client
+                    send(shootingPacket);
                 } else {
-                    // TODO send miss message back to client
-                    field.miss();
+                    // Result has been set
+                    // TODO add validation of field of packet is same as fieldToShootAt
+                    if (result.equals(FieldState.Hit)) {
+                        fieldToShootAt.hit();
+                    } else if (result.equals(FieldState.Miss)) {
+                        fieldToShootAt.miss();
+                    }
                 }
+                // Switch 
+                switchWaitForEnemy();
                 break;
             case Kick:
                 notKicked = false;
@@ -152,16 +180,24 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
 
     /**
      * Sends a packet for shooting at the enemy field
-     * @param field 
+     *
+     * @param field
      */
     public void shoot(Field field) {
+        fieldToShootAt = field;
         send(new ShootPacket(field.getPosX(), field.getPosY()));
+        Main.setState(GameState.EnemyTurn);
     }
-    
+
     /**
      * Switches the waiting state
      */
-    protected void switchWaitForEnemy(){
+    protected void switchWaitForEnemy() {
+        if (waitForEnemy) {
+            Main.setState(GameState.EnemyTurn);
+        } else {
+            Main.setState(GameState.MyTurn);
+        }
         waitForEnemy = !waitForEnemy;
     }
 }

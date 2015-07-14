@@ -23,17 +23,15 @@
  */
 package de.mash1t.networklib.packets;
 
-import de.mash1t.battleships.gui.field.Field;
-import de.mash1t.battleships.gui.field.FieldState;
-
 /**
- * Used for shooting at fields
+ * Used for positions
  *
  * @author Manuel Schmid
  */
-public class ShootPacket extends PositionPacket {
+public class PositionPacket extends Packet {
 
-    protected FieldState fieldState;
+    protected final int posX;
+    protected final int posY;
 
     /**
      * Set up packet type and position
@@ -41,37 +39,27 @@ public class ShootPacket extends PositionPacket {
      * @param posX position on the x axis
      * @param posY position on the y axis
      */
-    public ShootPacket(int posX, int posY) {
-        super(posX, posY);
-        fieldState = FieldState.Default;
+    public PositionPacket(int posX, int posY) {
+        this.posX = posX;
+        this.posY = posY;
+        this.packetType = PacketType.Position;
     }
 
     /**
-     * Setter of the shootings' result
+     * Getter for the position on the x axis
      *
-     * @param fieldState state after shooting at field. Can not be default or
-     * settingShip
+     * @return int position on the x axis
      */
-    public void setResult(FieldState fieldState) {
-        this.fieldState = fieldState;
+    public int getPosX() {
+        return posX;
     }
 
     /**
-     * Getter for result of shooting at field
+     * Getter for the position on the y axis
      *
-     * @return FieldState result of shooting at field
+     * @return int position on the y axis
      */
-    public FieldState getResult() {
-        return fieldState;
-    }
-
-    /**
-     * Returns the position on the x axis
-     *
-     * @param fields fields array
-     * @return position on x axis
-     */
-    public Field getField(Field[][] fields) {
-        return fields[posX][posY];
+    public int getPosY() {
+        return posY;
     }
 }

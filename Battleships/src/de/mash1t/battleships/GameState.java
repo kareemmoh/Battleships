@@ -28,6 +28,7 @@ package de.mash1t.battleships;
  * @author Manuel Schmid
  */
 public enum GameState {
+
     Initialized,
     SettingShips,
     FinishedSettingShips,

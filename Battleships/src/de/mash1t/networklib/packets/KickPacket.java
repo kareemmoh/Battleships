@@ -23,55 +23,31 @@
  */
 package de.mash1t.networklib.packets;
 
-import de.mash1t.battleships.gui.field.Field;
-import de.mash1t.battleships.gui.field.FieldState;
-
 /**
- * Used for shooting at fields
+ * Used for kicking clients
  *
  * @author Manuel Schmid
  */
-public class ShootPacket extends PositionPacket {
+public class KickPacket extends Packet {
 
-    protected FieldState fieldState;
+    protected String message;
 
     /**
-     * Set up packet type and position
+     * Set up packet type and kick message
      *
-     * @param posX position on the x axis
-     * @param posY position on the y axis
+     * @param message
      */
-    public ShootPacket(int posX, int posY) {
-        super(posX, posY);
-        fieldState = FieldState.Default;
+    public KickPacket(String message) {
+        this.message = message;
+        this.packetType = PacketType.Kick;
     }
 
     /**
-     * Setter of the shootings' result
+     * Returns the reason why somebody has been kicked
      *
-     * @param fieldState state after shooting at field. Can not be default or
-     * settingShip
+     * @return reason
      */
-    public void setResult(FieldState fieldState) {
-        this.fieldState = fieldState;
-    }
-
-    /**
-     * Getter for result of shooting at field
-     *
-     * @return FieldState result of shooting at field
-     */
-    public FieldState getResult() {
-        return fieldState;
-    }
-
-    /**
-     * Returns the position on the x axis
-     *
-     * @param fields fields array
-     * @return position on x axis
-     */
-    public Field getField(Field[][] fields) {
-        return fields[posX][posY];
+    public String getMessage() {
+        return "You have been kicked, reason: " + this.message;
     }
 }

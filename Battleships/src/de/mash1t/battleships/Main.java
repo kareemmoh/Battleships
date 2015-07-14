@@ -28,7 +28,6 @@ import static de.mash1t.battleships.gui.boards.Board.fieldCountSquare;
 import de.mash1t.battleships.config.ConfigHelper;
 import de.mash1t.battleships.gui.boards.*;
 import de.mash1t.battleships.gui.helper.DialogHelper;
-import de.mash1t.battleships.network.BattleshipNetworkObject;
 import de.mash1t.battleships.ships.Ship;
 import de.mash1t.battleships.ships.ShipSize;
 import de.mash1t.networklib.methods.NetworkBasics;
@@ -51,10 +50,8 @@ public final class Main extends javax.swing.JFrame {
     public static EnemyBoard enemyBoard;
     public static OwnBoard ownBoard;
 
-    public static BattleshipNetworkObject bsno;
-
     // Helper
-    private final DialogHelper dialogHelper = DialogHelper.getDialogHelper(this);
+    protected final DialogHelper dialogHelper = DialogHelper.getDialogHelper(this);
 
     /**
      * Creates new form Main
@@ -110,7 +107,7 @@ public final class Main extends javax.swing.JFrame {
                 ConnectionDialog connDialog = new ConnectionDialog(mainFrame);
                 connDialog.setLocationRelativeTo(mainFrame);
                 connDialog.setVisible(true);
-                
+
             }
         }.start();
         enemyBoard.disablePanel();

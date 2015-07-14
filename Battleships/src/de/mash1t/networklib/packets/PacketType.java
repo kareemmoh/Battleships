@@ -23,55 +23,18 @@
  */
 package de.mash1t.networklib.packets;
 
-import de.mash1t.battleships.gui.field.Field;
-import de.mash1t.battleships.gui.field.FieldState;
-
 /**
- * Used for shooting at fields
+ * Enum for all available packet identifiers. If you add a new custom packet,
+ * don't forget to add its identifier here
  *
  * @author Manuel Schmid
  */
-public class ShootPacket extends PositionPacket {
+public enum PacketType {
 
-    protected FieldState fieldState;
-
-    /**
-     * Set up packet type and position
-     *
-     * @param posX position on the x axis
-     * @param posY position on the y axis
-     */
-    public ShootPacket(int posX, int posY) {
-        super(posX, posY);
-        fieldState = FieldState.Default;
-    }
-
-    /**
-     * Setter of the shootings' result
-     *
-     * @param fieldState state after shooting at field. Can not be default or
-     * settingShip
-     */
-    public void setResult(FieldState fieldState) {
-        this.fieldState = fieldState;
-    }
-
-    /**
-     * Getter for result of shooting at field
-     *
-     * @return FieldState result of shooting at field
-     */
-    public FieldState getResult() {
-        return fieldState;
-    }
-
-    /**
-     * Returns the position on the x axis
-     *
-     * @param fields fields array
-     * @return position on x axis
-     */
-    public Field getField(Field[][] fields) {
-        return fields[posX][posY];
-    }
+    Info,
+    Invalid,
+    Userlist,
+    Kick,
+    Packet, // Abstract
+    Position;
 }

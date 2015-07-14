@@ -103,7 +103,6 @@ public class ButtonField extends JButton implements Field {
         changeColor();
     }
 
-
     @Override
     public boolean hitAndCheckDestroyed() {
         hit();

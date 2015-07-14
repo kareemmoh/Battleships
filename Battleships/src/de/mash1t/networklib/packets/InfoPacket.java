@@ -23,55 +23,30 @@
  */
 package de.mash1t.networklib.packets;
 
-import de.mash1t.battleships.gui.field.Field;
-import de.mash1t.battleships.gui.field.FieldState;
-
 /**
- * Used for shooting at fields
+ * Used to send information (e.g. from Server to client)
  *
  * @author Manuel Schmid
  */
-public class ShootPacket extends PositionPacket {
-
-    protected FieldState fieldState;
+public class InfoPacket extends MessagePacket {
 
     /**
-     * Set up packet type and position
+     * Set up packet type and message
      *
-     * @param posX position on the x axis
-     * @param posY position on the y axis
+     * @param message
      */
-    public ShootPacket(int posX, int posY) {
-        super(posX, posY);
-        fieldState = FieldState.Default;
+    public InfoPacket(String message) {
+        this.message = message;
+        this.packetType = PacketType.Info;
     }
 
     /**
-     * Setter of the shootings' result
+     * Returns the sent message
      *
-     * @param fieldState state after shooting at field. Can not be default or
-     * settingShip
+     * @return mesage
      */
-    public void setResult(FieldState fieldState) {
-        this.fieldState = fieldState;
-    }
-
-    /**
-     * Getter for result of shooting at field
-     *
-     * @return FieldState result of shooting at field
-     */
-    public FieldState getResult() {
-        return fieldState;
-    }
-
-    /**
-     * Returns the position on the x axis
-     *
-     * @param fields fields array
-     * @return position on x axis
-     */
-    public Field getField(Field[][] fields) {
-        return fields[posX][posY];
+    @Override
+    public String getMessage() {
+        return this.message;
     }
 }

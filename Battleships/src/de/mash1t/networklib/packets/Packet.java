@@ -23,55 +23,50 @@
  */
 package de.mash1t.networklib.packets;
 
-import de.mash1t.battleships.gui.field.Field;
-import de.mash1t.battleships.gui.field.FieldState;
+import java.io.Serializable;
 
 /**
- * Used for shooting at fields
+ * Used as a body for all other packets
  *
  * @author Manuel Schmid
  */
-public class ShootPacket extends PositionPacket {
+public abstract class Packet implements Serializable {
 
-    protected FieldState fieldState;
-
-    /**
-     * Set up packet type and position
-     *
-     * @param posX position on the x axis
-     * @param posY position on the y axis
-     */
-    public ShootPacket(int posX, int posY) {
-        super(posX, posY);
-        fieldState = FieldState.Default;
-    }
+    protected PacketType packetType = PacketType.Packet;
+    //protected String senderAlias = "Server";
+//    protected boolean isPrepared = false;
 
     /**
-     * Setter of the shootings' result
+     * Returns the packet type
      *
-     * @param fieldState state after shooting at field. Can not be default or
-     * settingShip
+     * @return
      */
-    public void setResult(FieldState fieldState) {
-        this.fieldState = fieldState;
+    public PacketType getType() {
+        return this.packetType;
     }
 
-    /**
-     * Getter for result of shooting at field
-     *
-     * @return FieldState result of shooting at field
-     */
-    public FieldState getResult() {
-        return fieldState;
-    }
-
-    /**
-     * Returns the position on the x axis
-     *
-     * @param fields fields array
-     * @return position on x axis
-     */
-    public Field getField(Field[][] fields) {
-        return fields[posX][posY];
-    }
+//    /**
+//     * Getter for senderAlias
+//     *
+//     * @return
+//     */
+//    public String getSenderAlias() {
+//        return this.senderAlias;
+//    }
+//
+//    /**
+//     * Setter for senderAlias protected because of one time usage of packets
+//     *
+//     * @param senderAlias
+//     */
+//    protected void setSenderAlias(String senderAlias) {
+//        this.senderAlias = senderAlias;
+//    }
+//
+//    /**
+//     * Sets the internal boolean isPrepared to true/false depending on what the current value is Use this for e.g. encrypting/decrypting a specific message
+//     */
+//    public void switchPrepared() {
+//        this.isPrepared = !this.isPrepared;
+//    }
 }

@@ -83,8 +83,8 @@ public interface Field {
      * Set new field status and change color
      */
     public void hit();
-    
-        /**
+
+    /**
      * Hits the field and checks if ship has been destroyed
      *
      * @return has ship been destroyed?

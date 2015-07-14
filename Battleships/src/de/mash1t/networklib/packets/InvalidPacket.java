@@ -23,55 +23,18 @@
  */
 package de.mash1t.networklib.packets;
 
-import de.mash1t.battleships.gui.field.Field;
-import de.mash1t.battleships.gui.field.FieldState;
-
 /**
- * Used for shooting at fields
+ * Used as a placeholder for invalid internal results
  *
  * @author Manuel Schmid
  */
-public class ShootPacket extends PositionPacket {
-
-    protected FieldState fieldState;
+public class InvalidPacket extends Packet {
 
     /**
-     * Set up packet type and position
-     *
-     * @param posX position on the x axis
-     * @param posY position on the y axis
+     * Set up packet type
      */
-    public ShootPacket(int posX, int posY) {
-        super(posX, posY);
-        fieldState = FieldState.Default;
-    }
-
-    /**
-     * Setter of the shootings' result
-     *
-     * @param fieldState state after shooting at field. Can not be default or
-     * settingShip
-     */
-    public void setResult(FieldState fieldState) {
-        this.fieldState = fieldState;
-    }
-
-    /**
-     * Getter for result of shooting at field
-     *
-     * @return FieldState result of shooting at field
-     */
-    public FieldState getResult() {
-        return fieldState;
-    }
-
-    /**
-     * Returns the position on the x axis
-     *
-     * @param fields fields array
-     * @return position on x axis
-     */
-    public Field getField(Field[][] fields) {
-        return fields[posX][posY];
+    public InvalidPacket() {
+        this.packetType = PacketType.Invalid;
+        //this.prepare();
     }
 }

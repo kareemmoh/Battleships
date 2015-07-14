@@ -23,7 +23,6 @@
  */
 package de.mash1t.battleships;
 
-import static de.mash1t.battleships.Main.setState;
 import de.mash1t.battleships.config.ConfigHelper;
 import de.mash1t.battleships.network.*;
 import java.awt.Color;
@@ -84,12 +83,12 @@ public class ConnectionDialog extends javax.swing.JDialog {
 
             setAndClose(server);
         } catch (SocketException ex) {
-            server.dialogHelper.showWarningDialog("Error", "Socket already in use");
+            if (!cancelButtonPressed) {
+                server.dialogHelper.showWarningDialog("Error", "Socket already in use");
+            }
             exceptionOccured = true;
         } catch (IOException ex) {
-            if (!cancelButtonPressed) {
-                server.dialogHelper.showWarningDialog("Error", "Connection Failed");
-            }
+            server.dialogHelper.showWarningDialog("Error", "Connection Failed");
             exceptionOccured = true;
         }
 

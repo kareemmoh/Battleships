@@ -24,7 +24,6 @@
 package de.mash1t.battleships.network;
 
 import de.mash1t.battleships.Main;
-import de.mash1t.battleships.gui.boards.OwnBoard;
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.helper.DialogHelper;
 import de.mash1t.networklib.methods.NetworkProtocol;

@@ -23,50 +23,41 @@
  */
 package de.mash1t.networklib.packets;
 
-import java.io.Serializable;
-
 /**
- * Used as a body for all other packets
+ * Used for kicking clients
  *
  * @author Manuel Schmid
  */
-public abstract class Packet implements Serializable {
+public class ExtendedKickPacket extends KickPacket {
 
-    protected PacketType packetType = PacketType.Packet;
-    //protected String senderAlias = "Server";
-//    protected boolean isPrepared = false;
+    protected boolean isGameFinished;
 
     /**
-     * Returns the packet type
+     * Set up packet type and kick message
      *
-     * @return
+     * @param message
      */
-    public PacketType getType() {
-        return this.packetType;
+    public ExtendedKickPacket(String message) {
+        super(message);
     }
 
-//    /**
-//     * Getter for senderAlias
-//     *
-//     * @return
-//     */
-//    public String getSenderAlias() {
-//        return this.senderAlias;
-//    }
-//
-//    /**
-//     * Setter for senderAlias protected because of one time usage of packets
-//     *
-//     * @param senderAlias
-//     */
-//    protected void setSenderAlias(String senderAlias) {
-//        this.senderAlias = senderAlias;
-//    }
-//
-//    /**
-//     * Sets the internal boolean isPrepared to true/false depending on what the current value is Use this for e.g. encrypting/decrypting a specific message
-//     */
-//    public void switchPrepared() {
-//        this.isPrepared = !this.isPrepared;
-//    }
+    /**
+     * Set up packet type and kick message
+     *
+     * @param gameFinished
+     */
+    public ExtendedKickPacket(boolean gameFinished) {
+        super("");
+        this.isGameFinished = gameFinished;
+        this.packetType = PacketType.Kick;
+    }
+
+    /**
+     * Returns if the game is finished
+     *
+     * @return boolean isGameFinished
+     */
+    public boolean getIsGameFinished() {
+        return this.isGameFinished;
+    }
 }

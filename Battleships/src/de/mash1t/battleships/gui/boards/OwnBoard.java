@@ -50,7 +50,7 @@ import javax.swing.SwingUtilities;
  */
 public class OwnBoard extends Board {
 
-    private static final Map<Field, Ship> fieldShipMap = new HashMap<>();
+    private static final Map<Ship, Field[]> shipFieldMap = new HashMap<>();
     private boolean setShip = false;
     private boolean isHoverValid = true;
     private static Ship ship;
@@ -352,9 +352,9 @@ public class OwnBoard extends Board {
         devLine("Assigning fields to ship:");
         // Assign fields to ship
         if (ship.assignFieldsToShip(shipFields)) {
+            shipFieldMap.put(ship, shipFields);
             for (Field field : shipFields) {
                 ship.setTurned(isShipTurned);
-                fieldShipMap.put(field, ship);
                 fields[field.getPosX()][field.getPosY()].assignShip(ship);
                 devLine(field.getPosX() + " - " + field.getPosY());
             }
@@ -363,5 +363,23 @@ public class OwnBoard extends Board {
         } else {
             devLine("Assignation failed: size of ship differs from amount of fields to set");
         }
+    }
+
+    /**
+     * Removes a ship from the shipToFields-map
+     *
+     * @param ship ship to remove
+     */
+    public static void deleteFieldsByShip(Ship ship) {
+        shipFieldMap.remove(ship);
+    }
+
+    /**
+     * Getter for the size of shipFieldMap
+     *
+     * @return size of shipFieldMap
+     */
+    public static int getShipMapSize() {
+        return shipFieldMap.size();
     }
 }

@@ -26,11 +26,12 @@ package de.mash1t.battleships.network;
 import de.mash1t.battleships.GameState;
 import de.mash1t.networklib.packets.ShootPacket;
 import de.mash1t.battleships.Main;
+import de.mash1t.battleships.gui.boards.OwnBoard;
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
 import de.mash1t.battleships.gui.helper.DialogHelper;
 import de.mash1t.networklib.methods.NetworkProtocol;
-import de.mash1t.networklib.packets.InfoPacket;
+import de.mash1t.networklib.packets.ExtendedKickPacket;
 import de.mash1t.networklib.packets.Packet;
 import java.net.Socket;
 import javax.swing.JFrame;
@@ -131,6 +132,7 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
         while (notKicked) {
             readResponse();
         }
+        System.exit(0);
     }
 
     /**
@@ -159,6 +161,12 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
                     }
                     // Send message with result back to client
                     send(shootingPacket);
+                    if (OwnBoard.getShipMapSize() == 0) {
+                        send(new ExtendedKickPacket(true));
+                        this.dialogHelper.showInfoDialog("Finished", "You Lost");
+                        Main.setState(GameState.GameFinished);
+                        notKicked = false;
+                    }
                 } else {
                     // Result has been set
                     // TODO add validation of field of packet is same as fieldToShootAt
@@ -172,9 +180,17 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
                 switchWaitForEnemy();
                 break;
             case Kick:
+                ExtendedKickPacket kickPacket = (ExtendedKickPacket) packet;
+                if (kickPacket.getIsGameFinished()) {
+                    this.dialogHelper.showInfoDialog("Finished", "You Won");
+                    Main.setState(GameState.GameFinished);
+                } else {
+                    this.dialogHelper.showInfoDialog("Kicked", kickPacket.getMessage());
+                }
                 notKicked = false;
-                // TODO add handle for erroneous packets
                 break;
+
+            // TODO add handle for erroneous packets
         }
     }
 

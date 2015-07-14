@@ -23,6 +23,8 @@
  */
 package de.mash1t.battleships.ships;
 
+import de.mash1t.battleships.Main;
+import de.mash1t.battleships.gui.boards.OwnBoard;
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
 
@@ -87,8 +89,10 @@ public class Ship {
                 break;
             }
         }
-
+        
+        // Check if ship is destroyed
         if (isDestroyed) {
+            OwnBoard.deleteFieldsByShip(this);
             shipState = ShipState.Destroyed;
             return true;
         }

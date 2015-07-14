@@ -37,5 +37,6 @@ public enum GameState {
     ClientStarted,
     Connected,
     EnemyTurn,
-    MyTurn;
+    MyTurn,
+    GameFinished;
 }

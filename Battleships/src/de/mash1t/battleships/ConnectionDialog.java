@@ -39,7 +39,7 @@ import javax.swing.JFrame;
  */
 public class ConnectionDialog extends javax.swing.JDialog {
 
-    protected final JFrame parentFrame;
+    protected final Main parentFrame;
 
     protected Server server;
     protected boolean cancelButtonPressed = false;
@@ -51,7 +51,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
      *
      * @param parent
      */
-    public ConnectionDialog(JFrame parent) {
+    public ConnectionDialog(Main parent) {
         super(parent, true);
         this.parentFrame = parent;
         initComponents();

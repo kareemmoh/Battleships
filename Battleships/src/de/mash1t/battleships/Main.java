@@ -34,7 +34,6 @@ import de.mash1t.networklib.methods.NetworkBasics;
 import de.mash1t.networklib.methods.NetworkProtocolType;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JFrame;
 
 /**
  * Main class to start battleships
@@ -74,7 +73,7 @@ public final class Main extends javax.swing.JFrame {
      * Adds all ships to the shipList
      */
     protected static void createShipList() {
-        shipList.add(new Ship(ShipSize.Five));
+        shipList.add(new Ship(ShipSize.Two));
 //        shipList.add(new Ship(ShipSize.Four));
 //        shipList.add(new Ship(ShipSize.Four));
 //        shipList.add(new Ship(ShipSize.Three));
@@ -93,7 +92,7 @@ public final class Main extends javax.swing.JFrame {
 //        switchConnectionPanelState(false);
         enemyBoard = new EnemyBoard(fieldCountSquare, this.pEnemy);
         ownBoard = new OwnBoard(fieldCountSquare, this.pOwn, shipList);
-        final JFrame mainFrame = this;
+        final Main mainFrame = this;
         // Outsource ship placement setter to new thread
         new Thread() {
             @Override
@@ -107,7 +106,6 @@ public final class Main extends javax.swing.JFrame {
                 ConnectionDialog connDialog = new ConnectionDialog(mainFrame);
                 connDialog.setLocationRelativeTo(mainFrame);
                 connDialog.setVisible(true);
-
             }
         }.start();
         enemyBoard.disablePanel();

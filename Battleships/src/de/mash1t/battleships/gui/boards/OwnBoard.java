@@ -48,7 +48,7 @@ import javax.swing.SwingUtilities;
  *
  * @author Manuel Schmid
  */
-public final class OwnBoard extends Board {
+public class OwnBoard extends Board {
 
     private static final Map<Field, Ship> fieldShipMap = new HashMap<>();
     private boolean setShip = false;

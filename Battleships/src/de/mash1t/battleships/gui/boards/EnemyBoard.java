@@ -38,7 +38,7 @@ import javax.swing.SwingUtilities;
  *
  * @author Manuel Schmid
  */
-public final class EnemyBoard extends Board {
+public class EnemyBoard extends Board {
 
     /**
      * Constructor

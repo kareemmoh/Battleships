@@ -23,9 +23,10 @@
  */
 package de.mash1t.battleships;
 
+import static de.mash1t.battleships.gui.boards.Board.fieldCountSquare;
+
 import de.mash1t.battleships.config.ConfigHelper;
 import de.mash1t.battleships.gui.boards.*;
-import static de.mash1t.battleships.gui.boards.Board.fieldCountSquare;
 import de.mash1t.battleships.gui.helper.DialogHelper;
 import de.mash1t.battleships.network.BattleshipNetworkObject;
 import de.mash1t.battleships.ships.Ship;
@@ -47,8 +48,8 @@ public final class Main extends javax.swing.JFrame {
     protected static final List<Ship> shipList = new ArrayList<>();
 
     // Boards
-    protected static EnemyBoard enemyBoard;
-    protected static OwnBoard ownBoard;
+    public static EnemyBoard enemyBoard;
+    public static OwnBoard ownBoard;
 
     public static BattleshipNetworkObject bsno;
 
@@ -59,7 +60,7 @@ public final class Main extends javax.swing.JFrame {
      * Creates new form Main
      */
     public Main() {
-        setState(MainState.Initialized);
+        setState(GameState.Initialized);
         NetworkBasics.setNetworkProtocolType(NetworkProtocolType.TCP);
         initComponents();
         setLocationRelativeTo(null);
@@ -68,7 +69,7 @@ public final class Main extends javax.swing.JFrame {
         startNewGame();
     }
 
-    public static void setState(MainState state) {
+    public static void setState(GameState state) {
         System.out.println(state.toString());
     }
 
@@ -101,11 +102,11 @@ public final class Main extends javax.swing.JFrame {
             @Override
             public void run() {
                 // Set up ships
-                setState(MainState.SettingShips);
+                setState(GameState.SettingShips);
                 ownBoard.setShips(shipList);
 
                 // Show frame (host or join)
-                setState(MainState.InitHostOrClient);
+                setState(GameState.InitHostOrClient);
                 ConnectionDialog connDialog = new ConnectionDialog(mainFrame);
                 connDialog.setLocationRelativeTo(mainFrame);
                 connDialog.setVisible(true);
@@ -144,7 +145,7 @@ public final class Main extends javax.swing.JFrame {
         );
         pEnemyLayout.setVerticalGroup(
             pEnemyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 437, Short.MAX_VALUE)
+            .addGap(0, 457, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout pOwnLayout = new javax.swing.GroupLayout(pOwn);
@@ -190,7 +191,7 @@ public final class Main extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pGame, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE))
+                .addComponent(pGame, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE))
         );
 
         pack();

@@ -21,16 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.mash1t.battleships;
+package de.mash1t.networklib.packets;
 
 /**
  *
  * @author Manuel Schmid
  */
-public enum MainState {
-    Initialized,
-    SettingShips,
-    InitHostOrClient,
-    EnemyTurn,
-    MyTurn;
+public enum PacketType {
+    ShootPacket,
+    ResultPacket;
 }

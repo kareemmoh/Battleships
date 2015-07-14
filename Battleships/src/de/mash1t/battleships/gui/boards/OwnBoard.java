@@ -23,6 +23,8 @@
  */
 package de.mash1t.battleships.gui.boards;
 
+import de.mash1t.battleships.Main;
+import de.mash1t.battleships.GameState;
 import de.mash1t.battleships.config.ConfigHelper;
 import static de.mash1t.battleships.config.ConfigHelper.devLine;
 import de.mash1t.battleships.gui.field.Field;
@@ -46,9 +48,9 @@ import javax.swing.SwingUtilities;
  *
  * @author Manuel Schmid
  */
-public class OwnBoard extends Board {
+public final class OwnBoard extends Board {
 
-    private final Map<Field, Ship> fieldShipMap = new HashMap<>();
+    private static final Map<Field, Ship> fieldShipMap = new HashMap<>();
     private boolean setShip = false;
     private boolean isHoverValid = true;
     private static Ship ship;
@@ -90,7 +92,7 @@ public class OwnBoard extends Board {
         }
         // Reset all hovered fields
         resetHover();
-        devLine("Finished setting up ships");
+        Main.setState(GameState.FinishedSettingShips);
     }
 
     @Override

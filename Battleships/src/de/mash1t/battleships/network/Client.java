@@ -54,6 +54,7 @@ public class Client extends BattleshipNetworkObject implements NetworkProtocol {
         this.host = host;
         this.port = port;
         this.clientName = nickname;
+        waitForEnemy = false;
     }
 
     public boolean connect() {

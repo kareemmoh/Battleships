@@ -26,6 +26,7 @@ package de.mash1t.battleships.gui.boards;
 import static de.mash1t.battleships.config.ConfigHelper.devLine;
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
+import de.mash1t.battleships.network.BattleshipNetworkObject;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JPanel;
@@ -37,7 +38,7 @@ import javax.swing.SwingUtilities;
  *
  * @author Manuel Schmid
  */
-public class EnemyBoard extends Board {
+public final class EnemyBoard extends Board {
 
     /**
      * Constructor
@@ -64,8 +65,10 @@ public class EnemyBoard extends Board {
             Field sourceField = (Field) e.getSource();
             if (sourceField.getFieldState() == FieldState.Default) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                    sourceField.hit();
-                    devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Enemy - hit");
+                    if (BattleshipNetworkObject.getWaitForEnemy()) {
+                        sourceField.shoot();
+                    }
+                    devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Enemy - shoot");
                 }
             }
         }

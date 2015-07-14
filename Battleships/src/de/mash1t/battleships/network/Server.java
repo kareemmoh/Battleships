@@ -30,6 +30,7 @@ import de.mash1t.networklib.methods.NetworkProtocol;
 import de.mash1t.networklib.packets.KickPacket;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.SocketException;
 import javax.swing.JFrame;
 
 /**
@@ -48,16 +49,17 @@ public class Server extends BattleshipNetworkObject implements NetworkProtocol {
      */
     public Server(JFrame jFrame) {
         super(jFrame);
+        waitForEnemy = true;
+
     }
 
     /**
      * Waits for the client to connect to the server
      *
-     * @return connection established successfully or not
+     * @throws java.net.SocketException
      */
-    public boolean waitForClientToConnect() {
+    public void waitForClientToConnect() throws SocketException, IOException{
 
-        try {
             int portNumber = ConfigHelper.getPort();
 
             // Open a server socket on the portNumber
@@ -70,12 +72,6 @@ public class Server extends BattleshipNetworkObject implements NetworkProtocol {
             // Create client socket for incoming connection
             // Handle for new connection, put it into empty array-slot
             clientSocket = serverSocket.accept();
-            nwProtocol = NetworkBasics.makeNetworkProtocolObject(clientSocket);
-            return true;
-
-        } catch (Exception ex) {
-            return false;
-        }
     }
 
     public boolean closeSocket() {

@@ -142,4 +142,13 @@ public abstract class Board {
             }
         }
     }
+
+    /**
+     * Getter for the fields
+     *
+     * @return fields array
+     */
+    public Field[][] getFields() {
+        return fields;
+    }
 }

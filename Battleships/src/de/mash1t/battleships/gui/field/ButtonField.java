@@ -103,8 +103,19 @@ public class ButtonField extends JButton implements Field {
         changeColor();
     }
 
+
+    @Override
+    public boolean hitAndCheckDestroyed() {
+        hit();
+        return ship.isDestroyed();
+    }
+
     @Override
     public void shoot() {
+        // Validate field state, only shoot when not already shot on
+        if (this.fieldStatus == FieldState.Default) {
+            getNetworkObject().shoot(this);
+        }
     }
 
     @Override

@@ -23,9 +23,14 @@
  */
 package de.mash1t.battleships.network;
 
+import de.mash1t.battleships.Main;
+import de.mash1t.battleships.gui.boards.OwnBoard;
+import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.helper.DialogHelper;
 import de.mash1t.networklib.methods.NetworkProtocol;
 import de.mash1t.networklib.packets.Packet;
+import static de.mash1t.networklib.packets.PacketType.ShootPacket;
+import de.mash1t.networklib.packets.ShootPacket;
 import java.net.Socket;
 import javax.swing.JFrame;
 
@@ -34,11 +39,13 @@ import javax.swing.JFrame;
  *
  * @author Manuel Schmid
  */
-public abstract class BattleshipNetworkObject implements NetworkProtocol {
+public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnable {
 
     protected Socket clientSocket;
     protected NetworkProtocol nwProtocol;
     public final DialogHelper dialogHelper;
+    protected static boolean waitForEnemy;
+    protected final Field fields[][];
 
     protected static BattleshipNetworkObject networkObject;
 
@@ -49,6 +56,7 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol {
      */
     public BattleshipNetworkObject(JFrame jFrame) {
         this.dialogHelper = DialogHelper.getDialogHelper(jFrame);
+        this.fields = Main.ownBoard.getFields();
     }
 
     /**
@@ -57,11 +65,7 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol {
      * @return is connected or not
      */
     public static boolean isConnected() {
-        if (networkObject != null && networkObject.nwProtocol != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return networkObject != null && networkObject.nwProtocol != null;
     }
 
     /**
@@ -80,6 +84,15 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol {
      */
     public static BattleshipNetworkObject getNetworkObject() {
         return networkObject;
+    }
+
+    /**
+     * Getter for current waiting state
+     *
+     * @return currently waiting
+     */
+    public static boolean getWaitForEnemy() {
+        return waitForEnemy;
     }
 
     @Override
@@ -102,7 +115,28 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol {
         return nwProtocol.close();
     }
 
-    public void getEnemyShot() {
+    @Override
+    public void run() {
+        Packet packet;
+        while (true) {
+            if (waitForEnemy) {
+                packet = read();
+                switch (packet.getType()) {
+                    case ShootPacket:
+                        Field field = ((ShootPacket) packet).getField(fields);
+                        if(field.isShipAssigned()){
+                            field.hitAndCheckDestroyed();
+                            // TODO send hit message back to client
+                        } else {
+                            // TODO send miss message back to client
+                        }
+                        break;
+                }
+            }
+        }
+    }
 
+    public void shoot(Field field) {
+        send(new ShootPacket(field.getPosX(), field.getPosY()));
     }
 }

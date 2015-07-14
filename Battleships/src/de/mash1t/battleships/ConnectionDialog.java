@@ -28,6 +28,8 @@ import de.mash1t.battleships.config.ConfigHelper;
 import de.mash1t.battleships.network.*;
 import java.awt.Color;
 import java.awt.Component;
+import java.io.IOException;
+import java.net.SocketException;
 import javax.swing.JFrame;
 
 /**
@@ -69,18 +71,29 @@ public class ConnectionDialog extends javax.swing.JDialog {
      * Hosts a server
      */
     protected void host() {
+        boolean exceptionOccured = false;
+        Main.setState(GameState.HostStarted);
         // Change elements of dialog
         hostElementChange(true);
         // Start server
         server = new Server(parentFrame);
-        if (server.waitForClientToConnect()) {
+        try {
+            server.waitForClientToConnect();
             server.dialogHelper.showInfoDialog("Info", "Connected");
+            Main.setState(GameState.Connected);
+
             setAndClose(server);
-        } else {
+        } catch (SocketException ex) {
+            server.dialogHelper.showWarningDialog("Error", "Socket already in use");
+            exceptionOccured = true;
+        } catch (IOException ex) {
             if (!cancelButtonPressed) {
                 server.dialogHelper.showWarningDialog("Error", "Connection Failed");
             }
-            // Reset elements of dialog
+            exceptionOccured = true;
+        }
+
+        if (exceptionOccured) {
             hostElementChange(false);
         }
     }
@@ -104,7 +117,8 @@ public class ConnectionDialog extends javax.swing.JDialog {
     protected void setAndClose(BattleshipNetworkObject bsno) {
         BattleshipNetworkObject.setNetworkObject(bsno);
         Main.enemyBoard.enablePanel();
-        setState(MainState.MyTurn);
+        Thread thread = new Thread(bsno);
+        thread.start();
         dispose();
     }
 

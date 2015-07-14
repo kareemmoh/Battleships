@@ -25,9 +25,6 @@ package de.mash1t.battleships.ships;
 
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Class for a ship
@@ -39,7 +36,7 @@ public class Ship {
     protected ShipState shipState = ShipState.ToBeSet;
     protected final ShipSize shipSize;
     protected boolean isShipTurned = false;
-    protected final List<Field> fieldList = new ArrayList<>();
+    protected Field[] fields;
 
     /**
      * Constructor
@@ -84,7 +81,7 @@ public class Ship {
      */
     public boolean isDestroyed() {
         boolean isDestroyed = true;
-        for (Field field : fieldList) {
+        for (Field field : fields) {
             if (field.getFieldState() != FieldState.Hit) {
                 isDestroyed = false;
                 break;
@@ -107,7 +104,7 @@ public class Ship {
     public boolean assignFieldsToShip(Field[] fields) {
         if (fields.length == this.shipSize.size()) {
             // Add fields to ship
-            fieldList.addAll(Arrays.asList(fields));
+            this.fields = fields;
             this.shipState = ShipState.Healthy;
             return true;
         }

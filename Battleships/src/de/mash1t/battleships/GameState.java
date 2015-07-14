@@ -29,14 +29,24 @@ package de.mash1t.battleships;
  */
 public enum GameState {
 
-    Initialized,
-    SettingShips,
-    FinishedSettingShips,
-    InitHostOrClient,
-    HostStarted,
-    ClientStarted,
-    Connected,
-    EnemyTurn,
-    MyTurn,
-    GameFinished;
+    SettingShips("Please set your ships. Richt click to turn ship"),
+    FinishedSettingShips("Finished setting ships"),
+    InitHostOrClient("Please choose whether to host or to join a server"),
+    HostStarted("Server started"),
+    ClientStarted("Client started"),
+    Connected("Connected"),
+    EnemyTurn("Waiting for enemy to finish turn"),
+    MyTurn("Your Turn"),
+    Kicked("Kicked"),
+    GameFinished("Finished");
+    
+    private final String stateText;
+
+    GameState(String stateText) {
+        this.stateText = stateText;
+    }
+
+    public String getText() {
+        return stateText;
+    }
 }

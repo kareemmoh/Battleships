@@ -23,13 +23,13 @@
  */
 package de.mash1t.battleships;
 
+import static de.mash1t.battleships.Main.setState;
 import de.mash1t.battleships.config.ConfigHelper;
 import de.mash1t.battleships.network.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.io.IOException;
 import java.net.SocketException;
-import javax.swing.JFrame;
 
 /**
  * Class for a dialog, where the user can choose between hosting or joining a
@@ -57,6 +57,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
         initComponents();
         presetFields();
         progressBar.setVisible(false);
+        setState(GameState.InitHostOrClient);
     }
 
     /**
@@ -78,9 +79,9 @@ public class ConnectionDialog extends javax.swing.JDialog {
         server = new Server(parentFrame);
         try {
             server.waitForClientToConnect();
-            server.dialogHelper.showInfoDialog("Info", "Connected");
-
             setAndClose(server);
+            server.dialogHelper.showInfoDialog("Info", "Connected");
+            Main.setState(GameState.MyTurn);
         } catch (SocketException ex) {
             if (!cancelButtonPressed) {
                 server.dialogHelper.showWarningDialog("Error", "Socket already in use");
@@ -100,12 +101,13 @@ public class ConnectionDialog extends javax.swing.JDialog {
      * Tries to connect to the given server
      */
     protected void connect() {
-        Main.setState(GameState.ClientStarted);
         if (validateConnectionData()) {
+            Main.setState(GameState.ClientStarted);
             Client client = new Client(tbServer.getText(), Integer.parseInt(tbPort.getText()), tbNickname.getText(), parentFrame);
             if (client.connect()) {
-                client.dialogHelper.showInfoDialog("Info", "Connected");
                 setAndClose(client);
+                client.dialogHelper.showInfoDialog("Info", "Connected");
+                Main.setState(GameState.EnemyTurn);
             }
         }
     }
@@ -338,6 +340,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
             cancelButtonPressed = true;
             server.closeSocket();
             hostElementChange(false);
+            setState(GameState.InitHostOrClient);
         } else {
 
             searchingClient = new Thread() {

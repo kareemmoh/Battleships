@@ -163,8 +163,8 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
                     send(shootingPacket);
                     if (OwnBoard.getShipMapSize() == 0) {
                         send(new ExtendedKickPacket(true));
-                        this.dialogHelper.showInfoDialog("Finished", "You Lost");
                         Main.setState(GameState.GameFinished);
+                        this.dialogHelper.showInfoDialog("Finished", "You Lost");
                         notKicked = false;
                     }
                 } else {
@@ -177,14 +177,17 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
                     }
                 }
                 // Switch 
-                switchWaitForEnemy();
+                if(notKicked){
+                    switchWaitForEnemy();
+                }
                 break;
             case Kick:
                 ExtendedKickPacket kickPacket = (ExtendedKickPacket) packet;
                 if (kickPacket.getIsGameFinished()) {
-                    this.dialogHelper.showInfoDialog("Finished", "You Won");
                     Main.setState(GameState.GameFinished);
+                    this.dialogHelper.showInfoDialog("Finished", "You Won");
                 } else {
+                    Main.setState(GameState.Kicked);
                     this.dialogHelper.showInfoDialog("Kicked", kickPacket.getMessage());
                 }
                 notKicked = false;
@@ -209,11 +212,11 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
      * Switches the waiting state
      */
     protected void switchWaitForEnemy() {
+        waitForEnemy = !waitForEnemy;
         if (waitForEnemy) {
             Main.setState(GameState.EnemyTurn);
         } else {
             Main.setState(GameState.MyTurn);
         }
-        waitForEnemy = !waitForEnemy;
     }
 }

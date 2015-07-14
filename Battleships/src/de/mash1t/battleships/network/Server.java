@@ -23,6 +23,8 @@
  */
 package de.mash1t.battleships.network;
 
+import de.mash1t.battleships.GameState;
+import de.mash1t.battleships.Main;
 import de.mash1t.battleships.config.ConfigHelper;
 import static de.mash1t.battleships.config.ConfigHelper.devLine;
 import de.mash1t.networklib.methods.NetworkBasics;
@@ -50,7 +52,6 @@ public class Server extends BattleshipNetworkObject implements NetworkProtocol {
     public Server(JFrame jFrame) {
         super(jFrame);
         waitForEnemy = false;
-
     }
 
     /**

@@ -23,6 +23,8 @@
  */
 package de.mash1t.battleships.network;
 
+import de.mash1t.battleships.GameState;
+import de.mash1t.battleships.Main;
 import de.mash1t.networklib.methods.NetworkBasics;
 import de.mash1t.networklib.methods.NetworkProtocol;
 import java.io.IOException;

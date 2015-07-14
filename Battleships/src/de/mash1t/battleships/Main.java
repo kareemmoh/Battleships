@@ -24,6 +24,7 @@
 package de.mash1t.battleships;
 
 import static de.mash1t.battleships.gui.boards.Board.fieldCountSquare;
+import static de.mash1t.battleships.config.ConfigHelper.devLine;
 
 import de.mash1t.battleships.config.ConfigHelper;
 import de.mash1t.battleships.gui.boards.*;
@@ -44,6 +45,7 @@ public final class Main extends javax.swing.JFrame {
 
     // Ship List
     protected static final List<Ship> shipList = new ArrayList<>();
+    protected static Main main;
 
     // Boards
     public static EnemyBoard enemyBoard;
@@ -56,7 +58,6 @@ public final class Main extends javax.swing.JFrame {
      * Creates new form Main
      */
     public Main() {
-        setState(GameState.Initialized);
         NetworkBasics.setNetworkProtocolType(NetworkProtocolType.TCP);
         initComponents();
         setLocationRelativeTo(null);
@@ -65,15 +66,21 @@ public final class Main extends javax.swing.JFrame {
         startNewGame();
     }
 
+    /**
+     *
+     * @param state
+     */
     public static void setState(GameState state) {
-        System.out.println(state.toString());
+        String title = state.getText();
+        devLine(title);
+        main.setTitle(title);
     }
 
     /**
      * Adds all ships to the shipList
      */
     protected static void createShipList() {
-        shipList.add(new Ship(ShipSize.Two));
+        shipList.add(new Ship(ShipSize.Five));
 //        shipList.add(new Ship(ShipSize.Four));
 //        shipList.add(new Ship(ShipSize.Four));
 //        shipList.add(new Ship(ShipSize.Three));
@@ -89,6 +96,7 @@ public final class Main extends javax.swing.JFrame {
      * Resets boards and initializes new game
      */
     protected void startNewGame() {
+        main = this;
 //        switchConnectionPanelState(false);
         enemyBoard = new EnemyBoard(fieldCountSquare, this.pEnemy);
         ownBoard = new OwnBoard(fieldCountSquare, this.pOwn, shipList);
@@ -102,7 +110,6 @@ public final class Main extends javax.swing.JFrame {
                 ownBoard.setShips(shipList);
 
                 // Show frame (host or join)
-                setState(GameState.InitHostOrClient);
                 ConnectionDialog connDialog = new ConnectionDialog(mainFrame);
                 connDialog.setLocationRelativeTo(mainFrame);
                 connDialog.setVisible(true);

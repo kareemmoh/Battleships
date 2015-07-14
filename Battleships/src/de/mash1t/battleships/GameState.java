@@ -24,7 +24,8 @@
 package de.mash1t.battleships;
 
 /**
- *
+ * Enum for the current state of the game
+ * 
  * @author Manuel Schmid
  */
 public enum GameState {

@@ -65,10 +65,10 @@ public class EnemyBoard extends Board {
             Field sourceField = (Field) e.getSource();
             if (sourceField.getFieldState() == FieldState.Default) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                    if (BattleshipNetworkObject.getWaitForEnemy()) {
+                    if (!BattleshipNetworkObject.getWaitForEnemy()) {
+                        devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Enemy - shoot");
                         sourceField.shoot();
                     }
-                    devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Enemy - shoot");
                 }
             }
         }

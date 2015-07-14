@@ -25,7 +25,6 @@ package de.mash1t.battleships.network;
 
 import de.mash1t.networklib.methods.NetworkBasics;
 import de.mash1t.networklib.methods.NetworkProtocol;
-import de.mash1t.networklib.packets.ConnectPacket;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -54,9 +53,14 @@ public class Client extends BattleshipNetworkObject implements NetworkProtocol {
         this.host = host;
         this.port = port;
         this.clientName = nickname;
-        waitForEnemy = false;
+        waitForEnemy = true;
     }
 
+    /**
+     * Connects to a given host
+     *
+     * @return connection established
+     */
     public boolean connect() {
 
         // Open a socket on a given host and port. Open input and output streams.
@@ -64,16 +68,7 @@ public class Client extends BattleshipNetworkObject implements NetworkProtocol {
             // Set up socket and streams
             clientSocket = new Socket(host, port);
             nwProtocol = NetworkBasics.makeNetworkProtocolObject(clientSocket);
-
-            // Create a thread to read from the server
-            //new Thread(new ClientGuiThread(this)).start();
-            // Send clientName
-            if (nwProtocol.send(new ConnectPacket(this.clientName))) {
-                return true;
-            }
-
-            this.dialogHelper.showWarningDialog("Warning", "Could not send data to host \"" + host + "\" on Port " + port);
-            return false;
+            return true;
         } catch (UnknownHostException ex) {
             this.dialogHelper.showWarningDialog("Warning", "Don't know about host " + host);
         } catch (IOException ex) {

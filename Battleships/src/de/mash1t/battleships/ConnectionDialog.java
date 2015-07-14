@@ -79,7 +79,6 @@ public class ConnectionDialog extends javax.swing.JDialog {
         try {
             server.waitForClientToConnect();
             server.dialogHelper.showInfoDialog("Info", "Connected");
-            Main.setState(GameState.Connected);
 
             setAndClose(server);
         } catch (SocketException ex) {
@@ -101,19 +100,24 @@ public class ConnectionDialog extends javax.swing.JDialog {
      * Tries to connect to the given server
      */
     protected void connect() {
+        Main.setState(GameState.ClientStarted);
         if (validateConnectionData()) {
-            // TODO actually connect
             Client client = new Client(tbServer.getText(), Integer.parseInt(tbPort.getText()), tbNickname.getText(), parentFrame);
             if (client.connect()) {
                 client.dialogHelper.showInfoDialog("Info", "Connected");
                 setAndClose(client);
-            } else {
-                client.dialogHelper.showWarningDialog("Error", "Connection Failed");
             }
         }
     }
 
+    /**
+     * Sets the given BattleshipNetworkObject as static, starts thread for
+     * receiving data, disposes form
+     *
+     * @param bsno BattleshipNetworkObject to set as static
+     */
     protected void setAndClose(BattleshipNetworkObject bsno) {
+        Main.setState(GameState.Connected);
         BattleshipNetworkObject.setNetworkObject(bsno);
         Main.enemyBoard.enablePanel();
         Thread thread = new Thread(bsno);

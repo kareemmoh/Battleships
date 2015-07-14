@@ -49,7 +49,7 @@ public class Server extends BattleshipNetworkObject implements NetworkProtocol {
      */
     public Server(JFrame jFrame) {
         super(jFrame);
-        waitForEnemy = true;
+        waitForEnemy = false;
 
     }
 
@@ -58,22 +58,27 @@ public class Server extends BattleshipNetworkObject implements NetworkProtocol {
      *
      * @throws java.net.SocketException
      */
-    public void waitForClientToConnect() throws SocketException, IOException{
+    public void waitForClientToConnect() throws SocketException, IOException {
 
-            int portNumber = ConfigHelper.getPort();
+        int portNumber = ConfigHelper.getPort();
 
-            // Open a server socket on the portNumber
-            serverSocket = new ServerSocket(portNumber);
-            devLine("Server started on port " + portNumber);
+        // Open a server socket on the portNumber
+        serverSocket = new ServerSocket(portNumber);
+        devLine("Server started on port " + portNumber);
 
-            // Adding shutdown handle
-            Runtime.getRuntime().addShutdownHook(new ShutdownHandle());
+        // Adding shutdown handle
+        Runtime.getRuntime().addShutdownHook(new ShutdownHandle());
 
-            // Create client socket for incoming connection
-            // Handle for new connection, put it into empty array-slot
-            clientSocket = serverSocket.accept();
+        // Create client socket for incoming connection
+        clientSocket = serverSocket.accept();
+        nwProtocol = NetworkBasics.makeNetworkProtocolObject(clientSocket);
     }
 
+    /**
+     * Closes the socket in case of manual cancel
+     *
+     * @return
+     */
     public boolean closeSocket() {
         try {
             serverSocket.close();
@@ -93,7 +98,7 @@ public class Server extends BattleshipNetworkObject implements NetworkProtocol {
 
             devLine("Shutting down Server");
 
-            if (clientSocket != null && clientSocket.isConnected()) {
+            if (clientSocket != null && clientSocket.isConnected() && nwProtocol != null) {
                 nwProtocol.send(new KickPacket("*** SERVER IS GOING DOWN ***"));
                 nwProtocol.close();
             }

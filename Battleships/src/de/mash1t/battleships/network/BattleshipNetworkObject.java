@@ -26,6 +26,7 @@ package de.mash1t.battleships.network;
 import de.mash1t.battleships.GameState;
 import de.mash1t.networklib.packets.ShootPacket;
 import de.mash1t.battleships.Main;
+import static de.mash1t.battleships.config.ConfigHelper.devLine;
 import de.mash1t.battleships.gui.boards.OwnBoard;
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
@@ -151,13 +152,16 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
                 if (result.equals(FieldState.Default)) {
                     // If no result was found, check if ship is assigned
                     if (field.isShipAssigned()) {
-                        field.hitAndCheckDestroyed();
                         // Set result of shooting
-                        shootingPacket.setResult(FieldState.Hit);
+                        if (field.hitAndCheckDestroyed()) {
+                            shootingPacket.setResult(FieldState.Hit, true);
+                        } else {
+                            shootingPacket.setResult(FieldState.Hit, false);
+                        }
                     } else {
                         field.miss();
                         // Set result of shooting
-                        shootingPacket.setResult(FieldState.Miss);
+                        shootingPacket.setResult(FieldState.Miss, false);
                     }
                     // Send message with result back to client
                     send(shootingPacket);
@@ -171,13 +175,17 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
                     // Result has been set
                     // TODO add validation of field of packet is same as fieldToShootAt
                     if (result.equals(FieldState.Hit)) {
+                        if(shootingPacket.getIsDestroyed()){
+                            // TODO Add function to mark destroyed ships
+                            devLine("Ship destroyed");
+                        }
                         fieldToShootAt.hit();
                     } else if (result.equals(FieldState.Miss)) {
                         fieldToShootAt.miss();
                     }
                 }
                 // Switch 
-                if(notKicked){
+                if (notKicked) {
                     switchWaitForEnemy();
                 }
                 break;

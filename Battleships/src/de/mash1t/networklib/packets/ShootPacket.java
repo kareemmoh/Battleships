@@ -34,6 +34,7 @@ import de.mash1t.battleships.gui.field.FieldState;
 public class ShootPacket extends PositionPacket {
 
     protected FieldState fieldState;
+    protected boolean destroyed = false;
 
     /**
      * Set up packet type and position
@@ -51,9 +52,11 @@ public class ShootPacket extends PositionPacket {
      *
      * @param fieldState state after shooting at field. Can not be default or
      * settingShip
+     * @param destroyed is ship destroyed after shooting
      */
-    public void setResult(FieldState fieldState) {
+    public void setResult(FieldState fieldState, boolean destroyed) {
         this.fieldState = fieldState;
+        this.destroyed = destroyed;
     }
 
     /**
@@ -63,6 +66,15 @@ public class ShootPacket extends PositionPacket {
      */
     public FieldState getResult() {
         return fieldState;
+    }
+
+    /**
+     * Getter for destroyed state of shooting at field
+     *
+     * @return ship is destroyed
+     */
+    public boolean getIsDestroyed() {
+        return destroyed;
     }
 
     /**

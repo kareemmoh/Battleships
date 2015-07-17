@@ -9,7 +9,7 @@ It is equipped with the following features:
 
 ### Version
 
-0.0.3
+0.1.0
 
 ### Installation
 Currently there is **no installer**. Simply pull the repository:
@@ -28,11 +28,13 @@ If you have any questions or feature requests, don't hesitate to contact me on [
 ### Current Todo's
 
  - [x] Full LAN-Support
- - [ ] Implement ship setting thread correctly
  - [x] Make hover wrapper invisible
  - [x] Add hover wrapper
  - [x] .ini-file support
-
+ - [ ] Implement ship setting thread correctly
+ - [ ] Play Again
+ - [ ] Sync amount of ships
+ - [ ] Add box to display how much enemy ships are still alive / to set
 ### License
 
 This software is under MIT-License

@@ -26,6 +26,8 @@ package de.mash1t.networklib.packets;
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
 import de.mash1t.battleships.ships.Ship;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Used for shooting at fields
@@ -36,7 +38,7 @@ public class ShootPacket extends PositionPacket {
 
     protected FieldState fieldState;
     protected boolean destroyed;
-    protected Ship ship;
+    protected Map<Integer, Integer> fieldPositionMap = new HashMap<>();
 
     /**
      * Set up packet type and position
@@ -48,7 +50,6 @@ public class ShootPacket extends PositionPacket {
         super(posX, posY);
         this.fieldState = FieldState.Default;
         this.destroyed = false;
-        this.ship = null;
     }
 
     /**
@@ -59,7 +60,6 @@ public class ShootPacket extends PositionPacket {
      */
     public void setResult(FieldState fieldState) {
         this.fieldState = fieldState;
-        //this.destroyed = false;
     }
 
     /**
@@ -72,7 +72,10 @@ public class ShootPacket extends PositionPacket {
     public void setResult(FieldState fieldState, Ship ship) {
         this.fieldState = fieldState;
         this.destroyed = true;
-        this.ship = ship;
+        // Put field positions in the map
+        for (Field field : ship.getFields()) {
+            this.fieldPositionMap.put(field.getPosX(), field.getPosY());
+        }
     }
 
     /**
@@ -98,8 +101,8 @@ public class ShootPacket extends PositionPacket {
      *
      * @return destroyed ship
      */
-    public Ship getShip() {
-        return ship;
+    public Map<Integer, Integer> getFieldPositionMap() {
+        return fieldPositionMap;
     }
 
     /**

@@ -26,7 +26,6 @@ package de.mash1t.battleships.network;
 import de.mash1t.battleships.GameState;
 import de.mash1t.networklib.packets.ShootPacket;
 import de.mash1t.battleships.Main;
-import static de.mash1t.battleships.config.ConfigHelper.devLine;
 import de.mash1t.battleships.gui.boards.OwnBoard;
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
@@ -35,6 +34,8 @@ import de.mash1t.networklib.methods.NetworkProtocol;
 import de.mash1t.networklib.packets.ExtendedKickPacket;
 import de.mash1t.networklib.packets.Packet;
 import java.net.Socket;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.swing.JFrame;
 
 /**
@@ -181,12 +182,13 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
                             // Get fields of the enemyBoard
                             Field[][] enemyBoardFields = Main.enemyBoard.getFields();
                             // Get fields of the ship to mark them as destroyed
-                            Field[] destroyedFields = shootingPacket.getShip().getFields();
-                            for (Field destroyedField : destroyedFields) {
-                                enemyBoardFields[destroyedField.getPosX()][destroyedField.getPosY()].destroy();
+                            Map<Integer, Integer> destroyedFields = shootingPacket.getFieldPositionMap();
+                            // Interate over each entry
+                            for(Entry<Integer, Integer> entry:destroyedFields.entrySet()){
+                                enemyBoardFields[entry.getKey()][entry.getValue()].destroy();
                             }
                         }
-                            fieldToShootAt.hit();
+                        fieldToShootAt.hit();
                     } else if (result.equals(FieldState.Miss)) {
                         fieldToShootAt.miss();
                     }

@@ -109,6 +109,15 @@ public class ButtonField extends JButton implements Field {
     }
 
     @Override
+    public void destroy() {
+        // Check if field has been set to hit before
+        if (fieldStatus != FieldState.Hit) {
+            hit();
+        }
+        this.setText("X");
+    }
+
+    @Override
     public boolean hitAndCheckDestroyed() {
         hit();
         return ship.isDestroyed();

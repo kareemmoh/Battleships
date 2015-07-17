@@ -80,14 +80,14 @@ public final class Main extends javax.swing.JFrame {
      * Adds all ships to the shipList
      */
     protected static void createShipList() {
-        shipList.add(new Ship(ShipSize.Five));
-        shipList.add(new Ship(ShipSize.Four));
-        shipList.add(new Ship(ShipSize.Four));
-        shipList.add(new Ship(ShipSize.Three));
-        shipList.add(new Ship(ShipSize.Three));
-        shipList.add(new Ship(ShipSize.Three));
-        shipList.add(new Ship(ShipSize.Two));
-        shipList.add(new Ship(ShipSize.Two));
+//        shipList.add(new Ship(ShipSize.Five));
+//        shipList.add(new Ship(ShipSize.Four));
+//        shipList.add(new Ship(ShipSize.Four));
+//        shipList.add(new Ship(ShipSize.Three));
+//        shipList.add(new Ship(ShipSize.Three));
+//        shipList.add(new Ship(ShipSize.Three));
+//        shipList.add(new Ship(ShipSize.Two));
+//        shipList.add(new Ship(ShipSize.Two));
         shipList.add(new Ship(ShipSize.Two));
         shipList.add(new Ship(ShipSize.Two));
     }

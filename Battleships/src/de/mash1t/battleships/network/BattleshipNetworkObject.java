@@ -178,10 +178,15 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
                     // TODO add validation of field of packet is same as fieldToShootAt
                     if (result.equals(FieldState.Hit)) {
                         if (shootingPacket.getIsDestroyed()) {
-                            // TODO Add function to mark destroyed ships
-                            devLine("Ship destroyed");
+                            // Get fields of the enemyBoard
+                            Field[][] enemyBoardFields = Main.enemyBoard.getFields();
+                            // Get fields of the ship to mark them as destroyed
+                            Field[] destroyedFields = shootingPacket.getShip().getFields();
+                            for (Field destroyedField : destroyedFields) {
+                                enemyBoardFields[destroyedField.getPosX()][destroyedField.getPosY()].destroy();
+                            }
                         }
-                        fieldToShootAt.hit();
+                            fieldToShootAt.hit();
                     } else if (result.equals(FieldState.Miss)) {
                         fieldToShootAt.miss();
                     }

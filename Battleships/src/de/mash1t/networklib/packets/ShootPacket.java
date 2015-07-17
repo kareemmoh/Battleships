@@ -94,6 +94,15 @@ public class ShootPacket extends PositionPacket {
     }
 
     /**
+     * Getter for the ship
+     *
+     * @return destroyed ship
+     */
+    public Ship getShip() {
+        return ship;
+    }
+
+    /**
      * Returns the position on the x axis
      *
      * @param fields fields array

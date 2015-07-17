@@ -21,33 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.mash1t.battleships;
+package de.mash1t.battleships.gui.field;
+
+import java.io.Serializable;
 
 /**
- * Enum for the current state of the game
+ * Class for an object containing equipped with a position
  *
  * @author Manuel Schmid
  */
-public enum GameState {
+public class PositionObject implements Serializable {
 
-    SettingShips("Please set your ships. Richt click to turn ship"),
-    FinishedSettingShips("Finished setting ships"),
-    InitHostOrClient("Please choose whether to host or to join a server"),
-    HostStarted("Server started"),
-    ClientStarted("Client started"),
-    Connected("Connected"),
-    EnemyTurn("Waiting for enemy to finish turn"),
-    MyTurn("Your Turn"),
-    Kicked("Kicked"),
-    GameFinished("Finished");
+    protected final int posX;
+    protected final int posY;
 
-    private final String stateText;
-
-    GameState(String stateText) {
-        this.stateText = stateText;
+    /**
+     * Initializes the position
+     *
+     * @param posX set position on x axis
+     * @param posY set position on y axis
+     */
+    public PositionObject(int posX, int posY) {
+        this.posX = posX;
+        this.posY = posY;
     }
 
-    public String getText() {
-        return stateText;
+    /**
+     * Getter for position x
+     *
+     * @return position x
+     */
+    public int getPosX() {
+        return this.posX;
+    }
+
+    /**
+     * Getter for position y
+     *
+     * @return position y
+     */
+    public int getPosY() {
+        return this.posY;
     }
 }

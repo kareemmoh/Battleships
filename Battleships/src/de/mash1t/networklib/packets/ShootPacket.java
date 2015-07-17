@@ -25,9 +25,10 @@ package de.mash1t.networklib.packets;
 
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
+import de.mash1t.battleships.gui.field.PositionObject;
 import de.mash1t.battleships.ships.Ship;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Used for shooting at fields
@@ -38,7 +39,7 @@ public class ShootPacket extends PositionPacket {
 
     protected FieldState fieldState;
     protected boolean destroyed;
-    protected Map<Integer, Integer> fieldPositionMap = new HashMap<>();
+    protected List<PositionObject> fieldPositionObjectList = new ArrayList<>();
 
     /**
      * Set up packet type and position
@@ -74,8 +75,9 @@ public class ShootPacket extends PositionPacket {
         this.destroyed = true;
         // Put field positions in the map
         for (Field field : ship.getFields()) {
-            this.fieldPositionMap.put(field.getPosX(), field.getPosY());
+            this.fieldPositionObjectList.add(field.getPositionObject());
         }
+        System.out.println(ship.getFields().length);
     }
 
     /**
@@ -101,8 +103,8 @@ public class ShootPacket extends PositionPacket {
      *
      * @return destroyed ship
      */
-    public Map<Integer, Integer> getFieldPositionMap() {
-        return fieldPositionMap;
+    public List<PositionObject> getFieldPositionObjectList() {
+        return fieldPositionObjectList;
     }
 
     /**

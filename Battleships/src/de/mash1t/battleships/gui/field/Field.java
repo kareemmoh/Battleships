@@ -33,18 +33,11 @@ import de.mash1t.battleships.ships.Ship;
 public interface Field {
 
     /**
-     * Getter for position x of the field
+     * Getter for the position object
      *
-     * @return position x of the field
+     * @return PositionObject of the field
      */
-    public int getPosX();
-
-    /**
-     * Getter for position y of the field
-     *
-     * @return position y of the field
-     */
-    public int getPosY();
+    public PositionObject getPositionObject();
 
     /**
      * Assigns a ship to this field

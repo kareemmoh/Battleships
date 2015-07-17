@@ -29,6 +29,7 @@ import de.mash1t.battleships.Main;
 import de.mash1t.battleships.gui.boards.OwnBoard;
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
+import de.mash1t.battleships.gui.field.PositionObject;
 import de.mash1t.battleships.gui.helper.DialogHelper;
 import de.mash1t.networklib.methods.NetworkProtocol;
 import de.mash1t.networklib.packets.ExtendedKickPacket;
@@ -181,11 +182,10 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
                         if (shootingPacket.getIsDestroyed()) {
                             // Get fields of the enemyBoard
                             Field[][] enemyBoardFields = Main.enemyBoard.getFields();
-                            // Get fields of the ship to mark them as destroyed
-                            Map<Integer, Integer> destroyedFields = shootingPacket.getFieldPositionMap();
+
                             // Interate over each entry
-                            for(Entry<Integer, Integer> entry:destroyedFields.entrySet()){
-                                enemyBoardFields[entry.getKey()][entry.getValue()].destroy();
+                            for (PositionObject posObj : shootingPacket.getFieldPositionObjectList()) {
+                                enemyBoardFields[posObj.getPosX()][posObj.getPosY()].destroy();
                             }
                         }
                         fieldToShootAt.hit();
@@ -221,7 +221,8 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
      */
     public void shoot(Field field) {
         fieldToShootAt = field;
-        send(new ShootPacket(field.getPosX(), field.getPosY()));
+        PositionObject posObj = field.getPositionObject();
+        send(new ShootPacket(posObj.getPosX(), posObj.getPosY()));
         Main.setState(GameState.EnemyTurn);
     }
 

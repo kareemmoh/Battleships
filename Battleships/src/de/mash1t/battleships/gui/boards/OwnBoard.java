@@ -29,6 +29,7 @@ import de.mash1t.battleships.config.ConfigHelper;
 import static de.mash1t.battleships.config.ConfigHelper.devLine;
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.HoverPosition;
+import de.mash1t.battleships.gui.field.PositionObject;
 import de.mash1t.battleships.ships.Ship;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -108,9 +109,10 @@ public class OwnBoard extends Board {
         @Override
         public void mouseClicked(MouseEvent e) {
             Field sourceField = (Field) e.getSource();
+            PositionObject posObj = sourceField.getPositionObject();
             if (SwingUtilities.isRightMouseButton(e)) {
                 if (setShip) {
-                    devLine(sourceField.getPosX() + " - " + sourceField.getPosY() + " - Own - turn");
+                    devLine(posObj.getPosX() + " - " + posObj.getPosY() + " - Own - turn");
                     isShipTurned = !isShipTurned;
                     resetHover();
                     reloadHover(sourceField);
@@ -163,8 +165,10 @@ public class OwnBoard extends Board {
      */
     private Field[] setShipFields(Field sourceField) {
 
-        int hoveredX = sourceField.getPosX();
-        int hoveredY = sourceField.getPosY();
+        PositionObject posObj = sourceField.getPositionObject();
+
+        int hoveredX = posObj.getPosX();
+        int hoveredY = posObj.getPosY();
         int shipSize = ship.getShipSize().size();
         Field[] returnArray = new Field[shipSize];
         int fieldCounter = 0;
@@ -217,10 +221,10 @@ public class OwnBoard extends Board {
 //        extenedHover.addAll(Arrays.asList(shipFields));
         int x;
         int y;
-        for (int i = 0; i < shipFields.length; i++) {
-            Field field = shipFields[i];
-            x = field.getPosX();
-            y = field.getPosY();
+        for (Field field : shipFields) {
+            PositionObject posObj = field.getPositionObject();
+            x = posObj.getPosX();
+            y = posObj.getPosY();
             if (field.getHoverPosition() == HoverPosition.First) {
                 // Check for first element
                 if (isShipTurned) {
@@ -355,8 +359,9 @@ public class OwnBoard extends Board {
             shipFieldMap.put(ship, shipFields);
             for (Field field : shipFields) {
                 ship.setTurned(isShipTurned);
-                fields[field.getPosX()][field.getPosY()].assignShip(ship);
-                devLine(field.getPosX() + " - " + field.getPosY());
+                PositionObject posObj = field.getPositionObject();
+                fields[posObj.getPosX()][posObj.getPosY()].assignShip(ship);
+                devLine(posObj.getPosX() + " - " + posObj.getPosY());
             }
             isHoverValid = false;
             setShip = false;

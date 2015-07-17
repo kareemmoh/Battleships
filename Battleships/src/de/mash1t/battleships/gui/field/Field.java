@@ -26,24 +26,18 @@ package de.mash1t.battleships.gui.field;
 import de.mash1t.battleships.ships.Ship;
 
 /**
+ * Interface for a field of a board
  *
  * @author Manuel Schmid
  */
 public interface Field {
 
     /**
-     * Getter for position x of the field
+     * Getter for the position object
      *
-     * @return position x of the field
+     * @return PositionObject of the field
      */
-    public int getPosX();
-
-    /**
-     * Getter for position y of the field
-     *
-     * @return position y of the field
-     */
-    public int getPosY();
+    public PositionObject getPositionObject();
 
     /**
      * Assigns a ship to this field
@@ -58,6 +52,13 @@ public interface Field {
      * @return is ship assigned
      */
     public boolean isShipAssigned();
+
+    /**
+     * Getter for the assigned ship
+     *
+     * @return assigned ship
+     */
+    public Ship getShip();
 
     /**
      * Set new field status and change color
@@ -83,6 +84,11 @@ public interface Field {
      * Set new field status and change color
      */
     public void hit();
+
+    /**
+     * Set new field status and change color
+     */
+    public void destroy();
 
     /**
      * Hits the field and checks if ship has been destroyed

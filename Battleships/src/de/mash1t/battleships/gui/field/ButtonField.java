@@ -35,8 +35,7 @@ import javax.swing.JButton;
  */
 public class ButtonField extends JButton implements Field {
 
-    private final int posx;
-    private final int posy;
+    private final PositionObject posObj;
     private FieldState fieldStatus;
     private Ship ship;
     private HoverState hoverState;
@@ -50,14 +49,12 @@ public class ButtonField extends JButton implements Field {
      * Constructor
      *
      * @param size size of the field
-     * @param x position on the board
-     * @param y position on the board
+     * @param posObj PositionObject of the field
      */
-    public ButtonField(int size, int x, int y) {
-        posx = x;
-        posy = y;
+    public ButtonField(int size, PositionObject posObj) {
+        this.posObj = posObj;
         setSize(size, size);
-        fieldStatus = FieldState.Default;
+        this.fieldStatus = FieldState.Default;
 
         setFocusPainted(false);
         setRolloverEnabled(false);
@@ -65,13 +62,8 @@ public class ButtonField extends JButton implements Field {
     }
 
     @Override
-    public int getPosX() {
-        return posx;
-    }
-
-    @Override
-    public int getPosY() {
-        return posy;
+    public PositionObject getPositionObject() {
+        return this.posObj;
     }
 
     @Override
@@ -90,6 +82,11 @@ public class ButtonField extends JButton implements Field {
     }
 
     @Override
+    public Ship getShip() {
+        return this.ship;
+    }
+
+    @Override
     public void miss() {
         hoverState = HoverState.NotHovered;
         fieldStatus = FieldState.Miss;
@@ -101,6 +98,16 @@ public class ButtonField extends JButton implements Field {
         hoverState = HoverState.NotHovered;
         fieldStatus = FieldState.Hit;
         changeColor();
+    }
+
+    @Override
+    public void destroy() {
+        // Check if field has been set to hit before, if not, hit it
+        if (fieldStatus != FieldState.Hit) {
+            hit();
+        }
+        // Mark the field as destroyed
+        this.setText("X");
     }
 
     @Override

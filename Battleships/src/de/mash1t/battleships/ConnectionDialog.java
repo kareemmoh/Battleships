@@ -108,6 +108,8 @@ public class ConnectionDialog extends javax.swing.JDialog {
                 setAndClose(client);
                 client.dialogHelper.showInfoDialog("Info", "Connected");
                 Main.setState(GameState.EnemyTurn);
+            } else {
+                setState(GameState.InitHostOrClient);
             }
         }
     }

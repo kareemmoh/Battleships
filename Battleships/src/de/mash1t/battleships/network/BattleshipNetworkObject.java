@@ -29,11 +29,14 @@ import de.mash1t.battleships.Main;
 import de.mash1t.battleships.gui.boards.OwnBoard;
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
+import de.mash1t.battleships.gui.field.PositionObject;
 import de.mash1t.battleships.gui.helper.DialogHelper;
 import de.mash1t.networklib.methods.NetworkProtocol;
 import de.mash1t.networklib.packets.ExtendedKickPacket;
 import de.mash1t.networklib.packets.Packet;
 import java.net.Socket;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.swing.JFrame;
 
 /**
@@ -151,12 +154,17 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
                 if (result.equals(FieldState.Default)) {
                     // If no result was found, check if ship is assigned
                     if (field.isShipAssigned()) {
-                        field.hitAndCheckDestroyed();
                         // Set result of shooting
-                        shootingPacket.setResult(FieldState.Hit);
+                        if (field.hitAndCheckDestroyed()) {
+                            // Ship destroyed
+                            shootingPacket.setResult(FieldState.Hit, field.getShip());
+                        } else {
+                            // Ship not destroyed
+                            shootingPacket.setResult(FieldState.Hit);
+                        }
                     } else {
-                        field.miss();
                         // Set result of shooting
+                        field.miss();
                         shootingPacket.setResult(FieldState.Miss);
                     }
                     // Send message with result back to client
@@ -171,13 +179,22 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
                     // Result has been set
                     // TODO add validation of field of packet is same as fieldToShootAt
                     if (result.equals(FieldState.Hit)) {
+                        if (shootingPacket.getIsDestroyed()) {
+                            // Get fields of the enemyBoard
+                            Field[][] enemyBoardFields = Main.enemyBoard.getFields();
+
+                            // Interate over each entry
+                            for (PositionObject posObj : shootingPacket.getFieldPositionObjectList()) {
+                                enemyBoardFields[posObj.getPosX()][posObj.getPosY()].destroy();
+                            }
+                        }
                         fieldToShootAt.hit();
                     } else if (result.equals(FieldState.Miss)) {
                         fieldToShootAt.miss();
                     }
                 }
                 // Switch 
-                if(notKicked){
+                if (notKicked) {
                     switchWaitForEnemy();
                 }
                 break;
@@ -204,7 +221,8 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
      */
     public void shoot(Field field) {
         fieldToShootAt = field;
-        send(new ShootPacket(field.getPosX(), field.getPosY()));
+        PositionObject posObj = field.getPositionObject();
+        send(new ShootPacket(posObj.getPosX(), posObj.getPosY()));
         Main.setState(GameState.EnemyTurn);
     }
 

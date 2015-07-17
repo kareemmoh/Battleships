@@ -25,6 +25,10 @@ package de.mash1t.networklib.packets;
 
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
+import de.mash1t.battleships.gui.field.PositionObject;
+import de.mash1t.battleships.ships.Ship;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Used for shooting at fields
@@ -34,6 +38,8 @@ import de.mash1t.battleships.gui.field.FieldState;
 public class ShootPacket extends PositionPacket {
 
     protected FieldState fieldState;
+    protected boolean destroyed;
+    protected List<PositionObject> fieldPositionObjectList = new ArrayList<>();
 
     /**
      * Set up packet type and position
@@ -43,7 +49,8 @@ public class ShootPacket extends PositionPacket {
      */
     public ShootPacket(int posX, int posY) {
         super(posX, posY);
-        fieldState = FieldState.Default;
+        this.fieldState = FieldState.Default;
+        this.destroyed = false;
     }
 
     /**
@@ -57,12 +64,47 @@ public class ShootPacket extends PositionPacket {
     }
 
     /**
+     * Setter of the shootings' result
+     *
+     * @param fieldState state after shooting at field. Can not be default or
+     * settingShip
+     * @param ship the ship which has been destroyed
+     */
+    public void setResult(FieldState fieldState, Ship ship) {
+        this.fieldState = fieldState;
+        this.destroyed = true;
+        // Put field positions in the map
+        for (Field field : ship.getFields()) {
+            this.fieldPositionObjectList.add(field.getPositionObject());
+        }
+        System.out.println(ship.getFields().length);
+    }
+
+    /**
      * Getter for result of shooting at field
      *
      * @return FieldState result of shooting at field
      */
     public FieldState getResult() {
         return fieldState;
+    }
+
+    /**
+     * Getter for destroyed state of shooting at field
+     *
+     * @return ship is destroyed
+     */
+    public boolean getIsDestroyed() {
+        return destroyed;
+    }
+
+    /**
+     * Getter for the ship
+     *
+     * @return destroyed ship
+     */
+    public List<PositionObject> getFieldPositionObjectList() {
+        return fieldPositionObjectList;
     }
 
     /**

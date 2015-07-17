@@ -25,6 +25,7 @@ package de.mash1t.battleships.gui.boards;
 
 import de.mash1t.battleships.gui.field.ButtonField;
 import de.mash1t.battleships.gui.field.Field;
+import de.mash1t.battleships.gui.field.PositionObject;
 import de.mash1t.battleships.ships.Ship;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -49,8 +50,7 @@ public abstract class Board {
     public static final int fieldSize = 45;
 
     /**
-     * Counter of how many fields should be displayed in square. TODO move to
-     * config and create panels with dynamic size
+     * Counter of how many fields should be displayed in square.
      */
     public static final int fieldCountSquare = 10;
 
@@ -77,7 +77,7 @@ public abstract class Board {
         ButtonField tempField;
         for (int x = 0; x < fieldCountX; x++) {
             for (int y = 0; y < fieldCountY; y++) {
-                tempField = new ButtonField(fieldSize, x, y);
+                tempField = new ButtonField(fieldSize, new PositionObject(x, y));
                 tempField.addMouseListener(getNewMouseListener());
                 panel.add(tempField);
                 tempField.setLocation(x * fieldSize, y * fieldSize);

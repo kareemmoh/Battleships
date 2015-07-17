@@ -90,6 +90,11 @@ public class ButtonField extends JButton implements Field {
     }
 
     @Override
+    public Ship getShip() {
+        return this.ship;
+    }
+
+    @Override
     public void miss() {
         hoverState = HoverState.NotHovered;
         fieldStatus = FieldState.Miss;

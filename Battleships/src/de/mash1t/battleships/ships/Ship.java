@@ -88,7 +88,7 @@ public class Ship {
                 break;
             }
         }
-        
+
         // Check if ship is destroyed
         if (isDestroyed) {
             OwnBoard.deleteFieldsByShip(this);
@@ -112,5 +112,14 @@ public class Ship {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Getter for the ships' fields
+     *
+     * @return fields assigned to this ship
+     */
+    public Field[] getFields() {
+        return this.fields;
     }
 }

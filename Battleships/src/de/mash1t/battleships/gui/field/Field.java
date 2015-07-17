@@ -26,6 +26,7 @@ package de.mash1t.battleships.gui.field;
 import de.mash1t.battleships.ships.Ship;
 
 /**
+ * Interface for a field of a board
  *
  * @author Manuel Schmid
  */
@@ -58,6 +59,13 @@ public interface Field {
      * @return is ship assigned
      */
     public boolean isShipAssigned();
+
+    /**
+     * Getter for the assigned ship
+     *
+     * @return assigned ship
+     */
+    public Ship getShip();
 
     /**
      * Set new field status and change color

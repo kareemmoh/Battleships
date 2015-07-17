@@ -154,14 +154,16 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
                     if (field.isShipAssigned()) {
                         // Set result of shooting
                         if (field.hitAndCheckDestroyed()) {
-                            shootingPacket.setResult(FieldState.Hit, true);
+                            // Ship destroyed
+                            shootingPacket.setResult(FieldState.Hit, field.getShip());
                         } else {
-                            shootingPacket.setResult(FieldState.Hit, false);
+                            // Ship not destroyed
+                            shootingPacket.setResult(FieldState.Hit);
                         }
                     } else {
-                        field.miss();
                         // Set result of shooting
-                        shootingPacket.setResult(FieldState.Miss, false);
+                        field.miss();
+                        shootingPacket.setResult(FieldState.Miss);
                     }
                     // Send message with result back to client
                     send(shootingPacket);
@@ -175,7 +177,7 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
                     // Result has been set
                     // TODO add validation of field of packet is same as fieldToShootAt
                     if (result.equals(FieldState.Hit)) {
-                        if(shootingPacket.getIsDestroyed()){
+                        if (shootingPacket.getIsDestroyed()) {
                             // TODO Add function to mark destroyed ships
                             devLine("Ship destroyed");
                         }

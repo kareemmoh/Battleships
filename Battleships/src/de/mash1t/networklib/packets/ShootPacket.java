@@ -25,6 +25,7 @@ package de.mash1t.networklib.packets;
 
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
+import de.mash1t.battleships.ships.Ship;
 
 /**
  * Used for shooting at fields
@@ -34,7 +35,8 @@ import de.mash1t.battleships.gui.field.FieldState;
 public class ShootPacket extends PositionPacket {
 
     protected FieldState fieldState;
-    protected boolean destroyed = false;
+    protected boolean destroyed;
+    protected Ship ship;
 
     /**
      * Set up packet type and position
@@ -44,7 +46,9 @@ public class ShootPacket extends PositionPacket {
      */
     public ShootPacket(int posX, int posY) {
         super(posX, posY);
-        fieldState = FieldState.Default;
+        this.fieldState = FieldState.Default;
+        this.destroyed = false;
+        this.ship = null;
     }
 
     /**
@@ -52,11 +56,23 @@ public class ShootPacket extends PositionPacket {
      *
      * @param fieldState state after shooting at field. Can not be default or
      * settingShip
-     * @param destroyed is ship destroyed after shooting
      */
-    public void setResult(FieldState fieldState, boolean destroyed) {
+    public void setResult(FieldState fieldState) {
         this.fieldState = fieldState;
-        this.destroyed = destroyed;
+        //this.destroyed = false;
+    }
+
+    /**
+     * Setter of the shootings' result
+     *
+     * @param fieldState state after shooting at field. Can not be default or
+     * settingShip
+     * @param ship the ship which has been destroyed
+     */
+    public void setResult(FieldState fieldState, Ship ship) {
+        this.fieldState = fieldState;
+        this.destroyed = true;
+        this.ship = ship;
     }
 
     /**

@@ -82,15 +82,21 @@ public class Ship {
      */
     public boolean isDestroyed() {
         boolean isDestroyed = true;
+        // Check if all fields have been hit
         for (Field field : fields) {
             if (field.getFieldState() != FieldState.Hit) {
+                // Ship is not destroyed
                 isDestroyed = false;
                 break;
             }
         }
-        
+
         // Check if ship is destroyed
         if (isDestroyed) {
+            // Mark fields as destroyed
+            for (Field field : fields) {
+                field.destroy();
+            }
             OwnBoard.deleteFieldsByShip(this);
             shipState = ShipState.Destroyed;
             return true;
@@ -112,5 +118,14 @@ public class Ship {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Getter for the ships' fields
+     *
+     * @return fields assigned to this ship
+     */
+    public Field[] getFields() {
+        return this.fields;
     }
 }

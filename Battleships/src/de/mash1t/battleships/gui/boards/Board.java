@@ -49,8 +49,7 @@ public abstract class Board {
     public static final int fieldSize = 45;
 
     /**
-     * Counter of how many fields should be displayed in square. TODO move to
-     * config and create panels with dynamic size
+     * Counter of how many fields should be displayed in square.
      */
     public static final int fieldCountSquare = 10;
 

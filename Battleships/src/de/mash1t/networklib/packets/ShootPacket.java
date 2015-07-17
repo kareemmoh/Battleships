@@ -25,6 +25,9 @@ package de.mash1t.networklib.packets;
 
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
+import de.mash1t.battleships.ships.Ship;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Used for shooting at fields
@@ -34,7 +37,8 @@ import de.mash1t.battleships.gui.field.FieldState;
 public class ShootPacket extends PositionPacket {
 
     protected FieldState fieldState;
-    protected boolean destroyed = false;
+    protected boolean destroyed;
+    protected Map<Integer, Integer> fieldPositionMap = new HashMap<>();
 
     /**
      * Set up packet type and position
@@ -44,7 +48,8 @@ public class ShootPacket extends PositionPacket {
      */
     public ShootPacket(int posX, int posY) {
         super(posX, posY);
-        fieldState = FieldState.Default;
+        this.fieldState = FieldState.Default;
+        this.destroyed = false;
     }
 
     /**
@@ -52,11 +57,25 @@ public class ShootPacket extends PositionPacket {
      *
      * @param fieldState state after shooting at field. Can not be default or
      * settingShip
-     * @param destroyed is ship destroyed after shooting
      */
-    public void setResult(FieldState fieldState, boolean destroyed) {
+    public void setResult(FieldState fieldState) {
         this.fieldState = fieldState;
-        this.destroyed = destroyed;
+    }
+
+    /**
+     * Setter of the shootings' result
+     *
+     * @param fieldState state after shooting at field. Can not be default or
+     * settingShip
+     * @param ship the ship which has been destroyed
+     */
+    public void setResult(FieldState fieldState, Ship ship) {
+        this.fieldState = fieldState;
+        this.destroyed = true;
+        // Put field positions in the map
+        for (Field field : ship.getFields()) {
+            this.fieldPositionMap.put(field.getPosX(), field.getPosY());
+        }
     }
 
     /**
@@ -75,6 +94,15 @@ public class ShootPacket extends PositionPacket {
      */
     public boolean getIsDestroyed() {
         return destroyed;
+    }
+
+    /**
+     * Getter for the ship
+     *
+     * @return destroyed ship
+     */
+    public Map<Integer, Integer> getFieldPositionMap() {
+        return fieldPositionMap;
     }
 
     /**

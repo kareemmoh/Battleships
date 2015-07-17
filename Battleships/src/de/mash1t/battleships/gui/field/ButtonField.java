@@ -90,6 +90,11 @@ public class ButtonField extends JButton implements Field {
     }
 
     @Override
+    public Ship getShip() {
+        return this.ship;
+    }
+
+    @Override
     public void miss() {
         hoverState = HoverState.NotHovered;
         fieldStatus = FieldState.Miss;
@@ -101,6 +106,16 @@ public class ButtonField extends JButton implements Field {
         hoverState = HoverState.NotHovered;
         fieldStatus = FieldState.Hit;
         changeColor();
+    }
+
+    @Override
+    public void destroy() {
+        // Check if field has been set to hit before, if not, hit it
+        if (fieldStatus != FieldState.Hit) {
+            hit();
+        }
+        // Mark the field as destroyed
+        this.setText("X");
     }
 
     @Override

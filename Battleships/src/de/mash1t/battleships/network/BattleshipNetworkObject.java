@@ -26,7 +26,6 @@ package de.mash1t.battleships.network;
 import de.mash1t.battleships.GameState;
 import de.mash1t.networklib.packets.ShootPacket;
 import de.mash1t.battleships.Main;
-import static de.mash1t.battleships.config.ConfigHelper.devLine;
 import de.mash1t.battleships.gui.boards.OwnBoard;
 import de.mash1t.battleships.gui.field.Field;
 import de.mash1t.battleships.gui.field.FieldState;
@@ -35,6 +34,8 @@ import de.mash1t.networklib.methods.NetworkProtocol;
 import de.mash1t.networklib.packets.ExtendedKickPacket;
 import de.mash1t.networklib.packets.Packet;
 import java.net.Socket;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.swing.JFrame;
 
 /**
@@ -154,14 +155,16 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
                     if (field.isShipAssigned()) {
                         // Set result of shooting
                         if (field.hitAndCheckDestroyed()) {
-                            shootingPacket.setResult(FieldState.Hit, true);
+                            // Ship destroyed
+                            shootingPacket.setResult(FieldState.Hit, field.getShip());
                         } else {
-                            shootingPacket.setResult(FieldState.Hit, false);
+                            // Ship not destroyed
+                            shootingPacket.setResult(FieldState.Hit);
                         }
                     } else {
-                        field.miss();
                         // Set result of shooting
-                        shootingPacket.setResult(FieldState.Miss, false);
+                        field.miss();
+                        shootingPacket.setResult(FieldState.Miss);
                     }
                     // Send message with result back to client
                     send(shootingPacket);
@@ -175,9 +178,15 @@ public abstract class BattleshipNetworkObject implements NetworkProtocol, Runnab
                     // Result has been set
                     // TODO add validation of field of packet is same as fieldToShootAt
                     if (result.equals(FieldState.Hit)) {
-                        if(shootingPacket.getIsDestroyed()){
-                            // TODO Add function to mark destroyed ships
-                            devLine("Ship destroyed");
+                        if (shootingPacket.getIsDestroyed()) {
+                            // Get fields of the enemyBoard
+                            Field[][] enemyBoardFields = Main.enemyBoard.getFields();
+                            // Get fields of the ship to mark them as destroyed
+                            Map<Integer, Integer> destroyedFields = shootingPacket.getFieldPositionMap();
+                            // Interate over each entry
+                            for(Entry<Integer, Integer> entry:destroyedFields.entrySet()){
+                                enemyBoardFields[entry.getKey()][entry.getValue()].destroy();
+                            }
                         }
                         fieldToShootAt.hit();
                     } else if (result.equals(FieldState.Miss)) {

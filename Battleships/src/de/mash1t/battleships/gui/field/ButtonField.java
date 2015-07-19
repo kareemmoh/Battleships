@@ -36,7 +36,7 @@ import javax.swing.JButton;
 public class ButtonField extends JButton implements Field {
 
     private final PositionObject posObj;
-    private FieldState fieldStatus;
+    private FieldState fieldState;
     private Ship ship;
     private HoverState hoverState;
 
@@ -54,7 +54,7 @@ public class ButtonField extends JButton implements Field {
     public ButtonField(int size, PositionObject posObj) {
         this.posObj = posObj;
         setSize(size, size);
-        this.fieldStatus = FieldState.Default;
+        this.fieldState = FieldState.Default;
 
         setFocusPainted(false);
         setRolloverEnabled(false);
@@ -71,7 +71,7 @@ public class ButtonField extends JButton implements Field {
         this.ship = ship;
         // TODO remove after development
         this.fieldNumber = this.getText();
-        fieldStatus = FieldState.ShipIsSet;
+        fieldState = FieldState.ShipIsSet;
         hoverState = HoverState.HoverInvalid;
         changeColor();
     }
@@ -89,21 +89,21 @@ public class ButtonField extends JButton implements Field {
     @Override
     public void miss() {
         hoverState = HoverState.NotHovered;
-        fieldStatus = FieldState.Miss;
+        fieldState = FieldState.Miss;
         changeColor();
     }
 
     @Override
     public void hit() {
         hoverState = HoverState.NotHovered;
-        fieldStatus = FieldState.Hit;
+        fieldState = FieldState.Hit;
         changeColor();
     }
 
     @Override
     public void destroy() {
         // Check if field has been set to hit before, if not, hit it
-        if (fieldStatus != FieldState.Hit) {
+        if (fieldState != FieldState.Hit) {
             hit();
         }
         // Mark the field as destroyed
@@ -119,7 +119,7 @@ public class ButtonField extends JButton implements Field {
     @Override
     public void shoot() {
         // Validate field state, only shoot when not already shot on
-        if (this.fieldStatus == FieldState.Default) {
+        if (this.fieldState == FieldState.Default) {
             getNetworkObject().shoot(this);
         }
     }
@@ -156,7 +156,7 @@ public class ButtonField extends JButton implements Field {
     public void resetHard() {
         hoverState = HoverState.NotHovered;
         hoverPosition = HoverPosition.None;
-        fieldStatus = FieldState.Default;
+        fieldState = FieldState.Default;
         changeColor();
         if (ConfigHelper.isDevModeHover()) {
             this.setText("");
@@ -165,7 +165,7 @@ public class ButtonField extends JButton implements Field {
 
     @Override
     public FieldState getFieldState() {
-        return this.fieldStatus;
+        return this.fieldState;
     }
 
     @Override
@@ -196,7 +196,7 @@ public class ButtonField extends JButton implements Field {
             this.setBackground(hoverState.getColor());
         } else {
 
-            this.setBackground(fieldStatus.getColor());
+            this.setBackground(fieldState.getColor());
         }
     }
 }
